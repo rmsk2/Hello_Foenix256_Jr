@@ -57,16 +57,41 @@ layout and activate it while using the emulator.
 ## The first assembly program
 
 The file `hello.asm` contains a simple assembly program which pokes the character A into the top left corner of the screen memory.
-You can use `64tass --nostart -o hello.bin hello.asm` to assemble this program. The resulting binary `hello.bin` can then be fed 
-into the emulator. The emulator must be instructed at start to load the neccessary binaries to their respective memory 
+You can use `64tass --nostart -o hello.bin hello.asm` (or `make hello`) to assemble this program. The resulting binary `hello.bin` 
+can then be fed into the emulator. 
+
+```
+; target address is $4000
+* = $4000
+
+; Save the current MMU setting
+lda $0001
+pha
+
+; Swap I/O Page 2 into bank 6
+lda #$02
+sta $0001
+
+; Write ’A’ to the upper left corner
+lda #65
+sta $C000
+
+; Restore MMU settings
+pla
+sta $0001
+
+rts
+```
+
+The emulator must be instructed at start to load the neccessary binaries to their respective memory 
 locations. For each file to load we have to add a CLI parameter of the form `file to load@hexaddress`. Let's assume the result of
 our assembly run can be found in the file `../../hellojr/hello.bin`. We then start the emulator from its `bin` directory by issuing 
-the command `./jr256  ../../hellojr/hello.bin@4000  ../basic.rom@b`. The pseudo address `b` is a shorthand the value $8000. At 
+the command `./jr256  ../../hellojr/hello.bin@4000  ../basic.rom@b`. The pseudo address `b` is a shorthand for the value $8000. At 
 the BASIC prompt we can use `call $4000` to execute our program. 
 
 We could also skip loading the BASIC ROM and only start our program. The emulator can do that through the command 
 `./jr256 ../../hellojr/hello.bin@4000 boot@4000`. As we have in this case not loaded the BASIC ROM not much is happening after 
-our program has written A to screen memory.
+our program has written the A to screen memory.
 
 ## The same program in BASIC style
 
@@ -86,11 +111,51 @@ When you type in and run the following BASIC program:
 100 rts
 ```
 
-you can execute the resulting assembly subroutine through the command `call $4000`.
+again, you can execute the resulting assembly subroutine through the command `call $4000`.
 
-## The same program Kernel style
+## Using the real hardware
 
+The first way to run our example program on the real hardware is to mount an appropriately formatted SD card
+on your Linux machine and store `hello.bin` on this card. Then transfer the card to your F256 Jr. and load the
+file with `bload "hello.bin", $4000`. Finally execute it using `call $4000`. 
 
+Using the SD card is satisfactory for distributing finished programs but during dvelopmemt it does not feel very
+sustainable to switch a card dozens of times in a few hours. Another way to transfer a binary to the F256 Jr. is
+to upload it to the board using a the USB debug port. For this the tool [FoenixMgr](https://github.com/pweingar/FoenixMgr)
+can be used. Via `FoenixMgr` it is possible to write a program into the RAM of your F256 Jr. from your development
+machine using a USB cable. To upload our program the following command can be used:
+
+`python3 fnxmgr.zip --port /dev/ttyUSB0 --binary hello.bin --address 4000`
+
+After uploading we start the program using `call $4000`. This repo contains a copy of `FoenixMgr` and in order to use 
+it you have to install `pyserial` on your development machine. This library is part of the standard Ubuntu repositores 
+as `python3-serial`.
+
+## Hello world Kernel style
+
+```
+.include "api.asm"
+; target address is $4000
+* = $4000
+
+lda #0
+sta kernel.args.display.x
+lda #0
+sta kernel.args.display.y
+lda #<data
+sta kernel.args.display.text
+lda #>data
+sta kernel.args.display.text+1
+lda #14
+sta kernel.args.display.buflen
+lda #5
+sta kernel.args.display.color
+jsr kernel.Display.DrawRow
+rts
+
+data .text "Hello World!"
+     .text $0d, $0a
+```
 
 ## Links
 
