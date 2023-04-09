@@ -1,7 +1,7 @@
 # Hello Foenix256 Jr.
 
 This project contains source code and information with respect to my first experiences with the 
-Fonexix 256 Jr. (Revision B) modern retro computer. This is work in progress use at your own risk.
+Foenix 256 Jr. (Revision B) modern retro computer. This is work in progress use at your own risk.
 
 ## Hardware setup
 
