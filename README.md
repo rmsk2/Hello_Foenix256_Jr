@@ -173,7 +173,7 @@ does not implement enough of the system for it to work.
 ## Links
 
 - [Product Home page](https://c256foenix.com/f256-jr/?v=3a52f3c22ed6)
-- [Wiki at Foneix Retro Systems](https://wiki.c256foenix.com/index.php?title=F256JR)
+- [Wiki at Foenix Retro Systems](https://wiki.c256foenix.com/index.php?title=F256JR)
 - [Kernel for the F256 Jr.](https://github.com/ghackwrench/F256_Jr_Kernel_DOS)
 - [Basic implementation](https://github.com/paulscottrobson/superbasic)
 - [System Documentation](https://github.com/pweingar/C256jrManual)
