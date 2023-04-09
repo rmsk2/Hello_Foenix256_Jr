@@ -30,12 +30,6 @@ ensure compatibility.
 In order to format an SD card enter the DOS utility by typing the command `/DOS` at the BASIC prompt. In the DOS
 CLI use the `mkfs`command in order to format an SD card.
 
-## Remarks about the source code
-
-The file `api.asm` contains the API definition of the TinyCore Kernel. I took this 
-[copy](https://github.com/paulscottrobson/superbasic/blob/main/source/common/api/api.asm) from the `superbasic` source
-code because that has to match the Kernel which is installed on my system.
-
 ## Setting up the emulator
 
 I am using Ubuntu 22.04 so all the following information is in principle specific to this platform but it should be easy to
@@ -141,6 +135,9 @@ as `python3-serial`. The serial port may be different on your machine. The list 
 
 This program should print `Hello World!"` in the upper left corner of the screen without relying on
 any BASIC functionality. It can be built by `64tass --nostart -o hello_kernel.bin  hello_kernel.asm` or `make hello_kernel`.
+The file `api.asm` contains the API definition of the TinyCore Kernel. I took this 
+[copy](https://github.com/paulscottrobson/superbasic/blob/main/source/common/api/api.asm) from the `superbasic` source
+code because that has to match the Kernel which is installed on my system.
 
 
 ```
