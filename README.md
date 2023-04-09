@@ -139,6 +139,10 @@ as `python3-serial`. The serial port may be different on your machine. The list 
 
 ## Hello world Kernel style
 
+This program should print `Hello World!"` in the upper left corner of the screen without relying on
+any BASIC functionality. It can be built by `64tass --nostart -o hello_kernel.bin  hello_kernel.asm` or `make hello_kernel`.
+
+
 ```
 .include "api.asm"
 ; target address is $4000
@@ -162,6 +166,9 @@ rts
 data .text "Hello World!"
      .text $0d, $0a
 ```
+
+**Remark**: The program does not work in the emulator. Either I have used the wrong API description or the emulator simply
+does not implement enough of the system for it to work.
 
 ## Links
 
