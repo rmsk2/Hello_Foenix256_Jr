@@ -32,7 +32,7 @@ CLI use the `mkfs`command in order to format an SD card.
 
 ## Remarks about the source code
 
-The file `api.asm` contains the API definition of the Tiny Kernel. I took this 
+The file `api.asm` contains the API definition of the TinyCore Kernel. I took this 
 [copy](https://github.com/paulscottrobson/superbasic/blob/main/source/common/api/api.asm) from the `superbasic` source
 code because that has to match the Kernel which is installed on my system.
 
