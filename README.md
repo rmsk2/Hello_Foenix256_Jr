@@ -184,3 +184,7 @@ does not implement enough of the system for it to work.
 - [Another Emulator](https://github.com/paulscottrobson/junior-emulator)
 - The project uses [64tass](https://sourceforge.net/projects/tass64/) as an assembler. The manual can be found [here](http://tass64.sourceforge.net/)
 
+## Things to do
+
+- Check the SIDs. According to the system reference the TinyCore Kernel uses DIP switch 5 to enable the SIDs.
+- Check the memory expansion.
