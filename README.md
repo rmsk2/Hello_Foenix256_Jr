@@ -96,7 +96,7 @@ our program has written the A to screen memory.
 ## The same program in BASIC style
 
 The superbasic that comes with the Foenix F256 Jr. can assemble programs into memory from BASIC through the `assemble` command.
-When you type in and run the following BASIC program:
+When you type it in and run the following BASIC program:
 
 ```
 10 assemble $4000,0
@@ -111,7 +111,7 @@ When you type in and run the following BASIC program:
 100 rts
 ```
 
-again, you can execute the resulting assembly subroutine through the command `call $4000`.
+you can execute the resulting assembly subroutine through the command `call $4000`.
 
 ## Using the real hardware
 
