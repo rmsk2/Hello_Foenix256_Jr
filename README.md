@@ -39,7 +39,7 @@ code because that has to match the Kernel which is installed on my system.
 ## Setting up the emulator
 
 I am using Ubuntu 22.04 so all the following information is in principle specific to this platform but it should be easy to
-replicate these steps on other Linux distros. I have not tried to use these tools on Windows.
+replicate these steps on other Linux distros. I have not attempted to use these tools on Windows.
 
 I have tried all emulators listed below and for the purpose of this experiment the emulator of paulscottrobson worked best for me. 
 I cloned the repo available at 
