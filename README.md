@@ -114,9 +114,9 @@ on your Linux machine and store `hello.bin` on this card. Then transfer the card
 file with `bload "hello.bin", $4000`. Finally execute it using `call $4000`. 
 
 Using the SD card is satisfactory for distributing finished programs but during dvelopmemt it does not feel very
-sustainable to switch a card dozens of times in a few hours. Another way to transfer a binary to the F256 Jr. is
-to upload it to the board via the USB debug port. In the picture linked above this port can be found between the
-power supply socket and the power on pin header and it uses the mini USB form factor.
+sustainable to switch a card dozens of times in a few hours over days or weeks. Another way to transfer a binary 
+to the F256 Jr. is to upload it to the board via the USB debug port. In the picture linked above this port can be 
+found between the power supply socket and the power on pin header and it uses the mini USB form factor.
 
 For uploading software to the board the tool [FoenixMgr](https://github.com/pweingar/FoenixMgr)
 can be used. Via `FoenixMgr` it is possible to write a program into the RAM of your F256 Jr. from your development
