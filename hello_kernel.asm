@@ -6,7 +6,7 @@
      sta kernel.args.display.x
      lda #0                                     ; set y coordinate
      sta kernel.args.display.y
-     lda #<textData                                 ; set pointer to text data
+     lda #<textData                             ; set pointer to text data
      sta kernel.args.display.text
      lda #>textData
      sta kernel.args.display.text+1
