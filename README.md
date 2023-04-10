@@ -167,7 +167,7 @@ colorData .text x"62" x 12
 ```
 
 **Remark**: The program does not work in the emulator. Either I have used the wrong API description or the emulator simply
-does not implement enough of the system for it to work.
+does not implement enough of the system for it to work. But the program works on a real machine.
 
 ## Links
 
