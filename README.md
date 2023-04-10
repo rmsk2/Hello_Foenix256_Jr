@@ -147,7 +147,7 @@ code because that has to match the Kernel which is installed on my system.
      sta kernel.args.display.x
      lda #0                                     ; set y coordinate
      sta kernel.args.display.y
-     lda #<textData                             ; set pointer to text data
+     lda #<textData                                 ; set pointer to text data
      sta kernel.args.display.text
      lda #>textData
      sta kernel.args.display.text+1
@@ -161,7 +161,7 @@ code because that has to match the Kernel which is installed on my system.
      rts
 
 textData .text "Hello World!"
-colorData .text x"62" x 12
+colorData .text x"62" x len(textData)
 ```
 
 **Remark**: The program does not work in the emulator. Either I have used the wrong API description or the emulator simply

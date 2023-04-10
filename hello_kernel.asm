@@ -20,4 +20,4 @@
      rts
 
 textData .text "Hello World!"
-colorData .text x"62" x 12
+colorData .text x"62" x len(textData)
