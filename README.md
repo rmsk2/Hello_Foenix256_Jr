@@ -191,7 +191,7 @@ background or foreground color. The lower 4 bit of a colour code specifiy the ba
 | 6 | Orange |
 | 7 | Light blue |
 | 8 | Dark grey |
-| 9 | Light grey |
+| 9 | Light grey (default foreground colour) |
 | 10 | Blue |
 | 11 | Light green|
 | 12 | Light purple |
