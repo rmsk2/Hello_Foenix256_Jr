@@ -167,6 +167,38 @@ colorData .text x"62" x len(textData)
 **Remark**: The program does not work in the emulator. Either I have used the wrong API description or the emulator simply
 does not implement enough of the system for it to work. But the program works on a real machine.
 
+## Memory expansion
+
+In the file `test_ramexp.asm` you will find a small assembly program that tests the presence of the 256K RAM expansion. You can
+build the program with `make ram_exp` which results in the binary `ram_exp.bin`. This can then be run as described above.
+
+The programm simply writes a byte to memory at 6502 address `$6100` then maps in a page of expanded RAM and writes a different 
+value to the same 6502 address. Then the values are read again and checked.
+
+## About colours in text mode
+
+For your convenience the following table gives the colour codes used in text mode. Any of the 16 colours can appear either as 
+background or foreground color. The lower 4 bit of a colour code specifiy the backround colour.
+
+| Colour code | Colour |
+|-|-|
+| 0 | Black|
+| 1 | Grey|
+| 2 | Dark blue (default background colour)|
+| 3 | Green |
+| 4 | Purple |
+| 5 | Brown |
+| 6 | Orange |
+| 7 | Light blue |
+| 8 | Dark grey |
+| 9 | Light grey |
+| 10 | Blue |
+| 11 | Light green|
+| 12 | Light purple |
+| 13 | Red |
+| 14 | Yellow |
+| 15 | White |
+
 ## Links
 
 - [Product Home page](https://c256foenix.com/f256-jr/?v=3a52f3c22ed6)
@@ -184,4 +216,3 @@ does not implement enough of the system for it to work. But the program works on
 ## Things to do
 
 - Check the SIDs. According to the system reference the TinyCore Kernel uses DIP switch 5 to enable the SIDs.
-- Check the memory expansion.
