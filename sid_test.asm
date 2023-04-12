@@ -3,7 +3,7 @@
 * = $4000
 .cpu "w65c02"
 
-SID_BASE = $D500
+SID_BASE = $D400
 
 TRIANGLE = 16
 SAWTOOTH = 32
@@ -11,7 +11,7 @@ SQUARE = 64
 NOISE = 128
 
 ; --------------------------------------------------
-; This macro print a string to the screen at a given x and y coordinate. The 
+; This macro prints a string to the screen at a given x and y coordinate. The 
 ; macro has the following parameters
 ;
 ; 1. x coordinate
@@ -26,7 +26,7 @@ kprint .macro x, y, txtPtr, len, colPtr
      lda #\y                                     ; set y coordinate
      sta kernel.args.display.y
      #load16BitImmediate \txtPtr, kernel.args.display.text
-     lda #\len                                     ; set text length
+     lda #\len                                   ; set text length
      sta kernel.args.display.buflen
      #load16BitImmediate \colPtr, kernel.args.display.color
      jsr kernel.Display.DrawRow                  ; print to the screen
@@ -44,6 +44,7 @@ load16BitImmediate .macro addr, target
     .endmacro
 
 
+; move a 16 bit value from one location to the other
 move16Bit .macro src, target
     lda \src
     sta \target
@@ -51,66 +52,9 @@ move16Bit .macro src, target
     sta \target+1
     .endmacro
 
-; clear SID register
-clearSID .macro 
-    ldx #0
-    lda #0
-_loopRegister
-    sta SID_BASE, x
-    inx
-    cpx #25
-    bne _loopRegister
-    .endmacro
+.include "sid_only.asm"
 
-
-; set volume for SID
-setGlobalVolume .macro volume
-    lda #\volume
-    and #%00001111
-    sta SID_BASE + 24
-    .endmacro
-
-                 
-setBeepADSR .macro timeAttack, timeDecay, volumeSustain, timeRelease, voice 
-    lda #\timeAttack                        ; time to reach full volume
-    asl
-    asl
-    asl
-    asl
-    ora #\timeDecay                         ; time to fall to .volumeSustain
-    sta SID_BASE + 5 + ((\voice-1) * 7)
-    lda #\volumeSustain                     ; volume during sustain
-    asl
-    asl
-    asl
-    asl
-    ora #\timeRelease                       ; time to reach zero volume after sound is turned off (key bit = 0)
-    sta SID_BASE + 6 + ((\voice-1) * 7)     
-    .endmacro
-
-
-turnWaveOn .macro waveBit, voice
-    lda SID_BASE + 4 + ((\voice-1) * 7)
-    and #%00001111
-    ora #\waveBit
-    ora #1                                  ; set key bit => turn sound on
-    sta SID_BASE + 4 + ((\voice-1) * 7)     ; make it happen
-    .endmacro
-
-
-turnWaveOff .macro waveBit, voice
-    lda SID_BASE + 4 + ((\voice-1) * 7)
-    and #%00001110
-    ora #\waveBit                           ; key bit was cleared in line above
-    sta SID_BASE + 4 + ((\voice-1) * 7)     ; make it happen
-    .endmacro
-
-
-setFrequency .macro frequency, voice
-    #load16BitImmediate \frequency, SID_BASE + ((\voice-1) * 7)
-    .endmacro
-
-
+; The name says it all
 main
     ; take event queue away from BASIC
     jsr initEvents
@@ -122,7 +66,7 @@ main
     ; set envelope
     #setBeepADSR 0, 0, 8, 0, 1
     ; set frequency
-    #setFrequency $311c, 1
+    #setFrequency $211c, 1
 
     #kprint 0, 30, pressKeyStart, len(pressKeyStart), pressKeyStartColor
     jsr waitForKey
@@ -142,20 +86,26 @@ main
     rts
 
 
+; value of event buffer at program start (likely set by `superbasic`)
 oldEvent .byte 0, 0
+
+; set event buffer to new value
 initEvents
     #move16Bit kernel.args.events, oldEvent
     #load16BitImmediate myEvent, kernel.args.events
     rts
 
 
+; restore original event buffer
 restoreEvents
     #move16Bit oldEvent, kernel.args.events
     rts
 
 
+; the new event buffer
 myEvent .dstruct kernel.event.event_t
 
+; waiting for a key press event from the kernel
 waitForKey
     ; Peek at the queue to see if anything is pending
     lda kernel.args.events.pending ; Negated count
@@ -172,6 +122,7 @@ _done
     rts    
 
 
+; Texts to display
 pressKeyStart .text "Press key to start sound"
 pressKeyStartColor .text x"62" x len(pressKeyStart)
 

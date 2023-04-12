@@ -201,19 +201,31 @@ background or foreground color. The lower 4 bit of a colour code specifiy the ba
 
 ## SID test
 
-For the purpose of trying out the two (SwinSID) SID-replacements I have bought for use with the F256 Jr. I have written a test program 
-called `sid_test.asm` (use `make sid_test`to build it). Unfortunately the program does not work (yet, I hope) on my system. I have switched
-on the DIP switch 5 and I am pretty sure that the ZIF sockets as well as the SIDs in them are seated properly and I am using the 
-speaker/headphone output. Neither the left nor the right SID work so I seem to be missing something quite fundamental as it seems 
-to be fairly unlikely that both SwinSIDs are broken or improperly seated, apart from the fundamental orientation of course but I am
-also pretty sure that I got that right. The SwinSID also does not care about being feed 9V or 12V so I did not change the corresponding 
-jumpers I also have tested the SID-part of the program on VICE, where it works as expected.
+For the purpose of trying out the two (Nano SwinSID) SID-replacements I have bought for use with the F256 Jr. I have written a test program 
+called `sid_test.asm` (use `make sid_test`to build it). Unfortunately the program does not work on my system. I have tried all of the following 
+but until now but neither the left nor the right SID works:
+
+- Switching DIP switch 5 on and off
+- Using the headphone output and using Line out
+- Using a Nano SwinSID and using a real (working) 8580R5 SID
+- Using 9V and 12V with a Nano SwinSID even though it should work with both
+- The SID specific part of the program works in VICE (see `sid_only.asm` and `sid_vice.asm`)
+- I have tried one of the Nano SwinSIDs in a real C64 and it worked
+
+Sound works in principle as the `superbasic` simple sound commands like `zap`, `shoot`, `ping` and `explode` produce audible output. The jumpers for SID 
+channel selection are present and route the left and right SIDs to the corresponding inputs of the CODEC chip. I am pretty sure that the ZIF sockets 
+as well as the SIDs in them are seated properly. It is not impossible but unlikely that a connection problem occurs on both sockets at the same 
+time unless of course the orientation of the chips is wrong. But I am confident that I got that right. I seem to be missing something quite fundamental. 
+
+The SID-part of the program works on VICE as expected. See `sid_vice.asm` (build with `make sid_vice`, start with `sys 16384`
+after loading it to the original address on your emulator of choice).
 
 ## Links
 
 - [Product Home page](https://c256foenix.com/f256-jr/?v=3a52f3c22ed6)
 - [Wiki at Foenix Retro Systems](https://wiki.c256foenix.com/index.php?title=F256JR)
 - [Kernel for the F256 Jr.](https://github.com/ghackwrench/F256_Jr_Kernel_DOS)
+- [Alternative kernAl using Commodore interface](https://github.com/ghackwrench/OpenKERNAL)
 - [Basic implementation](https://github.com/paulscottrobson/superbasic)
 - [System Documentation](https://github.com/pweingar/C256jrManual)
 - [Product data sheet](https://256-foenix.us-east-1.linodeobjects.com/C256_Foenix_JR_UM_Rev002.pdf)
