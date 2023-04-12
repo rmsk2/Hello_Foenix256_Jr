@@ -206,7 +206,8 @@ called `sid_test.asm` (use `make sid_test`to build it). Unfortunately the progra
 on the DIP switch 5 and I am pretty sure that the ZIF sockets as well as the SIDs in them are seated properly and I am using the 
 speaker/headphone output. Neither the left nor the right SID work so I seem to be missing something quite fundamental as it seems 
 to be fairly unlikely that both SwinSIDs are broken or improperly seated, apart from the fundamental orientation of course but I am
-also pretty sure that I got that right. The SwinSID also does not care about being feed 9V or 12V so I did not change corresponding jumpers.
+also pretty sure that I got that right. The SwinSID also does not care about being feed 9V or 12V so I did not change the corresponding 
+jumpers I also have tested the SID-part of the program on VICE, where it works as expected.
 
 ## Links
 
