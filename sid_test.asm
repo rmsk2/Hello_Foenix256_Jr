@@ -3,7 +3,7 @@
 * = $4000
 .cpu "w65c02"
 
-SID_BASE = $D400
+SID_BASE = $D500
 
 TRIANGLE = 16
 SAWTOOTH = 32

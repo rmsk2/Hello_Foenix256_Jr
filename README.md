@@ -199,6 +199,15 @@ background or foreground color. The lower 4 bit of a colour code specifiy the ba
 | 14 | Yellow |
 | 15 | White |
 
+## SID test
+
+For the purpose of trying out the two (SwinSID) SID-replacements I have bought for use with the F256 Jr. I have written a test program 
+called `sid_test.asm` (use `make sid_test`to build it). Unfortunately the program does not work (yet, I hope) on my system. I have switched
+on the DIP switch 5 and I am pretty sure that the ZIF sockets as well as the SIDs in them are seated properly and I am using the 
+speaker/headphone output. Neither the left nor the right SID work so I seem to be missing something quite fundamental as it seems 
+to be fairly unlikely that both SwinSIDs are broken or improperly seated, apart from the fundamental orientation of course but I am
+also pretty sure that I got that right. The SwinSID also does not care about being feed 9V or 12V so I did not change corresponding jumpers.
+
 ## Links
 
 - [Product Home page](https://c256foenix.com/f256-jr/?v=3a52f3c22ed6)
@@ -215,4 +224,5 @@ background or foreground color. The lower 4 bit of a colour code specifiy the ba
 
 ## Things to do
 
-- Check the SIDs. According to the system reference the TinyCore Kernel uses DIP switch 5 to enable the SIDs.
+- Get SIDs working
+- Research the save zero page locations to use in combination with `superbasic`.
