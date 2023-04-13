@@ -13,7 +13,7 @@ leftmost four pins of the 24 pin socket have to remain free.
 installed the PSU I had to exert a certain amount of pressure even in the correct position.
 - The board itself has no power switch but there is a pin header which has to be bridged in order to 
 connect the power supply to the board. In the picture linked above the pin header in question is shown in 
-the lower right where it is labeled with *Permanently ON/OFF Switch for PS*. I used a jumper to permanently
+the lower right where it is labeled with *PW ON SPST Switch*. I used a jumper to permanently
 connect the two pins.
 
 ## Using an SD-Card 
