@@ -50,7 +50,19 @@ The emulator expects a British keyboard layout. This resulted in the problem tha
 (for instance the `"` character) because I use a german keyboard. Thus I had to additionally install the British keyboard 
 layout and activate it while using the emulator.
 
-## The first assembly program
+The emulator must be instructed at start to load the neccessary binaries to their respective memory locations. For each file 
+to load we have to add a CLI parameter of the form `file to load@hexaddress`. Let's assume the we want to load a program that 
+can be found in the file `../../hellojr/hello.bin` relative to the emulator's `bin` directroy. We then start the emulator 
+from this  directory by issuing the command `./jr256  ../../hellojr/hello.bin@4000  ../basic.rom@b`. The pseudo address `b` 
+is a shorthand for the value $8000. At the BASIC prompt we can use `call $4000` to execute our program. 
+
+We could also skip loading the BASIC ROM and only start our program. The emulator can do that through the command 
+`./jr256 ../../hellojr/hello.bin@4000 boot@4000`. As we have in this case not loaded the BASIC ROM not much is happening after 
+our program has written the A to screen memory.
+
+## A Hello world in assembly
+
+### The first assembly program
 
 The file `hello.asm` contains a simple assembly program which pokes the character A into the top left corner of the screen memory.
 You can use `64tass --nostart -o hello.bin hello.asm` (or `make hello`) to assemble this program. The resulting binary `hello.bin` 
@@ -79,17 +91,11 @@ sta $0001
 rts
 ```
 
-The emulator must be instructed at start to load the neccessary binaries to their respective memory 
-locations. For each file to load we have to add a CLI parameter of the form `file to load@hexaddress`. Let's assume the result of
-our assembly run can be found in the file `../../hellojr/hello.bin` relative to the emulator's `bin` directroy. We then start the 
-emulator from this  directory by issuing the command `./jr256  ../../hellojr/hello.bin@4000  ../basic.rom@b`. The pseudo address `b` 
-is a shorthand for the value $8000. At the BASIC prompt we can use `call $4000` to execute our program. 
+ As mentioned above you can use `./jr256  ../../hellojr/hello.bin@4000  ../basic.rom@b` and `call $4000` to run this program in the
+ emulator.
 
-We could also skip loading the BASIC ROM and only start our program. The emulator can do that through the command 
-`./jr256 ../../hellojr/hello.bin@4000 boot@4000`. As we have in this case not loaded the BASIC ROM not much is happening after 
-our program has written the A to screen memory.
 
-## The same program in BASIC style
+### The same program in BASIC style
 
 The superbasic that comes with the Foenix F256 Jr. can assemble programs into memory from BASIC through the `assemble` command.
 When you type it in and run the following BASIC program:
@@ -169,7 +175,9 @@ colorData .text x"62" x len(textData)
 **Remark**: The program does not work in the emulator. Either I have used the wrong API description or the emulator simply
 does not implement enough of the system for it to work. But the program works on a real machine.
 
-## Memory expansion
+## Hardware tests
+
+### Memory expansion test
 
 In the file `test_ramexp.asm` you will find a small assembly program that tests the presence of the 256K RAM expansion. You can
 build the program with `make ram_exp` which results in the binary `ram_exp.bin`. This can then be run as described above.
@@ -177,7 +185,7 @@ build the program with `make ram_exp` which results in the binary `ram_exp.bin`.
 The program simply writes a byte to memory at 6502 address `$6100` then maps in a page of expanded RAM and writes a different 
 value to the same 6502 address. Then the values are read again and checked.
 
-## SID test
+### SID test
 
 The following `superbasic` program can be used to test the SIDs
 
