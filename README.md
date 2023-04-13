@@ -5,6 +5,8 @@ Foenix 256 Jr. (Revision B) modern retro computer. This is work in progress use 
 
 ## Hardware setup
 
+### General
+
 - The Foenix 256 Jr. motherboard is a mini ITX board. Its power supply socket has 24 Pins. I bought a 
 90 watts 20 pin Power supply unit (PSU) which works for me. How is the 20 pin PSU plugged in? If you
 look at this [picture](https://wiki.c256foenix.com/images/6/64/Pinout_Jr_December_7th_Trans.png) then the 
@@ -16,7 +18,7 @@ connect the power supply to the board. In the picture linked above the pin heade
 the lower right where it is labeled with *PW ON SPST Switch*. I used a jumper to permanently
 connect the two pins.
 
-## Using an SD-Card 
+### Using an SD-Card 
 
 Information mostly taken from [here](https://github.com/ghackwrench/F256_Jr_Kernel_DOS/blob/main/ReleaseNotes.txt).
 
@@ -175,30 +177,6 @@ build the program with `make ram_exp` which results in the binary `ram_exp.bin`.
 The program simply writes a byte to memory at 6502 address `$6100` then maps in a page of expanded RAM and writes a different 
 value to the same 6502 address. Then the values are read again and checked.
 
-## About colours in text mode
-
-For your convenience the following table gives the colour codes used in text mode. Any of the 16 colours can appear either as 
-background or foreground color. The lower 4 bit of a colour code specifiy the backround colour.
-
-| Colour code | Colour |
-|-|-|
-| 0 | Black|
-| 1 | Grey|
-| 2 | Dark blue (default background colour)|
-| 3 | Green |
-| 4 | Purple |
-| 5 | Brown |
-| 6 | Orange |
-| 7 | Light blue |
-| 8 | Dark grey |
-| 9 | Light grey (default foreground colour) |
-| 10 | Blue |
-| 11 | Light green|
-| 12 | Light purple |
-| 13 | Red |
-| 14 | Yellow |
-| 15 | White |
-
 ## SID test
 
 The following `superbasic` program can be used to test the SIDs
@@ -230,7 +208,41 @@ The program as shown above can be used to test both SIDs. Enter `right` for the 
 version can be built with `make sid_test`. The relevant source files are `sid_test.asm` and `sid_only.asm`. Please note that after a power 
 on the program needs to be run twice before you can hear any sound. This may be specific to the Nano SwinSIDs in my board.
 
-## Oddities experienced
+## Useful info
+
+### About colours in text mode
+
+For your convenience the following table gives the colour codes used in text mode. Any of the 16 colours can appear either as 
+background or foreground color. The lower 4 bit of a colour code specifiy the backround colour.
+
+| Colour code | Colour |
+|-|-|
+| 0 | Black|
+| 1 | Grey|
+| 2 | Dark blue (default background colour)|
+| 3 | Green |
+| 4 | Purple |
+| 5 | Brown |
+| 6 | Orange |
+| 7 | Light blue |
+| 8 | Dark grey |
+| 9 | Light grey (default foreground colour) |
+| 10 | Blue |
+| 11 | Light green|
+| 12 | Light purple |
+| 13 | Red |
+| 14 | Yellow |
+| 15 | White |
+
+### `superbasic` Keyboard shortcuts
+
+| Key combination | Effect |
+|-|-|
+|`ctrl-c`| Stops a listing or a running program |
+|`ctrl-l`| Clears the screen | 
+ 
+
+### Oddities experienced
 
 - The boot screen shows 4 characters with wrong background color. See [here](https://user-images.githubusercontent.com/13918100/230933468-1fb9ce9a-5362-4bfd-afc1-ab4f00d6e2bb.jpg) 
 - The `superbasic` statement `call` is currently not mentioned in the documentation
