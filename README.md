@@ -51,7 +51,7 @@ The emulator expects a British keyboard layout. This resulted in the problem tha
 layout and activate it while using the emulator.
 
 The emulator must be instructed at start to load the neccessary binaries to their respective memory locations. For each file 
-to load we have to add a CLI parameter of the form `file to load@hexaddress`. Let's assume the we want to load a program that 
+to load we have to add a CLI parameter of the form `file to load@hexaddress`. Let's assume that we want to load a program which 
 can be found in the file `../../hellojr/hello.bin` relative to the emulator's `bin` directroy. We then start the emulator 
 from this  directory by issuing the command `./jr256  ../../hellojr/hello.bin@4000  ../basic.rom@b`. The pseudo address `b` 
 is a shorthand for the value $8000. At the BASIC prompt we can use `call $4000` to execute our program. 
