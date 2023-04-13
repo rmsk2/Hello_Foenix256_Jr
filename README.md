@@ -256,6 +256,17 @@ background or foreground color. The lower 4 bit of a colour code specifiy the ba
 |`ctrl-l`| Clears the screen | 
  
 
+### Zero page usage of `superbasic` and the TinyCore MicroKernel
+
+I do not claim that I understand the source code of `superbasic` very well but as far as I understand it I think
+it uses the zero page locations $30-$40 and $50-$80. I came to this conclusions by looking at the following files
+
+- `source/common/aa.system/04data.inc`
+- `source/output/basic.lst`
+
+So I guess I will use zero page locations from $90 up for my own programs. It has to be noted that the kernel 
+additionally uses the addresses $F0-$FF.
+
 ### Oddities experienced
 
 - The boot screen shows 4 characters with wrong background color. See [here](https://user-images.githubusercontent.com/13918100/230933468-1fb9ce9a-5362-4bfd-afc1-ab4f00d6e2bb.jpg) 
@@ -280,4 +291,4 @@ background or foreground color. The lower 4 bit of a colour code specifiy the ba
 
 ## Things to do
 
-- Research the safe zero page locations to use in combination with `superbasic`.
+- Research how to do bitmap graphics
