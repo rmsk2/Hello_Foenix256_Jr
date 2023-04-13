@@ -7,6 +7,8 @@
 SID_LEFT =  $D400
 SID_RIGHT = $D500
 
+SID_TO_USE = SID_RIGHT
+
 .include "sid_only.asm"
 
 
@@ -48,15 +50,15 @@ main
     #kprint 0, 30, pressKeyStart, len(pressKeyStart), pressKeyStartColor
     jsr waitForKey
 
-    #clearSID SID_RIGHT
-    #setGlobalVolume SID_RIGHT, 15
-    #setBeepADSR SID_RIGHT, 12, 2, 5, 10, 1
-    #setFrequency SID_RIGHT, 8*256+180, 1
-    #turnWaveOn SID_RIGHT, SAWTOOTH, 1
+    #clearSID SID_TO_USE
+    #setGlobalVolume SID_TO_USE, 15
+    #setBeepADSR SID_TO_USE, 12, 2, 5, 10, 1
+    #setFrequency SID_TO_USE, 8*256+180, 1
+    #turnWaveOn SID_TO_USE, SAWTOOTH, 1
 
     jsr delay
 
-    #turnWaveOff SID_RIGHT, SAWTOOTH, 1
+    #turnWaveOff SID_TO_USE, SAWTOOTH, 1
 
     #kprint 0, 31, msgDone, len(msgDone), msgDoneColor
 
