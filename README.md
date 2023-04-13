@@ -197,7 +197,7 @@ The following `superbasic` program can be used to test the SIDs
 10    testsid(s$)
 100   end 
 500   proc testsid(sidpos$)
-505   local sid
+505   local sid,n
 510   sid=$D500
 511   if sidpos$<>"right"then sid=$D400
 519   poke sid+24,15
@@ -212,9 +212,15 @@ The following `superbasic` program can be used to test the SIDs
 1000  endproc 
 ```
 
-The program as shown above can be used to test both SIDs. Enter `right` for the right SID. Any other value tests the left SID. The assembly 
-version can be built with `make sid_test`. The relevant source files are `sid_test.asm` and `sid_only.asm`. Please note that after a power 
-on the program needs to be run twice before you can hear any sound. This may be specific to the Nano SwinSIDs in my board.
+The program as shown above can be used to test both SIDs. Enter `right` for the right SID. Any other value tests the left SID. The source
+code can be found in the file `testsid.bas`. As described in the `superbasic` manual the program can be stored on a comaptible SD card and
+loaded from there or it can be uploaded to the F256 Jr. through the following command:
+
+`python3 fnxmgr.zip --port /dev/ttyUSB0 --binary testsid.bas --address 28000`
+
+After the machine resets type `xload` and after that you can list and/or run the program. Please note that after a power on of the F256 Jr.
+the program needs to be run twice before you can hear any sound. This may be specific to the Nano SwinSIDs in my board or to my speakers. 
+The assembly version can be built with `make sid_test`. The relevant source files are `sid_test.asm` and `sid_only.asm`. 
 
 ## Useful info
 
