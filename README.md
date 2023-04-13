@@ -7,8 +7,8 @@ Foenix 256 Jr. (Revision B) modern retro computer. This is work in progress use 
 
 - The Foenix 256 Jr. motherboard is a mini ITX board. Its power supply socket has 24 Pins. I bought a 
 90 watts 20 pin Power supply unit (PSU) which works for me. How is the 20 pin PSU plugged in? If you
-look at this [picture](https://c256foenix.com/f256-jr/?v=3a52f3c22ed6) then the leftmost four pins of
-the 24 pin socket have to remain free.
+look at this [picture](https://wiki.c256foenix.com/images/6/64/Pinout_Jr_December_7th_Trans.png) then the 
+leftmost four pins of the 24 pin socket have to remain free.
 - The plug of the PSU will not really fit in any other position and I have to say that when I first
 installed the PSU I had to exert a certain amount of pressure even in the correct position.
 - The board itself has no power switch but there is a pin header which has to be bridged in order to 
@@ -218,7 +218,11 @@ as well as the SIDs in them are seated properly. It is not impossible but unlike
 time unless of course the orientation of the chips is wrong. But I am confident that I got that right. I seem to be missing something quite fundamental. 
 
 The SID-part of the program works on VICE as expected. See `sid_vice.asm` (build with `make sid_vice`, start with `sys 16384`
-after loading it to the original address on your emulator of choice).
+after loading it to the original address on your emulator of choice). 
+
+I am running out of ideas what the cause for the problem could be and therefore have opened an 
+[issue](https://github.com/ghackwrench/F256_Jr_Kernel_DOS/issues/1) at the TinyCore MicroKernel project in order to verify that the SIDs are currently 
+supported and set up during sound system initialization or whether this remains to be implemented.
 
 ## Links
 
