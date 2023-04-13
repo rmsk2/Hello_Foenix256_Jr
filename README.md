@@ -204,20 +204,38 @@ background or foreground color. The lower 4 bit of a colour code specifiy the ba
 The following `superbasic` program can be used to test the SIDs
 
 ```
-10    sid=$D500
-15    poke sid+24,15
-20    poke sid+5,194
-30    poke sid+6,90
-40    poke sid,180
-50    poke sid+1,8
-60    poke sid+4,33
-70    for n=1 to 15000:next 
-80    poke sid+4,32
-90    print "done"
+5     print "SID test program"
+6     print "----------------"
+7     print 
+8     input "Left or right sid? ";s$
+10    testsid(s$)
+100   end 
+500   proc testsid(sidpos$)
+505   local sid
+510   sid=$D500
+511   if sidpos$<>"right"then sid=$D400
+519   poke sid+24,15
+520   poke sid+5,194
+530   poke sid+6,90
+540   poke sid,180
+550   poke sid+1,8
+560   poke sid+4,33
+570   for n=1 to 15000:next 
+580   poke sid+4,32
+590   print "done"
+1000  endproc 
 ```
 
-The program as shown above tests the right SID. Change `$D500` to `$D400` for the left SID. The assembly version can be built with `make sid_test`.
-The relevant source files are `sid_test.asm` and `sid_only.asm`.
+The program as shown above can be used to test both SIDs. Enter `right` for the right SID. Any other value tests the left SID. The assembly 
+version can be built with `make sid_test`. The relevant source files are `sid_test.asm` and `sid_only.asm`. Please note that after a power 
+on the program needs to be run twice before you can hear any sound. This may be specific to the Nano SwinSIDs in my board.
+
+## Oddities experienced
+
+- The boot screen shows 4 characters with wrong background color. See [here](https://user-images.githubusercontent.com/13918100/230933468-1fb9ce9a-5362-4bfd-afc1-ab4f00d6e2bb.jpg). 
+- The `superbasic` statement `call` is currently not mentioned in the documentation
+- The `bload` statement does not print `Completed` when loading is successfull whereas `load` does
+- The `superbasic` documentation does not mention that the `proc` keyword is only valid if it occurs after an `end` statement
 
 ## Links
 
