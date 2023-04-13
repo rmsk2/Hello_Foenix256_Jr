@@ -34,6 +34,7 @@ kprint .macro x, y, txtPtr, len, colPtr
      jsr kernel.Display.DrawRow                  ; print to the screen
      .endmacro
 
+
 ; move a 16 bit value from one location to the other
 move16Bit .macro src, target
     lda \src
