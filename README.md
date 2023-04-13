@@ -201,28 +201,23 @@ background or foreground color. The lower 4 bit of a colour code specifiy the ba
 
 ## SID test
 
-For the purpose of trying out the two (Nano SwinSID) SID-replacements I have bought for use with the F256 Jr. I have written a test program 
-called `sid_test.asm` (use `make sid_test`to build it). Unfortunately the program does not work on my system. I have tried all of the following 
-but until now but neither the left nor the right SID works:
+The following `superbasic` program can be used to test the SIDs
 
-- Switching DIP switch 5 on and off
-- Using the headphone output and using Line out
-- Using a Nano SwinSID and using a real (working) 8580R5 SID
-- Using 9V and 12V with a Nano SwinSID even though it should work with both
-- The SID specific part of the program works in VICE (see `sid_only.asm` and `sid_vice.asm`)
-- I have tried one of the Nano SwinSIDs in a real C64 and it worked
+```
+10    sid=$D500
+15    poke sid+24,15
+20    poke sid+5,194
+30    poke sid+6,90
+40    poke sid,180
+50    poke sid+1,8
+60    poke sid+4,33
+70    for n=1 to 15000:next 
+80    poke sid+4,32
+90    print "done"
+```
 
-Sound works in principle as the `superbasic` simple sound commands like `zap`, `shoot`, `ping` and `explode` produce audible output. The jumpers for SID 
-channel selection are present and route the left and right SIDs to the corresponding inputs of the CODEC chip. I am pretty sure that the ZIF sockets 
-as well as the SIDs in them are seated properly. It is not impossible but unlikely that a connection problem occurs on both sockets at the same 
-time unless of course the orientation of the chips is wrong. But I am confident that I got that right. I seem to be missing something quite fundamental. 
-
-The SID-part of the program works on VICE as expected. See `sid_vice.asm` (build with `make sid_vice`, start with `sys 16384`
-after loading it to the original address on your emulator of choice). 
-
-I am running out of ideas what the cause for the problem could be and therefore have opened an 
-[issue](https://github.com/ghackwrench/F256_Jr_Kernel_DOS/issues/1) at the TinyCore MicroKernel project in order to verify that the SIDs are currently 
-supported and set up during sound system initialization or whether this remains to be implemented.
+The program as shown above tests the right SID. Change `$D500` to `$D400` for the left SID. Unfortunatley I was unable to get any sound from the
+SIDs when using an assembly program which in essence does the same as the above BASIC program.
 
 ## Links
 
@@ -241,5 +236,4 @@ supported and set up during sound system initialization or whether this remains 
 
 ## Things to do
 
-- Get SIDs working
-- Research the save zero page locations to use in combination with `superbasic`.
+- Research the safe zero page locations to use in combination with `superbasic`.
