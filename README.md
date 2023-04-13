@@ -172,7 +172,7 @@ does not implement enough of the system for it to work. But the program works on
 In the file `test_ramexp.asm` you will find a small assembly program that tests the presence of the 256K RAM expansion. You can
 build the program with `make ram_exp` which results in the binary `ram_exp.bin`. This can then be run as described above.
 
-The programm simply writes a byte to memory at 6502 address `$6100` then maps in a page of expanded RAM and writes a different 
+The program simply writes a byte to memory at 6502 address `$6100` then maps in a page of expanded RAM and writes a different 
 value to the same 6502 address. Then the values are read again and checked.
 
 ## About colours in text mode
