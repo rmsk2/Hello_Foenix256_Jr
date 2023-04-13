@@ -232,7 +232,7 @@ on the program needs to be run twice before you can hear any sound. This may be 
 
 ## Oddities experienced
 
-- The boot screen shows 4 characters with wrong background color. See [here](https://user-images.githubusercontent.com/13918100/230933468-1fb9ce9a-5362-4bfd-afc1-ab4f00d6e2bb.jpg). 
+- The boot screen shows 4 characters with wrong background color. See [here](https://user-images.githubusercontent.com/13918100/230933468-1fb9ce9a-5362-4bfd-afc1-ab4f00d6e2bb.jpg) 
 - The `superbasic` statement `call` is currently not mentioned in the documentation
 - The `bload` statement does not print `Completed` when loading is successfull whereas `load` does
 - The `superbasic` documentation does not mention that the `proc` keyword is only valid if it occurs after an `end` statement
