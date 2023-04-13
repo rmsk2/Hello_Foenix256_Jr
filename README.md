@@ -216,8 +216,8 @@ The following `superbasic` program can be used to test the SIDs
 90    print "done"
 ```
 
-The program as shown above tests the right SID. Change `$D500` to `$D400` for the left SID. Unfortunatley I was unable to get any sound from the
-SIDs when using an assembly program which in essence does the same as the above BASIC program.
+The program as shown above tests the right SID. Change `$D500` to `$D400` for the left SID. The assembly version can be built with `make sid_test`.
+The relevant source files are `sid_test.asm` and `sid_only.asm`.
 
 ## Links
 
