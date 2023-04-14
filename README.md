@@ -96,7 +96,7 @@ our program has run.
 ## A Hello world in assembly
 
 In order to compile the assembly examples you will need an installed version of `64tass` in your path. I used the version from
-the Ubuntu repositories whcih worked fine. If you want to install the latest version you can download it 
+the Ubuntu repositories which worked fine. If you want to install the latest version you can download it 
 [here](https://sourceforge.net/projects/tass64/).
 
 ### The first assembly program
