@@ -198,8 +198,8 @@ the 256K memory expansion and the optional SID chips.
 ### About colours in text mode
 
 For your convenience the following table gives the colour codes used in text mode. Any of the 16 colours can appear either as 
-background or foreground color. The lower 4 bit of a colour code specifiy the backround colour the upper 4 bit set the foreground
-colour.
+background or foreground color. The lower 4 bit of a colour code specifiy the background colour the upper 4 bit set the 
+foreground colour.
 
 | Colour code | Colour |
 |-|-|
