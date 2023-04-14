@@ -56,11 +56,22 @@ can be found in the file `../../hellojr/hello.bin` relative to the emulator's `b
 from this  directory by issuing the command `./jr256  ../../hellojr/hello.bin@4000  ../basic.rom@b`. The pseudo address `b` 
 is a shorthand for the value $8000. At the BASIC prompt we can use `call $4000` to execute our program. 
 
+If you want to load a BASIC program, let's call it `test.bas`, into the emulator you can use the command 
+
+`./jr256  test.bas@28000  ../basic.rom@b`
+
+and type `xload` at the BASIC prompt. This first loads the source to the address $28000 and `xload` is reading it from that
+location.
+
 We could also skip loading the BASIC ROM and only start our program. The emulator can do that through the command 
 `./jr256 ../../hellojr/hello.bin@4000 boot@4000`. As we have in this case not loaded the BASIC ROM not much is happening after 
-our program has written the A to screen memory.
+our program has run.
 
 ## A Hello world in assembly
+
+In order to compile the assembly examples you will need an installed version of `64tass` in your path. I used the version from
+the Ubuntu repositories whcih worked fine. If you want to install the latest version you can download it 
+[here](https://sourceforge.net/projects/tass64/).
 
 ### The first assembly program
 
