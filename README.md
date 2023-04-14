@@ -1,10 +1,13 @@
 # Hello Foenix256 Jr.
 
 This project contains source code and information with respect to my first experiences with the 
-Foenix 256 Jr. (Revision B) modern retro computer. This is work in progress use at your own risk. In
-[this document](/emulator.md) you find info about how to set up an emulator. I am using Ubuntu 22.04 
-so all the following information is in principle specific to this platform but it should be easy to
-replicate these steps on other Linux distros. I have not attempted to use these tools on Windows.
+Foenix 256 Jr. (Revision B) modern retro computer. This is work in progress use at your own risk.
+
+I am using Ubuntu 22.04 so all the following information is in principle specific to this platform 
+but it should be easy to replicate these steps on other Linux distros. I have not attempted to use 
+these tools on Windows.
+
+In [this document](/emulator.md) you find info about how to set up an emulator. 
 
 ## Hardware setup
 
