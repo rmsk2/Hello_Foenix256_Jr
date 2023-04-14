@@ -223,7 +223,7 @@ colour.
 
 ### Zero page usage of `superbasic` and the TinyCore MicroKernel
 
-I do not claim that I understand the source code of `superbasic` very well but as far as I understand it I think
+I do not claim to understand the source code of `superbasic` very well but as far as I understand it I think
 it uses the zero page locations $30-$40 and $50-$80. I came to these conclusions by looking at the following files
 
 - `source/common/aa.system/04data.inc`
