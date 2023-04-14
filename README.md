@@ -54,7 +54,8 @@ The emulator must be instructed at start to load the neccessary binaries to thei
 to load we have to add a CLI parameter of the form `file to load@hexaddress`. Let's assume that we want to load a program which 
 can be found in the file `../../hellojr/hello.bin` relative to the emulator's `bin` directroy. We then start the emulator 
 from this  directory by issuing the command `./jr256  ../../hellojr/hello.bin@4000  ../basic.rom@b`. The pseudo address `b` 
-is a shorthand for the value $8000. At the BASIC prompt we can use `call $4000` to execute our program. 
+is a shorthand for the value $8000. At the BASIC prompt we can use `call $4000` to execute our program. This of course assumes
+that the target address used during compliation of `hello.bin` was $4000.
 
 If you want to load a BASIC program, let's call it `test.bas`, into the emulator you can use the command 
 
