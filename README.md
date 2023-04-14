@@ -20,7 +20,8 @@ In addition to the board you will need:
 - A power adapter for this PSU
 - A DVI monitor cable
 - A PS/2 keyboard or a USB to PS/2 adapter and a USB keyboard
-- A jumper to bridge the pin headers of the power on switch (see below)
+- A jumper to bridge the pin headers of the power on switch (see below) or
+a proper switch that can be connected to the pin headers
 - A cable to connect the Line out or headphone output to your speakers
 
 Optional but good to have:
