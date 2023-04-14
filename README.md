@@ -188,10 +188,18 @@ the 256K memory expansion and the optional SID chips.
 
 ## Useful info
 
+### `superbasic` keyboard shortcuts
+
+| Key combination | Effect |
+|-|-|
+|`ctrl-c`| Stops a listing or a running program |
+|`ctrl-l`| Clears the screen | 
+
 ### About colours in text mode
 
 For your convenience the following table gives the colour codes used in text mode. Any of the 16 colours can appear either as 
-background or foreground color. The lower 4 bit of a colour code specifiy the backround colour.
+background or foreground color. The lower 4 bit of a colour code specifiy the backround colour the upper 4 bit set the foreground
+colour.
 
 | Colour code | Colour |
 |-|-|
@@ -211,13 +219,6 @@ background or foreground color. The lower 4 bit of a colour code specifiy the ba
 | 13 | Red |
 | 14 | Yellow |
 | 15 | White |
-
-### `superbasic` Keyboard shortcuts
-
-| Key combination | Effect |
-|-|-|
-|`ctrl-c`| Stops a listing or a running program |
-|`ctrl-l`| Clears the screen | 
  
 
 ### Zero page usage of `superbasic` and the TinyCore MicroKernel
