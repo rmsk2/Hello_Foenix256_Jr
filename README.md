@@ -1,7 +1,8 @@
 # Hello Foenix256 Jr.
 
-This project contains source code and information with respect to my first experiences with the 
-Foenix 256 Jr. (Revision B) modern retro computer. This is work in progress use at your own risk.
+This project contains source code and information with respect to my first steps while developing
+a hello world example in assembly language for the Foenix 256 Jr. (Revision B) modern retro computer. 
+This is work in progress use at your own risk.
 
 I am using Ubuntu 22.04 so all the following information is in principle specific to this platform 
 but it should be easy to replicate these steps on other Linux distros. I have not attempted to use 
@@ -181,7 +182,7 @@ colorData .text x"62" x len(textData)
 does not implement enough of the system for it to work. But the program works on a real machine.
 
 There are additional examples described in [this document](/testprogs.md) which can be used to test hardware add-ons like
-the 256K memory expansion and the optional SID chips-
+the 256K memory expansion and the optional SID chips.
 
 ## Useful info
 
