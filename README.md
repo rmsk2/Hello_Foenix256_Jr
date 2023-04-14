@@ -49,7 +49,7 @@ the lower right where it is labeled with *PW ON SPST Switch*. I used a jumper to
 connect the two pins
 - If you ordered the ZIF sockets you have to plug them into the SID sockets in such a way that the levers
 when they are turned over point to that side of the board where the DVI, IEC and SD sockets are. When seating
-the socket the lever has to be vertical.
+the sockets their lever has to be vertical.
 
 ### Using an SD-Card 
 
