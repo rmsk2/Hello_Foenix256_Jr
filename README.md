@@ -67,7 +67,7 @@ CLI use the `mkfs`command in order to format an SD card.
 ## Uploading programs to the F256 Jr.
 
 The first way to run a program on the real hardware is to mount an appropriately formatted SD card
-on your Linux machine and store the program to run, let's call it `hello.bin` with a target address of $4000, 
+on your Linux machine and store the assembly program to run, let's call it `hello.bin` with a target address of $4000, 
 on this card. Then transfer the card to your F256 Jr. and load the file with `bload "hello.bin", $4000`. Finally 
 execute it using `call $4000`. 
 
