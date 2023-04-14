@@ -8,7 +8,7 @@ I am using Ubuntu 22.04 so all the following information is in principle specifi
 but it should be easy to replicate these steps on other Linux distros. I have not attempted to use 
 these tools on Windows.
 
-In [this document](/emulator.md) you find info about how to set up an emulator. 
+In [this document](/emulator.md) you find info about how to set up an F256 Jr. emulator. 
 
 ## Hardware setup
 
@@ -182,6 +182,8 @@ colorData .text x"62" x len(textData)
 
 **Remark**: The program does not work in the emulator. Either I have used the wrong API description or the emulator simply
 does not implement enough of the system for it to work. But the program works on a real machine.
+
+### Additional examples
 
 There are additional examples described in [this document](/testprogs.md) which can be used to test hardware add-ons like
 the 256K memory expansion and the optional SID chips.
