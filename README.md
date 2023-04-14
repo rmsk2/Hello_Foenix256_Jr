@@ -5,7 +5,30 @@ Foenix 256 Jr. (Revision B) modern retro computer. This is work in progress use 
 
 ## Hardware setup
 
-### General
+### What do you need?
+
+In addition to the board you will need:
+
+- A mini ITX power supply unit (PSU), that plugs into the F256 Jr. board
+- A power adapter for this PSU
+- A DVI monitor cable
+- A PS/2 keyboard or a USB to PS/2 adapter and a USB keyboard
+- A jumper to bridge the pin headers of the power on switch (see below)
+- A cable to connect the Line out or headphone output to your speakers
+
+Optional but good to have
+
+- SDHC or SDXC cards if you want to use the SD card slot
+- A mini USB cable if you want to upload software from your development machine to the F256 Jr. via
+the USB debug port
+
+Optional
+
+- A mini ITX case
+- An IEC device for instance an original Commodore floppy drive or an SD2IEC like device including the 
+corresponding connection cable
+
+### Hardware installation
 
 - The Foenix 256 Jr. motherboard is a mini ITX board. Its power supply socket has 24 Pins. I bought a 
 90 watts 20 pin Power supply unit (PSU) which works for me. How is the 20 pin PSU plugged in? If you
@@ -16,7 +39,9 @@ installed the PSU I had to exert a certain amount of pressure even in the correc
 - The board itself has no power switch but there is a pin header which has to be bridged in order to 
 connect the power supply to the board. In the picture linked above the pin header in question is shown in 
 the lower right where it is labeled with *PW ON SPST Switch*. I used a jumper to permanently
-connect the two pins.
+connect the two pins
+- If you ordered the ZIF sockets you have to plug them into the SID sockets in such a way that the levers
+point to that side of the board where the DVI, IEC and SD sockets are.
 
 ### Using an SD-Card 
 
@@ -61,7 +86,7 @@ If you want to load a BASIC program, let's call it `test.bas`, into the emulator
 
 `./jr256  test.bas@28000  ../basic.rom@b`
 
-and type `xload` at the BASIC prompt. This first loads the source to the address $28000 and `xload` is reading it from that
+and type `xload` at the BASIC prompt. This first loads the source to the address $28000 and `xload` then reads it from that
 location.
 
 We could also skip loading the BASIC ROM and only start our program. The emulator can do that through the command 
@@ -103,9 +128,8 @@ sta $0001
 rts
 ```
 
- As mentioned above you can use `./jr256  ../../hellojr/hello.bin@4000  ../basic.rom@b` and `call $4000` to run this program in the
+ As mentioned above you can use `./jr256  path/to/hello.bin@4000  ../basic.rom@b` and `call $4000` to run this program in the
  emulator.
-
 
 ### The same program in BASIC style
 
@@ -293,12 +317,13 @@ additionally uses the addresses $F0-$FF.
 - [Kernel for the F256 Jr.](https://github.com/ghackwrench/F256_Jr_Kernel_DOS)
 - [Alternative kernAl using Commodore interface](https://github.com/ghackwrench/OpenKERNAL)
 - [Basic implementation](https://github.com/paulscottrobson/superbasic)
-- [System Documentation](https://github.com/pweingar/C256jrManual)
+- [System manual](https://github.com/pweingar/C256jrManual)
+- [BASIC manual](https://github.com/paulscottrobson/superbasic/blob/main/reference/source/f256jr_basic_ref.pdf)
 - [Product data sheet](https://256-foenix.us-east-1.linodeobjects.com/C256_Foenix_JR_UM_Rev002.pdf)
 - [Tool for firmware upload and USB debugging](https://github.com/pweingar/FoenixMgr)
 - [The official emulator/Dev suite](https://github.com/Trinity-11/FoenixIDE)
 - [Fork of the official emulator](https://github.com/scttgs0/emuF256Jr)
-- [Another Emulator](https://github.com/paulscottrobson/junior-emulator)
+- [Emulator used in this project](https://github.com/paulscottrobson/junior-emulator)
 - The project uses [64tass](https://sourceforge.net/projects/tass64/) as an assembler. The manual can be found [here](http://tass64.sourceforge.net/)
 
 ## Things to do
