@@ -30,3 +30,9 @@ location.
 We could also skip loading the BASIC ROM and only start our program. The emulator can do that through the command 
 `./jr256 ../../hellojr/hello.bin@4000 boot@4000`. As we have in this case not loaded the BASIC ROM not much is happening after 
 our program has run.
+
+## Links
+
+- [The official emulator/Dev suite](https://github.com/Trinity-11/FoenixIDE)
+- [Fork of the official emulator](https://github.com/scttgs0/emuF256Jr)
+- [Emulator used in this project](https://github.com/paulscottrobson/junior-emulator)
