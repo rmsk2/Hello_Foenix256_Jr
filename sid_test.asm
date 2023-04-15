@@ -46,6 +46,7 @@ move16Bit .macro src, target
 
 ; The name says it all
 main
+    ; make sure whe receive kernel events
     jsr initEvents
 
     #kprint 0, 30, pressKeyStart, len(pressKeyStart), pressKeyStartColor
@@ -63,6 +64,7 @@ main
 
     #kprint 0, 31, msgDone, len(msgDone), msgDoneColor
 
+    ; restore event queue of superbasic
     jsr restoreEvents
 
     rts
@@ -71,6 +73,7 @@ loCount .byte 0
 middleCount .byte 0
 hiCount .byte 0
 
+; A simple counting loop to cause a delay in the program 
 delay
     stz loCount
     stz middleCount
