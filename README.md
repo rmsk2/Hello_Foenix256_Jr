@@ -272,7 +272,45 @@ must be omitted. This is explained in the section about structured programming o
 - [Emulator used in this project](https://github.com/paulscottrobson/junior-emulator)
 - The project uses [64tass](https://sourceforge.net/projects/tass64/) as an assembler. The manual can be found [here](http://tass64.sourceforge.net/)
 
+## What do I think about the F256 Jr.?
+
+I think it is a great little machine and I like it a lot. On top of that (and in contrast to other similar projects) it is real! The hardware is 
+sitting on my desk **today** and works reliably. When compared to the Commander X16 the F256 Jr. is a more ambitious design. The memory management
+is much more flexible, it features a math coprocessor for fast multiplication/divison and includes a DMA Controller (i.e. a Blitter) which should 
+make it, at least in that respect, a more capable retro gaming system than the X16. The kernel even provides a SLIP based TCP stack which
+should make it possible to connect the F256 Jr. to the internet without adding the optional WiFi module, but I have not tried that, yet.
+
+Due to the fact that the F256 Jr. deviates much further from the Commodore line of 8 bit computers than the X16 the learning curve for the aspiring
+retro programmer coming from a Commodore background is also steeper but on the other hand there is also more to discover.
+
+As I am not a hardware guy the steepest part of my learning curve was (believe it ot not) getting the board powered up. I was unsure how to plug
+my 20 pin power supply in the 24 pin socket on the F256 Jr. board and I was simply not aware that I had to provide a "power switch" for the board in 
+the form of a jumper. A little brochure that explains explicitly how to set up the hardware would have been helpful.
+
+The second obstacle was to get the SD card slot to work. In contrast to other systems in the retro world the F256 Jr. only works with more modern
+SDHC and SDXC cards and I tried my assortment of older SD cards over an extended period of time with no success. I found the relevant piece of 
+information in the release notes of the kernel so this was documented but it was far from obvious. On the other hand the IEC bus worked right
+away and it was quite a sight to see the F256 Jr. use a Commodore 1541 floppy drive! Using an SD2IEC like device also worked. I had some 
+diffculties setting up the SID chips but the reason for that was my own flawed assumptions about one of my programs.
+
+I like the BASIC that comes with the F256 Jr. as it enables you to explore the system and its features in an interactive way. It is much 
+more advanced than the Commodore BASIC V2 but that also means that not all of your potential previous knowledge carries over to this new
+platform.
+
+While the documentation could be improved (see section `Also notworthy` above) it mostly works at least for me as a reference for the system. 
+What is missing is in my opinion tutorial syle material that guides you through the first steps on the system from hardware installation to a running 
+hello world program. This information mostly is already available but split between different sources.
+
+Another thing that is not ideal from my point of view is the situation with respect to an emulator. I was not able to get the official emulator 
+to boot to a BASIC prompt, but maybe I should try that again as I now know quite a bit more about the F256 Jr than I did in the beginning. The 
+fork of `scttgs0` simply crashes after it is started. The emulator of Paul Robson boots to a BASIC prompt and is usable but makes no use of the 
+kernel ROM which limits what kind of software can be tested. As the development cycle is fairly smooth when using the upload mechanism a nice 
+emulator is not a necessity for me as a programmer but it could be a tool to get people interested in the platform.
+
+I wish the people behind the F256 Jr. the commercial success that the product deserves.
+
 ## Things to do
 
 - Experiment with the math coprocessor
-- Research how to do bitmap graphics
+- Research how to do bitmap graphics in assembly
+- Port my Mandelbrot set viewer to the platform
