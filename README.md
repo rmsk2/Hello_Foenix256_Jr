@@ -303,7 +303,7 @@ hello world program. This information mostly is already available but split betw
 
 Another thing that is not ideal from my point of view is the situation with respect to an emulator. I was not able to get the official emulator 
 to boot to a BASIC prompt, but maybe I should try that again as I now know quite a bit more about the F256 Jr than I did in the beginning. The 
-fork of `scttgs0` simply crashes after it is started. The emulator of Paul Robson boots to a BASIC prompt and is usable but makes no use of the 
+fork of `scttgs0` does not work for me. The emulator of Paul Robson boots to a BASIC prompt and is usable but makes no use of the 
 kernel ROM which limits what kind of software can be tested. As the development cycle is fairly smooth when using the upload mechanism a nice 
 emulator is not a necessity for me as a programmer but it could be a tool to get people interested in the platform.
 
