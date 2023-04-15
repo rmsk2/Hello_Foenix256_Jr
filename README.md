@@ -226,12 +226,13 @@ foreground colour. These colour codes can be used with the kernel function `kern
 
 |Code | Effect |
 |-|-|
-| chr$(12) | Clear screen |
+| chr$(12) | Clear screen and set cursor to upper left corner |
 | chr$(16)| Cursor up |
 | chr$(14)| Cursor down |
 | chr$(2)| Cursor left |
 | chr$(6)| Cursor right |
 | chr$(1) | Set cursor to leftmost position in current line |
+| chr$(5) | Set cursor to righmost position in current line |
 | chr$(128) - chr$(143)| Set foreground color. Code 128 is black 143 is white. The rest follows the sequence given above |
 | chr$(144) - chr$(159)| Set background color. Code 144 is black 159 is white. The rest follows the sequence given above |
 
