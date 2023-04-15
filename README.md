@@ -68,10 +68,10 @@ CLI use the `mkfs`command in order to format an SD card.
 
 ## Uploading programs to the F256 Jr.
 
-The first way to run a program on the real hardware is to mount an appropriately formatted SD card
-on your Linux machine and store the assembly program to run, let's call it `hello.bin` with a target address of $4000, 
-on this card. Then transfer the card to your F256 Jr. and load the file with `bload "hello.bin", $4000`. Finally 
-execute it using `call $4000`. 
+The first way to run an assembly program on the real hardware is to mount an appropriately formatted SD card
+on your Linux machine and store the program, let's call it `hello.bin` with a target address of $4000,
+which you have compiled under Linux, on this card. Then transfer the card to your F256 Jr. and load the file with 
+`bload "hello.bin", $4000`. Finally execute it using `call $4000`. 
 
 Using the SD card is satisfactory for distributing finished programs but during dvelopmemt it does not feel very
 sustainable to switch a card dozens of times in a few hours over days or weeks. Another way to transfer a binary 
@@ -274,4 +274,5 @@ must be omitted. This is explained in the section about structured programming o
 
 ## Things to do
 
+- Experiment with the math coprocessor
 - Research how to do bitmap graphics
