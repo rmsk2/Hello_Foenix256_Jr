@@ -23,7 +23,6 @@
 207   print "done"
 210   cursor on
 498   end 
-499   print "done"
 500   proc testsid(sidpos$)
 505       local sid,n
 510       sid=$D500
