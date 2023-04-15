@@ -100,7 +100,7 @@ the Ubuntu repositories which worked fine. If you want to install the latest ver
 
 The file `hello.asm` contains a simple assembly program which pokes the character A into the top left corner of the screen memory.
 You can use `64tass --nostart -o hello.bin hello.asm` (or `make hello`) to assemble this program. The resulting binary `hello.bin` 
-can then be uploaded to the machine using the methods described above. 
+can then be uploaded to the F256 Jr. using the methods described above. 
 
 ```
 ; target address is $4000
