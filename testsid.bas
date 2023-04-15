@@ -40,4 +40,3 @@
 705      print chr$(1);
 710      print "Selected SID: " pos$ "   ";
 1000 endproc
-
