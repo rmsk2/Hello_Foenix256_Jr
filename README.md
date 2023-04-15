@@ -201,7 +201,7 @@ the 256K memory expansion and the optional SID chips.
 
 For your convenience the following table gives the colour codes used in text mode. Any of the 16 colours can appear either as 
 background or foreground color. The lower 4 bit of a colour code specifiy the background colour the upper 4 bit set the 
-foreground colour.
+foreground colour. These colour codes can be used with the kernel function `kernel.Display.DrawRow`.
 
 | Colour code | Colour |
 |-|-|
@@ -221,7 +221,19 @@ foreground colour.
 | 13 | Red |
 | 14 | Yellow |
 | 15 | White |
- 
+
+### Control characters for cursor and colour control
+
+|Code | Effect |
+|-|-|
+| chr$(12) | Clear screen |
+| chr$(16)| Cursor up |
+| chr$(14)| Cursor down |
+| chr$(2)| Cursor left |
+| chr$(6)| Cursor right |
+| chr$(1) | Set cursor to leftmost position in current line |
+| chr$(128) - chr$(143)| Set foreground color. Code 128 is black 143 is white. The rest follows the sequence given above |
+| chr$(144) - chr$(159)| Set background color. Code 144 is black 159 is white. The rest follows the sequence given above |
 
 ### Zero page usage of `superbasic` and the TinyCore MicroKernel
 
@@ -234,12 +246,14 @@ it uses the zero page locations $30-$40 and $50-$80. I came to these conclusions
 So I guess I will use zero page locations from $90 up for my own programs. It has to be noted that the kernel 
 additionally uses the addresses $F0-$FF.
 
-### Oddities experienced
+### Also noteworthy
 
 - The boot screen shows 4 characters with wrong background color. See [here](https://user-images.githubusercontent.com/13918100/230933468-1fb9ce9a-5362-4bfd-afc1-ab4f00d6e2bb.jpg) 
 - The `superbasic` statement `call` is currently not mentioned in the documentation
 - The `bload` statement does not print `Completed` when loading is successfull whereas `load` does
 - The `superbasic` documentation does not mention that the `proc` keyword is only valid if it occurs after an `end` statement
+- When using the variant of the `if` statement that allows for a multline `if` block and an optional `else` block the `then` statement 
+must be omitted. This is explained in the section about structured programming of the basic reference manual.
 
 ## Links
 
