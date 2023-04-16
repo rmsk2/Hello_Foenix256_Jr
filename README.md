@@ -194,7 +194,7 @@ There are additional examples described in [this document](/testprogs.md) which 
 
 - the 256K memory expansion
 - the optional SID chips 
-- the joystick ports.
+- the joystick ports
 
 ## Useful info
 
