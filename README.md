@@ -244,8 +244,8 @@ it uses the zero page locations $30-$40 and $50-$80. I came to these conclusions
 - `source/common/aa.system/04data.inc`
 - `source/output/basic.lst`
 
-So I guess I will use zero page locations from $90 up for my own programs. It has to be noted that the kernel 
-additionally uses the addresses $F0-$FF.
+So I guess I will use zero page locations from $90 up for my own programs. It has to be noted that the kernel additionally uses 
+the addresses $F0-$FF and the system itself uses the zero page addresses $00, $01 and $08-$0F for configuring the memory layout.
 
 ### Also noteworthy
 
@@ -282,16 +282,6 @@ should make it possible to connect the F256 Jr. to the internet without adding t
 
 Due to the fact that the F256 Jr. deviates much further from the Commodore line of 8 bit computers than the X16 the learning curve for the aspiring
 retro programmer coming from a Commodore background is also steeper but on the other hand there is also more to discover.
-
-As I am not a hardware guy the steepest part of my learning curve was (believe it ot not) getting the board powered up. I was unsure how to plug
-my 20 pin power supply in the 24 pin socket on the F256 Jr. board and I was simply not aware that I had to provide a "power switch" for the board in 
-the form of a jumper. A little brochure that explains explicitly how to set up the hardware would have been helpful.
-
-The second obstacle was to get the SD card slot to work. In contrast to other systems in the retro world the F256 Jr. only works with more modern
-SDHC and SDXC cards and I tried my assortment of older SD cards over an extended period of time with no success. I found the relevant piece of 
-information in the release notes of the kernel so this was documented but it was far from obvious. On the other hand the IEC bus worked right
-away and it was quite a sight to see the F256 Jr. use a Commodore 1541 floppy drive! Using an SD2IEC like device also worked. I had some 
-diffculties setting up the SID chips but the reason for that was my own flawed assumptions about one of my programs.
 
 I like the BASIC that comes with the F256 Jr. as it enables you to explore the system and its features in an interactive way. It is much 
 more advanced than the Commodore BASIC V2 but that also means that not all of your potential previous knowledge carries over to this new
