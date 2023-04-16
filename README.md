@@ -191,7 +191,10 @@ does not implement enough of the system for it to work. But the program works on
 ### Additional examples
 
 There are additional examples described in [this document](/testprogs.md) which can be used to test hardware add-ons like
-the 256K memory expansion, the optional SID chips and the joystick ports.
+
+- the 256K memory expansion
+- the optional SID chips 
+- the joystick ports.
 
 ## Useful info
 
