@@ -19,3 +19,8 @@ After the machine resets type `xload` and after that you can list and/or run the
 the first time you try to play a sound on either the left or the right SID does not work. This is probably specific to the Nano SwinSIDs in 
 my board or to my speakers. The assembly version can be built with `make sid_test`. The relevant source files are `sid_test.asm` and 
 `sid_only.asm`. 
+
+## Joystick test
+
+The file `joystick.asm` contains the source for an assembly program that visualizes the joystick state on the text screen. You can build
+the program by issuing the command `make joystick`. Its target address is $4000.
