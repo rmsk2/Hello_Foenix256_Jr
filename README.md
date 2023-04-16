@@ -245,7 +245,8 @@ it uses the zero page locations $30-$40 and $50-$80. I came to these conclusions
 - `source/output/basic.lst`
 
 So I guess I will use zero page locations from $90 up for my own programs. It has to be noted that the kernel additionally uses 
-the addresses $F0-$FF and the system itself uses the zero page addresses $00, $01 and $08-$0F for configuring the memory layout.
+the addresses $F0-$FF and the system itself uses the zero page addresses $00, $01 and $08-$0F for configuration of the memory 
+layout.
 
 ### Also noteworthy
 
