@@ -37,6 +37,8 @@ main
 
     rts
 
+.include "khelp.asm"
+
 loCount .byte 0
 middleCount .byte 0
 hiCount .byte 0
@@ -59,25 +61,6 @@ _loop
 
     rts
 
-
-; value of event buffer at program start (likely set by `superbasic`)
-oldEvent .byte 0, 0
-
-; set event buffer to new value
-initEvents
-    #move16Bit kernel.args.events, oldEvent
-    #load16BitImmediate myEvent, kernel.args.events
-    rts
-
-
-; restore original event buffer
-restoreEvents
-    #move16Bit oldEvent, kernel.args.events
-    rts
-
-
-; the new event buffer
-myEvent .dstruct kernel.event.event_t
 
 ; waiting for a key press event from the kernel
 waitForKey

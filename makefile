@@ -13,16 +13,16 @@ hello.bin: hello.asm
 hello_kernel.bin: hello_kernel.asm api.asm
 	64tass --nostart -o hello_kernel.bin  hello_kernel.asm
 
-ram_exp.bin: test_ramexp.asm api.asm macros.asm
+ram_exp.bin: test_ramexp.asm api.asm macros.asm khelp.asm
 	64tass --nostart -o ram_exp.bin test_ramexp.asm
 
-sid_test.bin: sid_test.asm sid_only.asm api.asm
+sid_test.bin: sid_test.asm sid_only.asm api.asm khelp.asm
 	64tass --nostart -o sid_test.bin sid_test.asm
 
-joystick.bin: joystick.asm api.asm macros.asm
+joystick.bin: joystick.asm api.asm macros.asm khelp.asm
 	64tass --nostart -o joystick.bin joystick.asm
 
-slip.bin: slip.asm api.asm macros.asm
+slip.bin: slip.asm api.asm macros.asm khelp.asm
 	64tass --nostart -o slip.bin slip.asm
 
 clean:
