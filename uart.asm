@@ -91,10 +91,10 @@ initUart
     rts
 
 ; ******************** BEWARE ********************
-; These routines are
+; These routines
 ; 
-; 1. Probably inefficient
-; 2. do no error checking and reporting
+; 1. Are inefficient (they are synchronous and make suboptimal use of the FIFO of the UART)
+; 2. Do no error checking and reporting
 ; ******************** BEWARE ********************
 
 sendByte

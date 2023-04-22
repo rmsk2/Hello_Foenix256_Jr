@@ -33,3 +33,10 @@ F256 Jr. board. `yourEventBuffer.joystick.joy1` on the other hand must be used f
 Unfortunately the documentation for this feature is too sketchy at the moment that I am not able to write an example proggram. My idea
 is to use a Raspberry Pi as the other end of the SLIP connection which could the act as a "modem" for the F256 Jr. This in turn could
 enable multiplayer games on the platform. Nontheless there is a skeleton `slip.asm` that can be built by `make slip`.
+
+## Serial communication via the UART
+
+The file `uart.asm` contains a little program that demonstrates the sending and receiving of a single byte via the F256 Jr. UART. It
+can be built by `make uart`. The receiving side of the serial communication is implemented in python and can be found in the file 
+`ser_echo.py`. In essence these files implement a simple echo server. The F256 sends one byte and the python program returns the
+byte incremented by 1.

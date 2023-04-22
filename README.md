@@ -197,6 +197,7 @@ functionality like
 - the optional SID chips 
 - the joystick ports
 - SLIP networking
+- Serial communication via the UART
 
 ## Useful info
 
