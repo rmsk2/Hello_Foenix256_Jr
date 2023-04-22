@@ -4,17 +4,7 @@ SAWTOOTH = 32
 SQUARE = 64
 NOISE = 128
 
-; --------------------------------------------------
-; load16BitImmediate loads the 16 bit value given in the first argument 
-; into the memory location given the second argument
-; --------------------------------------------------
-load16BitImmediate .macro addr, target
-    lda #<\addr
-    sta \target
-    lda #>\addr
-    sta \target+1
-    .endmacro
-
+.include "macros.asm"
 
 clearSID .macro base
     ldx #0
@@ -25,7 +15,6 @@ _loopRegister
     cpx #25
     bne _loopRegister
     .endmacro
-
 
 ; set volume for SID
 setGlobalVolume .macro base, volume

@@ -35,7 +35,7 @@ Optional:
 - A mini ITX case
 - An IEC device for instance an original Commodore floppy drive or an SD2IEC like device including the 
 corresponding connection cable
-- Several (up to five) IDC-10 to DB9 cables. The serial port, the joystick ports and the game controller 
+- Several (up to four) IDC-10 to DB9 cables. The serial port, the two joystick ports and the game controller 
 ports are available on the F256 Jr. board in the form of IDC-10 pin headers. You will need a corresponding 
 adapter cable in order to be able to connect a serial nullmodem cable or Atari joysticks. For connecting NES or 
 SNES game controllers you also need an adapter box available via Foenix retro systems which connects to the
