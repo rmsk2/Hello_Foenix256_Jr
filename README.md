@@ -26,7 +26,7 @@ a proper switch that can be connected to the pin headers
 
 Optional but good to have:
 
-- SDHC or SDXC cards if you want to use the SD card slot *OR*
+- SDHC or SDXC cards if you want to use the SD card slot **OR**
 - An IEC device for instance an original Commodore floppy drive or an SD2IEC like device including the 
 corresponding connection cable
 - A mini USB cable if you want to upload software from your development machine to the F256 Jr. via
@@ -190,11 +190,13 @@ does not implement enough of the system for it to work. But the program works on
 
 ### Additional examples
 
-There are additional examples described in [this document](/testprogs.md) which can be used to test hardware add-ons like
+There are additional examples described in [this document](/testprogs.md) which can be used to test hardware add-ons and
+functionality like
 
 - the 256K memory expansion
 - the optional SID chips 
 - the joystick ports
+- SLIP networking
 
 ## Useful info
 
