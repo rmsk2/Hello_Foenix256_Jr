@@ -288,7 +288,7 @@ must be omitted. This is explained in the section about structured programming o
 
 I think it is a great little machine and I like it a lot. On top of that (and in contrast to other similar projects) it is real! The hardware is 
 sitting on my desk **today** and works reliably. When compared to the Commander X16 the F256 Jr. is a more ambitious design. The memory management
-is much more flexible, it features a math coprocessor for fast multiplication/divison and includes a DMA Controller (i.e. a Blitter) which should 
+is much more flexible, it features a math coprocessor for fast multiplication and includes a DMA Controller (i.e. a Blitter) which should 
 make it, at least in that respect, a more capable retro gaming system than the X16. The kernel even provides a SLIP based TCP stack which
 should make it possible to connect the F256 Jr. to the internet without adding the optional WiFi module, but I have not tried that, yet.
 
