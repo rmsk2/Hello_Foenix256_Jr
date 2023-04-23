@@ -7,23 +7,34 @@ class SerialServer:
         self._port = serial.Serial(self._port_device, self._baud_rate)
 
 
-    def read_byte(self):
+    def read_frame(self):
         b1 = bytes()
         while len(b1) == 0:
             b1 = self._port.read()
+        
+        num_bytes = b1[0]
 
-        return b1[0]
+        res = bytes()
+        while len(res) != num_bytes:
+            read_now = self._port.read(num_bytes - len(res))
+            res = res + read_now 
+
+        return res
 
 
-    def send_byte(self, byte):
-        b_out = bytes([byte])
-        written = 0
-        while written == 0:
-            written = self._port.write(b_out)
+    def write_frame(self, data):
+        header = bytes([len(data)])
+        packet = header + data
+
+        while len(packet) != 0:
+            bytes_written = self._port.write(packet)
+            packet = packet[bytes_written:]
+
 
 if __name__ == "__main__":
     p = SerialServer("/dev/ttyUSB0", 115200)
     for i in range(2000):
-        res = p.read_byte()
+        res = p.read_frame()
         print(i, res)
-        p.send_byte(res+1)
+        p.write_frame(res)
+

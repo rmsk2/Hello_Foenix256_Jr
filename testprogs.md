@@ -36,7 +36,7 @@ enable multiplayer games on the platform. Nontheless there is a skeleton `slip.a
 
 ## Serial communication via the UART
 
-The file `uart.asm` contains a little program that demonstrates the sending and receiving of a single byte via the F256 Jr. UART. It
+The file `uart.asm` contains a little program that demonstrates the sending and receiving bytes via the F256 Jr. UART. It
 can be built by `make uart`. The receiving side of the serial communication is implemented in python and can be found in the file 
-`ser_echo.py`. In essence these files implement a simple echo server. The F256 sends one byte and the python program returns the
-byte incremented by 1.
+`ser_echo.py`. In essence these files implement a simple echo server. The F256 sends a string and the python program returns that
+string.

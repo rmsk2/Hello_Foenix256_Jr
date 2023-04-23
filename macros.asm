@@ -43,3 +43,15 @@ kprint .macro x, y, txtPtr, len, colPtr
      #load16BitImmediate \colPtr, kernel.args.display.color
      jsr kernel.Display.DrawRow                  ; print to the screen
      .endmacro
+
+kprintAddr .macro x, y, txtPtr, len, colPtr
+     lda #\x                                     ; set x coordinate
+     sta kernel.args.display.x
+     lda #\y                                     ; set y coordinate
+     sta kernel.args.display.y
+     #move16Bit \txtPtr, kernel.args.display.text
+     lda \len                                   ; set text length
+     sta kernel.args.display.buflen
+     #load16BitImmediate \colPtr, kernel.args.display.color
+     jsr kernel.Display.DrawRow                  ; print to the screen
+     .endmacro
