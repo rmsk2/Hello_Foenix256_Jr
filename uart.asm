@@ -42,8 +42,10 @@ REG_THR_EMPTY_IDLE = %01000000
 DATA_AVAILABLE = 1
 IS_ERROR = %10011110
 
+; These divisors are taken from Table 15.6 of the F256 reference manual
 BPS_2400 = 655
 BPS_38400 = 40
+BPS_57600 = 27
 BPS_115200 = 13
 
 setDLAB .macro 
