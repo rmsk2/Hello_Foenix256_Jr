@@ -113,7 +113,8 @@ initUart .macro baudRate
 
 ; --------------------------------------------------
 ; This routine sends the byte in the accu over the serial line. It waits 
-; indefinitley until the send buffer has room for the byte.
+; indefinitely until the send buffer has room for the byte.
+;
 ; If an error occurred the carry flag is set. It is clear otherwise.
 ; --------------------------------------------------
 sendByte
@@ -138,8 +139,9 @@ _sndError
 
 
 ; --------------------------------------------------
-; This routine reads one byte from the serial port. It waits indefinitley
+; This routine reads one byte from the serial port. It waits indefinitely
 ; until this byte becomes available. It returns the received byte in the accu.
+;
 ; If an error occurred the carry flag is set. It is clear otherwise.
 ; --------------------------------------------------
 receiveByte
