@@ -200,12 +200,14 @@ sendFrame
 
     ldy #0
 _sendNext
+    cpy FRAME_LEN
+    bcs _sendDone
     lda (FRAME_PTR), y
     jsr sendByte
     bcs _sendEnd
-    iny 
-    cpy FRAME_LEN
-    bne _sendNext
+    iny
+    bra _sendNext
+_sendDone 
     clc
 _sendEnd
     rts
@@ -224,12 +226,14 @@ receiveFrame
 
     ldy #0
 _receiveNext
+    cpy FRAME_LEN
+    bcs _receiveDone
     jsr receiveByte
     bcs _receiveEnd
     sta (FRAME_PTR), y
     iny
-    cpy FRAME_LEN
-    bne _receiveNext
+    bra _receiveNext
+_receiveDone
     clc
 _receiveEnd
     rts
