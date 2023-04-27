@@ -313,6 +313,5 @@ I wish the people behind the F256 Jr. the commercial success that the product de
 
 ## Things to do
 
-- Experiment with the math coprocessor
 - Research how to do bitmap graphics in assembly
 - Port my Mandelbrot set viewer to the platform

@@ -23,6 +23,20 @@ load16BitImmediate .macro addr, target
 
 
 ; --------------------------------------------------
+; inc16Bit implements a 16 bit increment of the 16 bit value stored at .memAddr 
+; --------------------------------------------------
+inc16Bit .macro memAddr
+    clc
+    lda #1
+    adc \memAddr
+    sta \memAddr
+    bcc _noCarryInc
+    inc \memAddr+1
+_noCarryInc
+    .endmacro
+
+
+; --------------------------------------------------
 ; This macro prints a string to the screen at a given x and y coordinate. The 
 ; macro has the following parameters
 ;

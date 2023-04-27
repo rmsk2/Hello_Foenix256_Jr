@@ -1,4 +1,4 @@
-all: hello hello_kernel ram_exp sid_test joystick slip uart
+all: hello hello_kernel ram_exp sid_test joystick slip uart hires
 
 hello: hello.bin 
 hello_kernel: hello_kernel.bin
@@ -7,6 +7,7 @@ sid_test: sid_test.bin
 joystick: joystick.bin
 slip: slip.bin
 uart: uart.bin
+hires: hires.bin
 
 hello.bin: hello.asm
 	64tass --nostart -o hello.bin hello.asm
@@ -29,6 +30,8 @@ slip.bin: slip.asm api.asm macros.asm khelp.asm
 uart.bin: uart.asm api.asm macros.asm khelp.asm
 	64tass --nostart -o uart.bin uart.asm
 
+hires.bin: hires.asm api.asm macros.asm khelp.asm
+	64tass --nostart -o hires.bin hires.asm
 
 clean:
 	rm hello.bin
@@ -37,3 +40,4 @@ clean:
 	rm sid_test.bin
 	rm joystick.bin
 	rm slip.bin
+	rm hires.bin
