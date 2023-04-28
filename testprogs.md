@@ -40,3 +40,8 @@ The file `uart.asm` contains a little program that demonstrates the sending and 
 can be built by `make uart`. The receiving side of the serial communication is implemented in python and can be found in the file 
 `ser_echo.py`. In essence these files implement a simple echo server. The F256 sends a string and the python program returns that
 string.
+
+## Bitmap graphics
+
+The files `hires.asm` and  `hires_base.asm` implement a simple demo that turns on graphics mode and draws a color gradient on the screen.
+This program can be built by `make hires`. It has to be loaded to the address $4000 from where it also can be run.

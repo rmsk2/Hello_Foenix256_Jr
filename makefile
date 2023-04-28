@@ -30,7 +30,7 @@ slip.bin: slip.asm api.asm macros.asm khelp.asm
 uart.bin: uart.asm api.asm macros.asm khelp.asm
 	64tass --nostart -o uart.bin uart.asm
 
-hires.bin: hires.asm api.asm macros.asm khelp.asm
+hires.bin: hires.asm api.asm macros.asm khelp.asm hires_base.asm
 	64tass --nostart -o hires.bin hires.asm
 
 clean:

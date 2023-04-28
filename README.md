@@ -198,6 +198,7 @@ functionality like
 - the joystick ports
 - SLIP networking
 - Serial communication via the UART
+- Bitmap graphics
 
 ## Useful info
 
@@ -313,5 +314,4 @@ I wish the people behind the F256 Jr. the commercial success that the product de
 
 ## Things to do
 
-- Research how to do bitmap graphics in assembly
 - Port my Mandelbrot set viewer to the platform
