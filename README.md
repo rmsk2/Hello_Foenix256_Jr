@@ -312,6 +312,10 @@ emulator is not a necessity for me as a programmer but it could be a tool to get
 
 I wish the people behind the F256 Jr. the commercial success that the product deserves.
 
-## Things to do
+## A slightly more complex example
 
-- Port my Mandelbrot set viewer to the platform
+Look [here](https://github.com/rmsk2/F256_Mandelbrot) for a slightly more complex programming example for the F256: A simple Mandelbrot
+set viewer that makes use of bitmap graphics and the integer math coprocessor.
+
+## Things to do
+- We'll see ...
