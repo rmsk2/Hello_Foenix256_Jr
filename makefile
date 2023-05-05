@@ -46,4 +46,5 @@ clean:
 	rm joystick.bin
 	rm slip.bin
 	rm hires.bin
+	rm uart.bin
 	rm cursor.bin
