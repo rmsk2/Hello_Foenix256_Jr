@@ -43,22 +43,4 @@ _loopColor
 
 
 .include "khelp.asm"
-
-; waiting for a key press event from the kernel
-waitForKey
-    ; Peek at the queue to see if anything is pending
-    lda kernel.args.events.pending ; Negated count
-    bpl waitForKey
-    ; Get the next event.
-    jsr kernel.NextEvent
-    bcs waitForKey
-    ; Handle the event
-    lda myEvent.type    
-    cmp #kernel.event.key.PRESSED
-    beq _done
-    bra waitForKey
-_done
-    rts    
-
-
 .include "hires_base.asm"

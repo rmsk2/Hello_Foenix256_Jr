@@ -45,3 +45,9 @@ string.
 
 The files `hires.asm` and  `hires_base.asm` implement a simple demo that turns on graphics mode and draws a color gradient on the screen.
 This program can be built by `make hires`. It has to be loaded to the address $4000 from where it also can be run.
+
+## Cursor control
+
+In `cursor.asm` a little example is given which demonstrates controlling the cursor position in machine language. On top of that it
+prints all characters available in the font on the screen. This example can be built by running `make cursor`. The resulting program
+has the usual target address of $4000 from where it can be started after an upload through fnxmgr.

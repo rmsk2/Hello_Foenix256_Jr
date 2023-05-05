@@ -248,6 +248,9 @@ foreground colour. These colour codes can be used with the kernel function `kern
 | chr$(128) - chr$(143)| Set foreground color. Code 128 is black 143 is white. The rest follows the sequence given above |
 | chr$(144) - chr$(159)| Set background color. Code 144 is black 159 is white. The rest follows the sequence given above |
 
+You can peek/read the registers $D014 for the current X-position and $D016 for the current Y-Position of the cursor. Setting the cursor position via 
+these registers does not work in BASIC but it works in machine language (see [here](/testprogs.md)) for an example.
+
 ### Zero page usage of `superbasic` and the TinyCore MicroKernel
 
 I do not claim to understand the source code of `superbasic` very well but as far as I understand it I think

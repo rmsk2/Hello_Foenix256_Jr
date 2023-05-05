@@ -59,24 +59,7 @@ _loop
     cmp #$10
     bne _loop
 
-    rts
-
-
-; waiting for a key press event from the kernel
-waitForKey
-    ; Peek at the queue to see if anything is pending
-    lda kernel.args.events.pending ; Negated count
-    bpl waitForKey
-    ; Get the next event.
-    jsr kernel.NextEvent
-    bcs waitForKey
-    ; Handle the event
-    lda myEvent.type    
-    cmp #kernel.event.key.PRESSED
-    beq _done
-    bra waitForKey
-_done
-    rts    
+    rts   
 
 
 ; Texts to display
