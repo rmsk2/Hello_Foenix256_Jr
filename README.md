@@ -199,6 +199,7 @@ functionality like
 - SLIP networking
 - Serial communication via the UART
 - Bitmap graphics
+- Cursor control in Assembler
 
 ## Useful info
 
