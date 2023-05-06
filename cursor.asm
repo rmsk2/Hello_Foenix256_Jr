@@ -24,8 +24,8 @@ main
 
     #kprint 0, OUT_LINE - 3, started2Txt, len(started2Txt), started2Color
     jsr waitForKey
-    ldx #20
-    lda #30
+    ldx #30
+    lda #20
     jsr setCursor
 
 
@@ -39,9 +39,9 @@ main
 
 setCursor
     stz CURSOR_X+1
-    sta CURSOR_X
+    stx CURSOR_X
     stz CURSOR_Y+1
-    stx CURSOR_Y
+    sta CURSOR_Y
     rts
 
 printAllChars
@@ -70,7 +70,7 @@ _loopChars
 startedTxt .text "Press key to set cursor to 10,10"
 startedColor .text x"62" x len(startedTxt)
 
-started2Txt .text "Press key to set cursor to 20,30"
+started2Txt .text "Press key to set cursor to 30,20"
 started2Color .text x"32" x len(started2Txt)
 
 started3Txt .text "Press key to print full font       "
