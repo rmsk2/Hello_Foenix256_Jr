@@ -39,4 +39,8 @@ waitForKey
     beq _done
     bra waitForKey
 _done
-    rts    
+    lda myEvent.key.flags 
+    and #myEvent.key.META
+    bne waitForKey
+    lda myEvent.key.ascii
+    rts

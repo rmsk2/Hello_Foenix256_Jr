@@ -17,6 +17,7 @@ main
 
     #kprint 0, OUT_LINE - 3, startedTxt, len(startedTxt), startedColor
     jsr waitForKey
+    jsr printByte
 
     ldx #10
     lda #10
@@ -24,13 +25,15 @@ main
 
     #kprint 0, OUT_LINE - 3, started2Txt, len(started2Txt), started2Color
     jsr waitForKey
+    jsr printByte
+
     ldx #30
     lda #20
     jsr setCursor
 
-
     #kprint 0, OUT_LINE - 3, started3Txt, len(started3Txt), started3Color
     jsr waitForKey
+    jsr printByte
 
     jsr printAllChars
 
@@ -63,7 +66,29 @@ _loopChars
     ; restore I/O page configuration
     pla
     sta $0001
+    rts
 
+hexChars .text "0123456789ABCDEF"
+
+tempChar .byte 0
+
+printByte
+    sta tempChar
+    and #$F0
+    lsr
+    lsr
+    lsr
+    lsr
+    tay
+    lda hexChars, y
+    sta asciiCode + 11
+    lda tempChar
+    and #$0F
+    tay
+    lda hexChars, y
+    sta asciiCode + 12
+    #kprint 0, 17, asciiCode, len(asciiCode), asciiCol
+    rts
 
 .include "khelp.asm"
 
@@ -75,3 +100,6 @@ started2Color .text x"32" x len(started2Txt)
 
 started3Txt .text "Press key to print full font       "
 started3Color .text x"D2" x len(started3Txt)
+
+asciiCode .text "ASCII Code:  "
+asciiCol .text x"62" x len(asciiCode)
