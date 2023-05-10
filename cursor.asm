@@ -15,6 +15,8 @@ CURSOR_Y = $D016
 main
     jsr initEvents
 
+    #kprint 70, OUT_LINE - 8, dummyTxt, len(dummyTxt), dummyTxtCol
+
     #kprint 0, OUT_LINE - 3, startedTxt, len(startedTxt), startedColor
     jsr waitForKey
     jsr printByte
@@ -103,3 +105,6 @@ started3Color .text x"D2" x len(started3Txt)
 
 asciiCode .text "ASCII Code:  "
 asciiCol .text x"62" x len(asciiCode)
+
+dummyTxt .text "This text spills into the next line"
+dummyTxtCol .text x"F2" x len(dummyTxt)

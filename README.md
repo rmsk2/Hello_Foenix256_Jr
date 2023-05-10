@@ -237,6 +237,8 @@ foreground colour. These colour codes can be used with the kernel function `kern
 
 ### Control characters for cursor and colour control
 
+In BASIC the following character codes can be used with `print` to control the cursor position and colours on the screen.
+
 |Code | Effect |
 |-|-|
 | chr$(12) | Clear screen and set cursor to upper left corner |
