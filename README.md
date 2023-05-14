@@ -23,6 +23,7 @@ In addition to the board you will need:
 - A jumper to bridge the pin headers of the power on switch (see below) or
 a proper switch that can be connected to the pin headers
 - A cable to connect the Line out or headphone output to your speakers
+- A CR2032 button cell for the real time clock
 
 Optional but good to have:
 
@@ -56,6 +57,8 @@ connect the two pins
 - If you ordered the ZIF sockets you have to plug them into the SID sockets in such a way that the levers
 when they are turned over point to that side of the board where the DVI, IEC and SD sockets are. When seating
 the sockets their lever has to be vertical.
+- When inserting the clock battery the side with the engraved `+` sign has to face up, i.e. this side has to 
+remain visible after the battery has been inserted into its holder
 
 ### Using an SD-Card 
 
