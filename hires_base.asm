@@ -16,7 +16,6 @@ BITMAP_2_ENABLE = $D110
 
 BITMAP_0_MEM = $40000
 BITMAP_WINDOW = $6000
-ZP_GRAPHIC_PTR = $90
 
 
 ; --------------------------------------------------

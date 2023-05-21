@@ -37,6 +37,37 @@ _noCarryInc
 
 
 ; --------------------------------------------------
+; cmp16Bit compares the 16 bit values stored at memAddr1 and memAddr2 
+; Z  flag is set in case these values are equal
+; --------------------------------------------------
+cmp16Bit .macro  memAddr1, memAddr2 
+    lda \memAddr1+1
+    cmp \memAddr2+1
+    bne _unequal
+    lda \memAddr1
+    cmp \memAddr2
+_unequal
+.endmacro
+
+
+; --------------------------------------------------
+; cmp16BitImmediate compares the 16 bit value stored at memAddr with
+; the immediate value given in .value.
+; 
+; Z  flag is set in case these values are equal. Carry is set
+; if .value is greater or equal than the value store at .memAddr
+; --------------------------------------------------
+cmp16BitImmediate .macro  value, memAddr 
+    lda #>\value
+    cmp \memAddr+1
+    bne _unequal2
+    lda #<\value
+    cmp \memAddr
+_unequal2
+.endmacro
+
+
+; --------------------------------------------------
 ; This macro prints a string to the screen at a given x and y coordinate. The 
 ; macro has the following parameters
 ;

@@ -1,4 +1,4 @@
-all: hello hello_kernel ram_exp sid_test joystick slip uart hires cursor
+all: hello hello_kernel ram_exp sid_test joystick slip uart hires cursor txtio
 
 hello: hello.bin 
 hello_kernel: hello_kernel.bin
@@ -9,12 +9,13 @@ slip: slip.bin
 uart: uart.bin
 hires: hires.bin
 cursor: cursor.bin
+txtio: txtio.bin
 
 hello.bin: hello.asm
 	64tass --nostart -o hello.bin hello.asm
 
 hello_kernel.bin: hello_kernel.asm api.asm
-	64tass --nostart -o hello_kernel.bin  hello_kernel.asm
+	64tass --nostart -o hello_kernel.bin hello_kernel.asm
 
 ram_exp.bin: test_ramexp.asm api.asm macros.asm khelp.asm
 	64tass --nostart -o ram_exp.bin test_ramexp.asm
@@ -31,12 +32,14 @@ slip.bin: slip.asm api.asm macros.asm khelp.asm
 uart.bin: uart.asm api.asm macros.asm khelp.asm
 	64tass --nostart -o uart.bin uart.asm
 
-hires.bin: hires.asm api.asm macros.asm khelp.asm hires_base.asm
+hires.bin: hires.asm api.asm macros.asm khelp.asm hires_base.asm zeropage.asm
 	64tass --nostart -o hires.bin hires.asm
 
 cursor.bin: cursor.asm api.asm macros.asm khelp.asm
 	64tass --nostart -o cursor.bin cursor.asm
 
+txtio.bin: test_txtio.asm txtio.asm api.asm macros.asm khelp.asm zeropage.asm
+	64tass --nostart -o txtio.bin test_txtio.asm
 
 clean:
 	rm hello.bin
@@ -48,3 +51,4 @@ clean:
 	rm hires.bin
 	rm uart.bin
 	rm cursor.bin
+	rm txtio.bin

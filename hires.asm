@@ -1,5 +1,6 @@
 .include "api.asm"
 .include "macros.asm"
+.include "zeropage.asm"
 
 ; target address is $4000
 * = $4000
