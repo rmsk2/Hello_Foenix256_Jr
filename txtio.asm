@@ -1,5 +1,6 @@
 CURSOR_X = $D014
 CURSOR_Y = $D016
+CARRIAGE_RETURN = 13
 
 
 toTxtMatrix .macro
@@ -47,8 +48,9 @@ maxVideoRam .word 0
 
 CURSOR_STATE  .dstruct cursorState_t
 
+txtio .namespace
 
-initTxtIo
+init
     ;calculate max address
     stz CURSOR_STATE.xPos
     lda CURSOR_STATE.yMax
@@ -90,6 +92,10 @@ cursorSet
 
 
 charOut
+    cmp #CARRIAGE_RETURN
+    bne _noCr
+    jmp newLine
+_noCr
     sta CURSOR_STATE.nextChar
 
     #saveIoState    
@@ -114,6 +120,7 @@ charOut
 _moveRight  
     ; move cursor one character to the right
     inc CURSOR_STATE.xPos
+    lda CURSOR_STATE.xPos
     cmp CURSOR_STATE.xMax
     bcc _done
     stz CURSOR_STATE.xPos
@@ -147,3 +154,191 @@ cursorOff
     and $D010
     sta $D010
     rts
+
+
+left
+    lda CURSOR_STATE.xPos
+    beq _leftEdge                                        ; was xPos zero?
+    dec a
+    sta CURSOR_STATE.xPos
+    bra _done
+_leftEdge
+    lda CURSOR_STATE.yPos
+    beq _done                                            ; was yPos zero?
+    lda CURSOR_STATE.xMax
+    dec a
+    sta CURSOR_STATE.xPos
+    dec CURSOR_STATE.yPos
+_done
+    jsr cursorSet
+    rts
+
+
+right
+    inc CURSOR_STATE.xPos
+    lda CURSOR_STATE.xPos
+    cmp CURSOR_STATE.xMax
+    bcc _done
+    stz CURSOR_STATE.xPos
+    inc CURSOR_STATE.yPos
+    lda CURSOR_STATE.yPos
+    cmp CURSOR_STATE.yMax
+    bcc _done
+    ; we have reached the lower right corner
+    ; we could also scroll up ...
+    stz CURSOR_STATE.yPos
+_done
+    jsr cursorSet
+    rts
+
+
+up
+    lda CURSOR_STATE.yPos
+    beq _done
+    dec CURSOR_STATE.yPos
+_done
+    jsr cursorSet
+    rts
+
+
+down
+    inc CURSOR_STATE.yPos
+    lda CURSOR_STATE.yPos
+    cmp CURSOR_STATE.yMax
+    bcc _done
+    ; we have reached the lower border
+    ; we could scroll up
+    dec CURSOR_STATE.yPos
+_done
+    jsr cursorSet
+    rts
+
+
+backSpace
+    jsr left
+    lda #32
+    jsr charOut
+    jsr left
+    rts
+
+
+newLine
+    stz CURSOR_STATE.xPos
+    jsr down
+    rts
+
+
+home
+    stz CURSOR_STATE.xPos
+    stz CURSOR_STATE.yPos
+    jsr cursorSet
+    rts
+
+
+BLOCK_COUNT .byte 0
+clear
+    #saveIoState
+    lda #17
+    sta BLOCK_COUNT
+    #load16BitImmediate $C000, TXT_PTR2
+    ldy #0
+_blockLoop
+    #toTxtMatrix
+    lda #32
+    sta (TXT_PTR2), y
+    #toColorMatrix
+    lda CURSOR_STATE.col
+    sta (TXT_PTR2), y
+    iny
+    bne _blockLoop
+    inc TXT_PTR2+1
+    dec BLOCK_COUNT
+    bpl _blockLoop
+
+    ; Special treatment of last 192 bytes which do not form 
+    ; a full block
+    #load16BitImmediate $D200, TXT_PTR2
+    ldy #0
+_lastLoop
+    #toTxtMatrix
+    lda #32
+    sta (TXT_PTR2), y
+    #toColorMatrix
+    lda CURSOR_STATE.col
+    sta (TXT_PTR2), y
+    iny
+    cpy #192
+    bne _lastLoop
+    #restoreIoState
+    rts
+
+
+LINE_COUNT .byte 0
+scrollUp
+    #saveIoState
+
+    #load16BitImmediate $C000, TXT_PTR1
+    #load16BitImmediate $C050, TXT_PTR2    
+    stz LINE_COUNT
+
+    ; move all lines on step up
+_nextLine
+    ldy #0
+_lineLoop
+    #toTxtMatrix
+    lda (TXT_PTR2), y
+    sta (TXT_PTR1), y
+    #toColorMatrix
+    lda (TXT_PTR2), y
+    sta (TXT_PTR1), y
+    iny
+    cpy #80
+    bne _lineLoop
+    
+    #move16Bit TXT_PTR2, TXT_PTR1
+    #add16BitImmediate 80, TXT_PTR2
+
+    inc LINE_COUNT
+    lda LINE_COUNT
+    cmp #59
+    bne _nextLine
+
+    #load16BitImmediate $D270, TXT_PTR1
+
+    ; clear last line
+    ldy #0
+_lastLineLoop
+    #toTxtMatrix
+    lda #32
+    sta (TXT_PTR1), y
+    #toColorMatrix
+    lda CURSOR_STATE.col
+    sta (TXT_PTR1), y
+    iny
+    cpy #80
+    bne _lastLineLoop
+
+    #restoreIoState
+    rts
+
+hexChars .text "0123456789ABCDEF"
+tempChar .byte 0
+printByte
+    sta tempChar
+    and #$F0
+    lsr
+    lsr
+    lsr
+    lsr
+    tay
+    lda hexChars, y
+    jsr charOut
+    lda tempChar
+    and #$0F
+    tay
+    lda hexChars, y
+    jsr charOut
+    rts
+
+
+.endnamespace

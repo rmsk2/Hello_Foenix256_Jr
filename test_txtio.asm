@@ -13,32 +13,45 @@ jmp main
 COUNT .byte 0
 
 main
-    jsr initTxtIo
+    jsr txtio.init
     jsr initEvents
 
-    lda #65
-    sta COUNT
+    lda #$92
+    sta CURSOR_STATE.col
+    jsr txtio.clear
+
+    ldy #65
 _out
-    jsr charOut
-    inc COUNT
-    lda COUNT
-    cmp #65+26
+    tya
+    jsr txtio.charOut
+    iny
+    cpy #65+26
     bne _out
 
     lda #79
     sta CURSOR_STATE.xPos
-    lda #59
+    lda #58
     sta CURSOR_STATE.yPos
-    jsr cursorSet
+    jsr txtio.cursorSet
 
-    lda #97
-    sta COUNT
+    ldy #97
 _out2
-    jsr charOut
-    inc COUNT
-    lda COUNT
-    cmp #97+26
+    tya
+    jsr txtio.charOut
+    iny
+    cpy #97+26
     bne _out2
+
+    jsr txtio.left
+
+    lda #$30
+    jsr txtio.charOut
+    lda #$30
+    jsr txtio.charOut
+
+    jsr txtio.backSpace
+
+    jsr txtio.scrollUp
 
     jsr restoreEvents
     rts

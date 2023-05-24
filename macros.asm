@@ -68,6 +68,22 @@ _unequal2
 
 
 ; --------------------------------------------------
+; add16BitImmediate implements a 16 bit add of an immediate value to value stored at memAddr2 
+; The result is stored in .memAddr2
+; --------------------------------------------------
+add16BitImmediate .macro  value, memAddr2 
+    clc
+    ; add lo bytes
+    lda #<\value
+    adc \memAddr2
+    sta \memAddr2
+    ; add hi bytes
+    lda #>\value
+    adc \memAddr2+1
+    sta \memAddr2+1
+.endmacro
+
+; --------------------------------------------------
 ; This macro prints a string to the screen at a given x and y coordinate. The 
 ; macro has the following parameters
 ;
