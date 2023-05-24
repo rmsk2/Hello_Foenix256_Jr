@@ -10,7 +10,6 @@ jmp main
 .include "txtio.asm"
 .include "khelp.asm"
 
-COUNT .byte 0
 
 main
     jsr txtio.init
