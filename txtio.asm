@@ -109,9 +109,11 @@ charOut
     bcc _moveRight
     ; We have reached the lower right corner. For now we return the cursor to the upper
     ; left corner. We also could scroll the screen one line up
-    #load16BitImmediate $C000, CURSOR_STATE.videoRamPtr
+    #load16BitImmediate $D270, CURSOR_STATE.videoRamPtr
     stz CURSOR_STATE.xPos
-    stz CURSOR_STATE.yPos
+    phy
+    jsr scrollUp
+    ply
     bra _done
 _moveRight  
     ; move cursor one character to the right
@@ -180,9 +182,8 @@ right
     lda CURSOR_STATE.yPos
     cmp CURSOR_STATE.yMax
     bcc _done
-    ; we have reached the lower right corner
-    ; we could also scroll up ...
-    stz CURSOR_STATE.yPos
+    jsr scrollUp
+    dec CURSOR_STATE.yPos
 _done
     jsr cursorSet
     rts
@@ -202,9 +203,10 @@ down
     lda CURSOR_STATE.yPos
     cmp CURSOR_STATE.yMax
     bcc _done
-    ; we have reached the lower border
-    ; we could scroll up
     dec CURSOR_STATE.yPos
+    phy
+    jsr scrollUp
+    ply
 _done
     jsr cursorSet
     rts
@@ -336,5 +338,24 @@ printByte
     jsr charOut
     rts
 
+
+printStr
+    sta tempChar
+    ldy #0
+_printLoop
+    cpy tempChar
+    beq _done
+    lda (TXT_PTR3), y
+    cmp #CARRIAGE_RETURN
+    bne _realChar
+    jsr newLine
+    bra _nextChar
+_realChar
+    jsr charOut
+_nextChar
+    iny
+    bra _printLoop 
+_done
+    rts
 
 .endnamespace

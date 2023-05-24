@@ -10,6 +10,7 @@ jmp main
 .include "txtio.asm"
 .include "khelp.asm"
 
+TEST_MSG .text $0d, "Press any key", $0d
 
 main
     jsr txtio.init
@@ -27,9 +28,9 @@ _out
     cpy #65+26
     bne _out
 
-    lda #79
+    lda #60
     sta CURSOR_STATE.xPos
-    lda #58
+    lda #59
     sta CURSOR_STATE.yPos
     jsr txtio.cursorSet
 
@@ -49,8 +50,13 @@ _out2
     jsr txtio.charOut
 
     jsr txtio.backSpace
+    jsr txtio.down
+    
+    #load16BitImmediate TEST_MSG, TXT_PTR3
+    lda #15
+    jsr txtio.printStr
 
-    jsr txtio.scrollUp
+    jsr waitForKey
 
     jsr restoreEvents
     rts
