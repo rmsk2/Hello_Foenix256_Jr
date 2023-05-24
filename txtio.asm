@@ -32,6 +32,11 @@ moveCursor .macro
     stz CURSOR_Y+1
 .endmacro
 
+printString .macro address, length
+    #load16BitImmediate \address, TXT_PTR3
+    lda #\length
+    jsr txtio.printStr
+.endmacro
 
 cursorState_t .struct 
 xPos        .byte 0

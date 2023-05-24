@@ -11,6 +11,8 @@ jmp main
 .include "khelp.asm"
 
 TEST_MSG .text $0d, "Press any key", $0d
+UPPER .text "ABCDEFGHIJKLMNOPQRTSUVWXYZ"
+LOWER .text "abcdefghijklmnopqrstuvwxyz"
 
 main
     jsr txtio.init
@@ -20,13 +22,7 @@ main
     sta CURSOR_STATE.col
     jsr txtio.clear
 
-    ldy #65
-_out
-    tya
-    jsr txtio.charOut
-    iny
-    cpy #65+26
-    bne _out
+    #printString UPPER, 26
 
     lda #60
     sta CURSOR_STATE.xPos
@@ -34,13 +30,7 @@ _out
     sta CURSOR_STATE.yPos
     jsr txtio.cursorSet
 
-    ldy #97
-_out2
-    tya
-    jsr txtio.charOut
-    iny
-    cpy #97+26
-    bne _out2
+    #printString LOWER, 26
 
     jsr txtio.left
 
@@ -52,9 +42,7 @@ _out2
     jsr txtio.backSpace
     jsr txtio.down
     
-    #load16BitImmediate TEST_MSG, TXT_PTR3
-    lda #15
-    jsr txtio.printStr
+    #printString TEST_MSG, 15
 
     jsr waitForKey
 
