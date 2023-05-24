@@ -92,10 +92,6 @@ cursorSet
 
 
 charOut
-    cmp #CARRIAGE_RETURN
-    bne _noCr
-    jmp newLine
-_noCr
     sta CURSOR_STATE.nextChar
 
     #saveIoState    
