@@ -456,8 +456,8 @@ _lastLineLoop
 
 
 prByteState_t .struct
-hexChars .text "0123456789ABCDEF"
-tempChar .byte 0
+hex_chars .text "0123456789ABCDEF"
+temp_char .byte 0
 .endstruct
 
 PRBYTE .dstruct prByteState_t
@@ -467,19 +467,19 @@ PRBYTE .dstruct prByteState_t
 ; This routine does not return a value.
 ; --------------------------------------------------
 printByte
-    sta PRBYTE.tempChar
+    sta PRBYTE.temp_char
     and #$F0
     lsr
     lsr
     lsr
     lsr
     tay
-    lda PRBYTE.hexChars, y
+    lda PRBYTE.hex_chars, y
     jsr charOut
-    lda PRBYTE.tempChar
+    lda PRBYTE.temp_char
     and #$0F
     tay
-    lda PRBYTE.hexChars, y
+    lda PRBYTE.hex_chars, y
     jsr charOut
     rts
 
