@@ -10,41 +10,103 @@ jmp main
 .include "txtio.asm"
 .include "khelp.asm"
 
-TEST_MSG .text $0d, "Press any key", $0d
 UPPER .text "ABCDEFGHIJKLMNOPQRTSUVWXYZ"
 LOWER .text "abcdefghijklmnopqrstuvwxyz"
+
+ALLOWED_CHARS .text "ABCDEFGHIJKLMNOPQRTSUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 .,?!_"
+INPUT_CHARS .text "A" x 32
+OUT_LEN .byte 0
+OUT_LEN_TXT .text "Number of characters: $"
+ENTER_TXT .text "Enter string: "
+DONE_TXT .text "Done!"
+
+CRLF = $0D
+KEY_X = $78
+KEY_C = $63
+CRSR_UP = $10
+CRSR_DOWN = $0E
+CRSR_LEFT = $02
+CRSR_RIGHT = $06
 
 main
     jsr txtio.init
     jsr initEvents
 
+    ; set fore- and background colours
     lda #$92
     sta CURSOR_STATE.col
-    jsr txtio.clear
 
-    #printString UPPER, 26
-
-    lda #60
-    sta CURSOR_STATE.xPos
-    lda #59
-    sta CURSOR_STATE.yPos
-    jsr txtio.cursorSet
-
-    #printString LOWER, 26
-
-    jsr txtio.left
-
-    lda #$30
-    jsr txtio.charOut
-    lda #$30
-    jsr txtio.charOut
-
-    jsr txtio.backSpace
-    jsr txtio.down
-    
-    #printString TEST_MSG, 15
-
+_charLoop
     jsr waitForKey
-
+    cmp #KEY_X
+    beq _done
+    cmp #CRSR_UP
+    bne _checkDown
+    jsr txtio.up
+    bra _charLoop
+_checkDown
+    cmp #CRSR_DOWN
+    bne _checkLeft
+    jsr txtio.down
+    bra _charLoop
+_checkLeft
+    cmp #CRSR_LEFT
+    bne _checkRight
+    jsr txtio.left
+_checkRight
+    cmp #CRSR_RIGHT
+    bne _checkCrLf
+    jsr txtio.right
+    bra _charLoop
+_checkCrLf
+    cmp #CRLF
+    bne _checkClear
+    jsr inputTest
+    bra _charLoop
+_checkClear
+    cmp #KEY_C
+    bne _charLoop
+    jsr txtio.clear
+    jsr txtio.home
+    bra _charLoop
+_done
+    #printString DONE_TXT, len(DONE_TXT)
+    jsr txtio.newLine
     jsr restoreEvents
+    rts
+
+
+inputTest
+    ; print "Enter string: "
+    #printString ENTER_TXT, len(ENTER_TXT)
+
+    ; set fore- and background colours to reverse
+    lda #$29
+    sta CURSOR_STATE.col
+
+    ; get input from user
+    #inputString INPUT_CHARS, len(INPUT_CHARS), ALLOWED_CHARS, len(ALLOWED_CHARS)
+    ; save length of entered string
+    sta OUT_LEN
+
+    ; restore colours to non reverse
+    lda #$92
+    sta CURSOR_STATE.col
+
+    ; print "Number of characters: $"
+    jsr txtio.newLine
+    #printString OUT_LEN_TXT, len(OUT_LEN_TXT)
+
+    ; print text length in hex
+    lda OUT_LEN    
+    jsr txtio.printByte
+    jsr txtio.newLine    
+    
+    ; print text the user entered
+    #printStringLenMem INPUT_CHARS, OUT_LEN
+    jsr txtio.newLine
+
+    ; turn cursor on, as the input routine turns it off
+    jsr txtio.cursorOn
+
     rts
