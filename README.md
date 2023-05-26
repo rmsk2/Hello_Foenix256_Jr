@@ -202,7 +202,8 @@ functionality like
 - SLIP networking
 - Serial communication via the UART
 - Bitmap graphics
-- Cursor control in Assembler
+- Simple cursor control in Assembler
+- Routines for printing and entering text in assembly 
 
 ## Useful info
 
