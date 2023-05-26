@@ -18,7 +18,9 @@ INPUT_CHARS .text "A" x 32
 OUT_LEN .byte 0
 OUT_LEN_TXT .text "Number of characters: $"
 ENTER_TXT .text "Enter string: "
-DONE_TXT .text "Done!"
+DONE_TXT .text $0d, "Done!"
+START_TXT1 .text "Use cursor keys to control cursor, c to clear screen, x to quit", $0d
+START_TXT2 .text "and return to test input", $0d
 
 CRLF = $0D
 KEY_X = $78
@@ -35,6 +37,9 @@ main
     ; set fore- and background colours
     lda #$92
     sta CURSOR_STATE.col
+
+    #printString START_TXT1, len(START_TXT1)
+    #printString START_TXT2, len(START_TXT2)
 
 _charLoop
     jsr waitForKey
