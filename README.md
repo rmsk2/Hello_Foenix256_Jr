@@ -284,6 +284,7 @@ must be omitted. This is explained in the section about structured programming o
 - [Product Home page](https://c256foenix.com/f256-jr/?v=3a52f3c22ed6)
 - [Wiki at Foenix Retro Systems](https://wiki.c256foenix.com/index.php?title=F256JR)
 - [Kernel for the F256 Jr.](https://github.com/ghackwrench/F256_Jr_Kernel_DOS)
+- [Readme for Kernel](https://github.com/ghackwrench/F256_Jr_Kernel_DOS/tree/main/kernel#readme)
 - [Alternative kernAl using Commodore interface](https://github.com/ghackwrench/OpenKERNAL)
 - [Basic implementation](https://github.com/paulscottrobson/superbasic)
 - [System manual](https://github.com/pweingar/C256jrManual)
