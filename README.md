@@ -219,7 +219,7 @@ functionality like
 
 | Key combination | Effect |
 |-|-|
-|`ctrl-c`| Stops a listing or a running program |
+|`ctrl-c` or `RUN STOP` on the F256 K| Stops a listing or a running program |
 |`ctrl-l`| Clears the screen | 
 
 ### About colours in text mode
