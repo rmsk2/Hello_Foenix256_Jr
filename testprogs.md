@@ -56,3 +56,10 @@ has the usual target address of $4000 from where it can be started after an uplo
 In `txtio.asm` you will find routines which allow full control over the cursor as well as printing text on the screen relative to the
 cursor positon and a robust string entry function. The program `test_txtio.asm` demonstrates these routines. It can be built using
 `make txtio`. The target address of the resulting binary `txtio.bin` is as usual $4000.
+
+## Mouse test
+
+The file `mouse.asm` contains a program which visualizes the mouse messages the kernel sends when a mouse attached to the PS/2 port 
+of the F256 K is moved or its buttons are clicked. It can be built by `make mouse` and its target address is also $4000 from where it
+can be `call`ed in Basic. As the F256 Jr. uses the PS2/2 port for the keyboard, this program will only run on the F256 K. I have tried 
+to use a USB mouse together with several USB to PS/2 adapters but none of the adapters has worked. Using a real PS/2 mouse worked.

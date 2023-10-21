@@ -1,4 +1,4 @@
-all: hello hello_kernel ram_exp sid_test joystick slip uart hires cursor txtio
+all: hello hello_kernel ram_exp sid_test joystick slip uart hires cursor txtio mouse
 
 hello: hello.bin 
 hello_kernel: hello_kernel.bin
@@ -10,6 +10,7 @@ uart: uart.bin
 hires: hires.bin
 cursor: cursor.bin
 txtio: txtio.bin
+mouse: mouse.bin
 
 hello.bin: hello.asm
 	64tass --nostart -o hello.bin hello.asm
@@ -25,6 +26,9 @@ sid_test.bin: sid_test.asm sid_only.asm api.asm khelp.asm
 
 joystick.bin: joystick.asm api.asm macros.asm khelp.asm
 	64tass --nostart -o joystick.bin joystick.asm
+
+mouse.bin: mouse.asm api.asm macros.asm khelp.asm
+	64tass --nostart -o mouse.bin mouse.asm
 
 slip.bin: slip.asm api.asm macros.asm khelp.asm
 	64tass --nostart -o slip.bin slip.asm
@@ -52,3 +56,4 @@ clean:
 	rm uart.bin
 	rm cursor.bin
 	rm txtio.bin
+	rm mouse.bin

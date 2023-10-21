@@ -212,6 +212,7 @@ functionality like
 - Bitmap graphics
 - Simple cursor control in Assembler
 - Routines for printing and entering text in assembly 
+- the mouse (only on F256K)
 
 ## Useful info
 
