@@ -10,12 +10,12 @@ these tools on Windows.
 
 In [this document](/emulator.md) you find info about how to set up an F256 Jr. emulator. 
 
-**Note:** The math coprocessor addresses differ between the F256 Jr. and the F256 K. This repo uses
-the F256 K addresses as a default. You have to change the value of `MUL_RES_CO_PROC` from `$DE10` to 
-`$DE04` in the files `hires_base.asm` and `txtio.asm` when building for a F256 Jr. in factory condition.
-Additionally the file `api.asm`, which defines the kernel interface, has been updated to a newer version.
-When building for an original F256 Jr. you may have to use the version of `api.asm` which was current
-when your system was released.
+**Note:** The math coprocessor addresses differ between the F256 Jr. (in factory condition) and the 
+F256 K. This repo uses the F256 K addresses as a default. You have to change the value of 
+`MUL_RES_CO_PROC` from `$DE10` to `$DE04` in the files `hires_base.asm` and `txtio.asm` when building 
+for a F256 Jr. in factory condition. Additionally the file `api.asm`, which defines the kernel interface, 
+has been updated to a newer version. When building for an original F256 Jr. you may have to use the 
+version of `api.asm` which was current when your system was released.
 
 ## Hardware setup
 
