@@ -2,6 +2,8 @@ CURSOR_X = $D014
 CURSOR_Y = $D016
 CARRIAGE_RETURN = 13
 BACK_SPACE = 8
+; Change to $DE04 when building for a F256 Jr. Rev B using factory settings
+MUL_RES_CO_PROC = $DE10
 
 toTxtMatrix .macro
     lda #2
@@ -110,7 +112,7 @@ calcCursorOffset
     sta $DE02
     stz $DE03
     
-    #move16Bit $DE04, CURSOR_STATE.videoRamPtr
+    #move16Bit MUL_RES_CO_PROC, CURSOR_STATE.videoRamPtr
 
     ; calculate x * 80 + y + 0xC000
     clc

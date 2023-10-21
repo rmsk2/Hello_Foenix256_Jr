@@ -17,6 +17,8 @@ BITMAP_2_ENABLE = $D110
 BITMAP_0_MEM = $40000
 BITMAP_WINDOW = $6000
 
+; Change to $DE04 when building for a F256 Jr. Rev B using factory settings
+MUL_RES_CO_PROC = $DE10
 
 ; --------------------------------------------------
 ; This routine turns the bitmap mode on and clears the
@@ -119,14 +121,14 @@ setPixel
 
     ; calculate (320 * YPOS) + XPOS    
     clc
-    lda $DE04
+    lda MUL_RES_CO_PROC
     adc setPixelArgs.x
     sta ZP_GRAPHIC_PTR
-    lda $DE05
+    lda MUL_RES_CO_PROC+1
     adc setPixelArgs.x+1
     sta GRAPHIC_ADDRESS
     lda #0
-    adc $DE06
+    adc MUL_RES_CO_PROC+2
     sta GRAPHIC_ADDRESS+1
 
     ; get address in 8K window => look at lower 13 bits
