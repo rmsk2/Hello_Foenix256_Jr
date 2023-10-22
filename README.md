@@ -297,7 +297,7 @@ must be omitted. This is explained in the section about structured programming o
 - [Alternative kernAl using Commodore interface](https://github.com/ghackwrench/OpenKERNAL)
 - [Basic implementation](https://github.com/paulscottrobson/superbasic)
 - [Fork of BASIC in FoenixRetro Repo](https://github.com/FoenixRetro/f256-superbasic)
-- [System manual](https://github.com/pweingar/C256jrManual)
+- Excellent [System manual](https://github.com/pweingar/C256jrManual)
 - [BASIC manual](https://github.com/paulscottrobson/superbasic/blob/main/reference/source/f256jr_basic_ref.pdf)
 - [Product data sheet](https://256-foenix.us-east-1.linodeobjects.com/C256_Foenix_JR_UM_Rev002.pdf)
 - [Tool for firmware upload and USB debugging](https://github.com/pweingar/FoenixMgr)
