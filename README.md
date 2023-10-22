@@ -289,7 +289,7 @@ layout.
 must be omitted. This is explained in the section about structured programming of the basic reference manual.
 
 ## Links
-
+- [Github page of Foenix Retro Systems](https://github.com/FoenixRetro) Look here for the "official" Kernel, Basic and other firmware
 - [Product Home page](https://c256foenix.com/f256-jr/?v=3a52f3c22ed6)
 - [Wiki at Foenix Retro Systems](https://wiki.c256foenix.com/index.php?title=F256JR)
 - [Kernel for the F256 Jr.](https://github.com/ghackwrench/F256_Jr_Kernel_DOS)
