@@ -11,6 +11,7 @@ hires: hires.bin
 cursor: cursor.bin
 txtio: txtio.bin
 mouse: mouse.bin
+#snespad: snespad.bin
 
 hello.bin: hello.asm
 	64tass --nostart -o hello.bin hello.asm
@@ -45,6 +46,10 @@ cursor.bin: cursor.asm api.asm macros.asm khelp.asm
 txtio.bin: test_txtio.asm txtio.asm api.asm macros.asm khelp.asm zeropage.asm
 	64tass --nostart -o txtio.bin test_txtio.asm
 
+#snespad.bin: snes_pad.asm api.asm macros.asm khelp.asm
+#	64tass --nostart -o snespad.bin snes_pad.asm
+
+
 clean:
 	rm hello.bin
 	rm hello_kernel.bin
@@ -57,3 +62,4 @@ clean:
 	rm cursor.bin
 	rm txtio.bin
 	rm mouse.bin
+#	rm snespad.bin
