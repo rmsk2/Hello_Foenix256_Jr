@@ -16,8 +16,6 @@ TEST_DONE =    %01000000
 
 .include "macros.asm"
 
-; Beware: This does not work yet
-
 ; --------------------------------------------------
 ; This routine is the entry point of the program
 ;--------------------------------------------------

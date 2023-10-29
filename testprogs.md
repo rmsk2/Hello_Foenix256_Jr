@@ -63,3 +63,9 @@ The file `mouse.asm` contains a program which visualizes the mouse messages the 
 of the F256 K is moved or its buttons are clicked. It can be built by `make mouse` and its target address is also $4000 from where it
 can be `call`ed in Basic. As the F256 Jr. uses the PS2/2 port for the keyboard, this program will only run on the F256 K. I have tried 
 to use a USB mouse together with several USB to PS/2 adapters but none of the adapters has worked. Using a real PS/2 mouse worked.
+
+## SNES game pad test   
+
+The file `snes_pad.bin` demonstrates how to query an SNES game pad for the state of its buttons. It has to be noted that on my F256 Jr.
+(using the firmware which was current in march 2023) the bit positions which represent the buttons of the controller have to be shifted
+one position to the left in order to match the description in table 12.3 of the system refernce manual.

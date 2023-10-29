@@ -1,4 +1,4 @@
-all: hello hello_kernel ram_exp sid_test joystick slip uart hires cursor txtio mouse
+all: hello hello_kernel ram_exp sid_test joystick slip uart hires cursor txtio mouse snespad
 
 hello: hello.bin 
 hello_kernel: hello_kernel.bin
@@ -62,4 +62,4 @@ clean:
 	rm cursor.bin
 	rm txtio.bin
 	rm mouse.bin
-#	rm snespad.bin
+	rm snespad.bin
