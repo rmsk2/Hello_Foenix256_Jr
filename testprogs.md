@@ -66,6 +66,12 @@ to use a USB mouse together with several USB to PS/2 adapters but none of the ad
 
 ## SNES game pad test   
 
-The file `snes_pad.bin` demonstrates how to query an SNES game pad for the state of its buttons. It has to be noted that on my F256 Jr.
-(using the firmware which was current in march 2023) the bit positions which represent the buttons of the controller have to be shifted
-one position to the left in order to match the description in table 12.3 of the system refernce manual.
+The file `snes_pad.bin` demonstrates how to query an SNES game pad for the state of its buttons. In order to connect the gamepad 
+to your F256 you need an adapter box, which also can be bought from  Foenix retro systems.
+
+It has to be noted that on my F256 Jr. (using the firmware which was current in march 2023) the bit positions which represent the
+buttons of the controller have to be rotated one position to the left in order to match the description in table 12.3 of the system
+reference manual. On my F256 K the description in the manual did fit the observed behaviour. 
+
+It is also worth mentioning that at least some modern replica controllers are not comaptible with the F256 machines and their adapter
+box. An original controller worked.

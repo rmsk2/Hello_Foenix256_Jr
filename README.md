@@ -207,12 +207,12 @@ functionality like
 - the 256K memory expansion
 - the optional SID chips 
 - the joystick ports
-- SLIP networking
 - Serial communication via the UART
 - Bitmap graphics
 - Simple cursor control in Assembler
 - Routines for printing and entering text in assembly 
 - the mouse (only on F256K)
+- the SNES gampad
 
 ## Useful info
 
