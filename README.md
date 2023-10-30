@@ -22,7 +22,7 @@ the F256 Jr. to the same state as the F256 K but I have not updated my machine y
 
 ### What do you need?
 
-In addition to the board you will need:
+In addition to the F256 Jr. board you will need:
 
 - A mini ITX power supply unit (PSU), that plugs into the F256 Jr. board
 - A power adapter for this PSU
