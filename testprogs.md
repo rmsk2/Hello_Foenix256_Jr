@@ -74,4 +74,4 @@ buttons of the controller have to be rotated one position to the left in order t
 reference manual. On my F256 K the description in the manual did fit the observed behaviour. 
 
 It is also worth mentioning that at least some modern replica controllers are not comaptible with the F256 machines and their adapter
-box. An original controller worked.
+box. I have tried two different brands which did not work but an original controller worked.
