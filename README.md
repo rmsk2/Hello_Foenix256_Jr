@@ -212,7 +212,7 @@ functionality like
 - Simple cursor control in Assembler
 - Routines for printing and entering text in assembly 
 - the mouse (only on F256K)
-- the SNES gampad
+- the SNES gamepad
 
 ## Useful info
 
