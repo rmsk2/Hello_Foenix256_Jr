@@ -71,10 +71,10 @@ from BASIC or after uploading via USB using the command
 
 ## SNES game pad test   
 
-The file `snes_pad.bin` demonstrates how to query an SNES game pad for the state of its buttons. In order to connect the gamepad 
+The file `snespad.bin` demonstrates how to query an SNES game pad for the state of its buttons. In order to connect the gamepad 
 to your F256 you need an adapter box, which also can be bought from  Foenix retro systems.
 
 It is worth mentioning that at least some modern replica controllers are not comaptible with the F256 machines and their adapter box. 
 I have tried two different brands which did not work but an original controller worked.
 
-As usual the target address of `snes_pad.bin` is $4000 and can be called from there after a transfer to the F256.
+As usual the target address of `snespad.bin` is $4000 and can be called from there after a transfer to the F256.
