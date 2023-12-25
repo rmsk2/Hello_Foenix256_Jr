@@ -8,7 +8,9 @@ I am using Ubuntu 22.04 so all the following information is in principle specifi
 but it should be easy to replicate these steps on other Linux distros. I have not attempted to use 
 these tools on Windows.
 
-In [this document](/emulator.md) you find info about how to set up an F256 Jr. emulator. 
+In [this document](/emulator.md) you find info about how to set up an F256 Jr. emulator. Alternatively
+you can use the official emulator available [here](https://github.com/Trinity-11/FoenixIDE) which now
+boots into a BASIC prompt.
 
 **Note:** The math coprocessor addresses differ between the F256 Jr. (in factory condition as of March 2023) 
 and the F256 K (as bought in October 2023). This repo uses the F256 K addresses as a default. You have to 
@@ -290,6 +292,7 @@ must be omitted. This is explained in the section about structured programming o
 
 ## Links
 - [Github page of Foenix Retro Systems](https://github.com/FoenixRetro) Look here for the "official" Kernel, Basic and other firmware
+- [F256K/F256 Jr. introductory information from Foenix Retro Systems at Github](https://github.com/FoenixRetro/Documentation)
 - [Product Home page](https://c256foenix.com/f256-jr/?v=3a52f3c22ed6)
 - [Wiki at Foenix Retro Systems](https://wiki.c256foenix.com/index.php?title=F256JR)
 - [Simple Shell for the F256](https://github.com/FoenixRetro/f256-dos)
@@ -323,15 +326,9 @@ I like the BASIC that comes with the F256 Jr. as it enables you to explore the s
 more advanced than the Commodore BASIC V2 but that also means that not all of your potential previous knowledge carries over to this new
 platform.
 
-While the documentation could be improved (see section `Also notworthy` above) it mostly works at least for me as a reference for the system. 
-What is missing is in my opinion tutorial syle material that guides you through the first steps on the system from hardware installation to a running 
-hello world program. This information mostly is already available but split between different sources.
-
-Another thing that is not ideal from my point of view is the situation with respect to an emulator. I was not able to get the official emulator 
-to boot to a BASIC prompt, but maybe I should try that again as I now know quite a bit more about the F256 Jr than I did in the beginning. The 
-fork of `scttgs0` does not work for me. The emulator of Paul Robson boots to a BASIC prompt and is usable but makes no use of the 
-kernel ROM which limits what kind of software can be tested. As the development cycle is fairly smooth when using the upload mechanism a nice 
-emulator is not a necessity for me as a programmer but it could be a tool to get people interested in the platform.
+While the BASIC documentation could be improved (see section `Also notworthy` above) it mostly works at least for me. The system manual on the 
+other hand is excellent. What is missing is in my opinion tutorial syle material that guides you through the first steps on the system from hardware 
+installation to a running hello world program. This information mostly is already available but split between different sources.
 
 I wish the people behind the F256 Jr. the commercial success that the product deserves.
 
