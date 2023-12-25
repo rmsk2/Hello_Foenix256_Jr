@@ -327,10 +327,9 @@ more advanced than the Commodore BASIC V2 but that also means that not all of yo
 platform.
 
 While the BASIC documentation could be improved (see section `Also notworthy` above) it mostly works at least for me. The system manual on the 
-other hand is excellent. What is missing is in my opinion tutorial syle material that guides you through the first steps on the system from hardware 
-installation to a running hello world program. This information mostly is already available but split between different sources.
+other hand is excellent.
 
-I wish the people behind the F256 Jr. the commercial success that the product deserves.
+I wish the people behind the F256 Jr. and F256K the commercial success that the product deserves.
 
 ## A slightly more complex example
 
