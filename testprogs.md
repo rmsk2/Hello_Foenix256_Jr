@@ -61,8 +61,9 @@ cursor positon and a robust string entry function. The program `test_txtio.asm` 
 
 The file `mouse.asm` contains a program which visualizes the mouse messages the kernel sends when a mouse attached to the PS/2 port 
 of the F256 K is moved or its buttons are clicked. It can be built by `make mouse` and its target address is also $4000 from where it
-can be `call`ed in Basic. As the F256 Jr. uses the PS2/2 port for the keyboard, this program will only run on the F256 K. I have tried 
-to use a USB mouse together with several USB to PS/2 adapters but none of the adapters has worked. Using a real PS/2 mouse worked.
+can be `call`ed in Basic. As the F256 Jr. uses the PS2/2 port for the keyboard, this program will only run on the F256 K. I was
+able to use an optical USB mouse together with a USB to PS/2 adapter but this worked only with one of my mice. Using a real PS/2 
+mouse always worked.
 
 The makefile generates the binary `mouse.bin` which can be executed from address $4000 after being loaded by `bload "mouse.bin", $4000`
 from BASIC or after uploading via USB using the command
