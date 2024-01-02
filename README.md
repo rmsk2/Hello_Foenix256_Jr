@@ -12,12 +12,12 @@ In [this document](/emulator.md) you find info about how to set up an F256 Jr. e
 you can use the official emulator available [here](https://github.com/Trinity-11/FoenixIDE) which now
 boots into a BASIC prompt.
 
-**Note:** The math coprocessor addresses differ between the F256 Jr. (in factory condition as of March 2023) 
+**Note:** The math coprocessor addresses differ between the F256 Jr. (in factory condition as of March 2023 having FPGA version RC08) 
 and the F256 K (as bought in October 2023). This repo uses the F256 K addresses as a default. You have to 
 change the value of `MUL_RES_CO_PROC` from `$DE10` to `$DE04` in the files `hires_base.asm` and `txtio.asm` 
-when building for a F256 Jr. in factory condition. Additionally the file `api.asm`, which defines the kernel 
+when building for an F256 Jr. with an FPGA version below RC10. Additionally the file `api.asm`, which defines the kernel 
 interface, has been updated to a newer version. When building for an original F256 Jr. you may have to use the 
-version of `api.asm` which was current when your system was released. I assume it is possible to update
+version of `api.asm` which was current when your system was released. It is possible to update
 the F256 Jr. to the same state as the F256 K but I have not updated my machine yet.
 
 ## Hardware setup
