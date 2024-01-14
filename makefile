@@ -1,4 +1,4 @@
-all: hello hello_kernel ram_exp sid_test joystick slip uart hires cursor txtio mouse snespad
+all: hello hello_kernel ram_exp sid_test joystick slip uart hires cursor txtio mouse snespad keytest
 
 hello: hello.bin 
 hello_kernel: hello_kernel.bin
@@ -12,6 +12,7 @@ cursor: cursor.bin
 txtio: txtio.bin
 mouse: mouse.bin
 snespad: snespad.bin
+keytest: keytest.bin
 
 hello.bin: hello.asm
 	64tass --nostart -o hello.bin hello.asm
@@ -49,6 +50,8 @@ txtio.bin: test_txtio.asm txtio.asm api.asm macros.asm khelp.asm zeropage.asm
 snespad.bin: snes_pad.asm api.asm macros.asm khelp.asm
 	64tass --nostart -o snespad.bin snes_pad.asm
 
+keytest.bin: key_test.asm api.asm txtio.asm khelp.asm macros.asm zeropage.asm
+	64tass --nostart -o keytest.bin key_test.asm
 
 clean:
 	rm hello.bin
