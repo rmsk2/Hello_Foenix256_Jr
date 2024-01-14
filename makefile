@@ -66,3 +66,4 @@ clean:
 	rm txtio.bin
 	rm mouse.bin
 	rm snespad.bin
+	rm keytest.bin
