@@ -17,30 +17,36 @@ printRand .macro
 .endmacro
 
 init
+    ; get 100th seconds and seconds from system time
     jsr kGetTimeStamp
     lda RTC_BUFFER.centis
     sta SEED_VAL_LO
     lda RTC_BUFFER.seconds
     sta SEED_VAL_HI
 
+    ; get lowest byte of 6.29 MHz counter
     lda $D651
     eor SEED_VAL_LO
     sta SEED_VAL_LO
 
+    ; get lowest byte of 1/60 sec counter
     lda $D659
     eor SEED_VAL_HI
     sta SEED_VAL_HI
 
     clc
+    ; get lowest byte of currently drawn row
     lda $D01A
     adc SEED_VAL_LO
     sta SEED_VAL_LO
 
     clc
+    ; get lowest byte of currently drawn column
     lda $D018
     adc SEED_VAL_HI
     sta SEED_VAL_HI
 
+    ; set seed
     lda SEED_VAL_LO
     sta RNG_LO
     lda SEED_VAL_HI
