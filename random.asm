@@ -54,7 +54,7 @@ init
 ;--------------------------------------------------
 main
     jsr txtio.init
-    ;jsr init
+    jsr init
     jsr initEvents
 
     jsr txtio.cursorOff
