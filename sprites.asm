@@ -49,8 +49,6 @@ main
     rts
 
 
-MSG1 .text "Dies ist ein Test"
-
 SPR_SIZE_8 = 64 | 32
 SPR_SIZE_16 = 64
 SPR_SIZE_24 = 32
