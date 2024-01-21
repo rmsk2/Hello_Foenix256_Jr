@@ -62,6 +62,11 @@ inputString .macro addrRes, lenRes, addrAllowed, lenAllowed
     jsr txtio.getString    
 .endmacro
 
+setCol .macro col 
+    lda #\col
+    sta CURSOR_STATE.col
+.endmacro
+
 cursorState_t .struct 
 xPos        .byte 0
 yPos        .byte 0
