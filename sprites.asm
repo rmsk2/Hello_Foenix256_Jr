@@ -85,7 +85,7 @@ simpleSpriteOn
     stz $d907
 
     ; sprite attributes
-    lda #SPR_SIZE_8 | SPR_LAYER_0 | SPR_LUT_0 | SPR_ENABLE
+    lda #SPR_SIZE_32 | SPR_LAYER_0 | SPR_LUT_0 | SPR_ENABLE
     sta $D900
     rts
 
@@ -125,6 +125,6 @@ spritesOff
     sta $D001    
     rts
 
-
-; A simple block using a single color
-SPR_DATA .text x"93" x 1024
+C1 = 163
+SPR_DATA
+.include "sprdef.asm"

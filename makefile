@@ -58,7 +58,7 @@ keytest.bin: key_test.asm api.asm txtio.asm khelp.asm macros.asm zeropage.asm
 random.bin: random.asm api.asm txtio.asm khelp.asm macros.asm zeropage.asm
 	64tass --nostart -o random.bin random.asm
 
-sprites.bin: sprites.asm api.asm txtio.asm khelp.asm macros.asm zeropage.asm
+sprites.bin: sprites.asm api.asm txtio.asm khelp.asm macros.asm zeropage.asm sprdef.asm
 	64tass --nostart -o sprites.bin sprites.asm
 
 
