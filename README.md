@@ -18,7 +18,7 @@ change the value of `MUL_RES_CO_PROC` from `$DE10` to `$DE04` in the files `hire
 when building for an F256 Jr. with an FPGA version below RC10. Additionally the file `api.asm`, which defines the kernel 
 interface, has been updated to a newer version. When building for an original F256 Jr. you may have to use the 
 version of `api.asm` which was current when your system was released. It is possible to update
-the F256 Jr. to the same state as the F256 K but I have not updated my machine yet.
+the F256 Jr. to the same state as the F256 K.
 
 ## Hardware setup
 
