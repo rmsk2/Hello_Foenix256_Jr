@@ -168,7 +168,7 @@ you can execute the resulting assembly subroutine through the command `call $400
 This program should print `Hello World!` in the upper left corner of the screen without relying on
 any BASIC functionality. It can be built by `64tass --nostart -o hello_kernel.bin  hello_kernel.asm` or `make hello_kernel`.
 The file `api.asm` contains the API definition of the TinyCore Kernel. I took this 
-[copy](https://github.com/paulscottrobson/superbasic/blob/main/source/common/api/api.asm) from the `superbasic` source
+[copy](https://github.com/FoenixRetro/f256-superbasic/blob/main/source/common/api/api.asm) from the `superbasic` source
 code because that has to match the Kernel which is installed on my system.
 
 
@@ -283,7 +283,6 @@ layout.
 
 ### Also noteworthy
 
-- The boot screen shows 4 characters with wrong background color. See [here](https://user-images.githubusercontent.com/13918100/230933468-1fb9ce9a-5362-4bfd-afc1-ab4f00d6e2bb.jpg) 
 - The `superbasic` statement `call` is currently not mentioned in the documentation
 - The `bload` statement does not print `Completed` when loading is successfull whereas `load` does
 - The `superbasic` documentation does not mention that the `proc` keyword is only valid if it occurs after an `end` statement
@@ -315,7 +314,7 @@ must be omitted. This is explained in the section about structured programming o
 
 I think it is a great little machine and I like it a lot. On top of that (and in contrast to other similar projects) it is real! The hardware is 
 sitting on my desk **today** and works reliably. When compared to the Commander X16 the F256 Jr. is a more ambitious design. The memory management
-is much more flexible, it features a math coprocessor for fast multiplication and includes a DMA Controller (i.e. a Blitter) which should 
+is much more flexible, it features a math coprocessor for fast multiplication and division and includes a DMA Controller (i.e. a Blitter) which should 
 make it, at least in that respect, a more capable retro gaming system than the X16. The kernel even provides a SLIP based TCP stack which
 should make it possible to connect the F256 Jr. to the internet without adding the optional WiFi module, but I have not tried that, yet.
 
