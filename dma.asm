@@ -34,6 +34,14 @@ restoreIo .macro
     sta $01
 .endmacro
 
+; ###################################################
+; B E W A R E   B E W A R E  B E W A R E  B E W A R E
+; 
+; This code does not run reliably. To see this yourself
+; remove the three NOPs in the lines 128-130.
+;
+; B E W A R E   B E W A R E  B E W A R E  B E W A R E
+; ###################################################
 
 ; --------------------------------------------------
 ; This routine is the entry point of the program
@@ -58,6 +66,7 @@ _nextTry
     cmp #250
     bne _nextTry
 
+    #kprint 0, OUT_LINE+4, doneTxt, len(doneTxt), doneColor
     jsr restoreEvents
     rts
 
@@ -179,6 +188,9 @@ fillOkColor .text x"62" x len(fillOkTxt)
 
 cmpOkTxt .text "Compare OK"
 cmpOkColor .text x"62" x len(cmpOkTxt)
+
+doneTxt .text "Done!"
+doneColor .text x"62" x len(doneTxt)
 
 errorTxt .text "Error"
 errorColor .text x"62" x len(errorTxt)
