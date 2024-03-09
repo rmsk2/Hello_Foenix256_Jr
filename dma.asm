@@ -115,7 +115,7 @@ _checkEnd
 
     stz DMA_CONTROL
     ; These seem to be neccessary .... . Otherwise the system
-    ; locks up
+    ; locks up after a few repeitions
     nop
     nop
     nop
