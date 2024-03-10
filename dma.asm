@@ -17,8 +17,6 @@ DMA_DESTINATION = $DF08
 DMA_COUNT = $DF0C
 ZP_ADDR = $B0
 
-BYTE_VALUE = $FF
-
 saveIo .macro
     lda $01
     pha
@@ -34,11 +32,11 @@ restoreIo .macro
     sta $01
 .endmacro
 
+
 ; ###################################################
 ; B E W A R E   B E W A R E  B E W A R E  B E W A R E
 ; 
-; This code does not run reliably. To see this yourself
-; remove the three NOPs in the lines 128-130.
+; This code does not run reliably.
 ;
 ; B E W A R E   B E W A R E  B E W A R E  B E W A R E
 ; ###################################################
@@ -52,12 +50,14 @@ main
 
     #kprint 0, OUT_LINE, startedTxt, len(startedTxt), startedColor
 
-_nextTry    
+_nextTry
+    jsr checkVBlank    
     jsr setMemory
-    #kprint 0, OUT_LINE+1, fillOkTxt, len(fillOkTxt), fillOkColor
+    ;#kprint 0, OUT_LINE+1, fillOkTxt, len(fillOkTxt), fillOkColor
 
+    jsr checkVBlank    
     jsr copyMemory
-    #kprint 0, OUT_LINE+2, copyOkTxt, len(copyOkTxt), copyOkColor
+    ;#kprint 0, OUT_LINE+2, copyOkTxt, len(copyOkTxt), copyOkColor
 
     jsr compareMemoryBlock
 
@@ -75,15 +75,34 @@ compareMemoryBlock
     ldy #0
 _nexByte
     lda (ZP_ADDR),y
-    cmp #BYTE_VALUE
+    cmp TRY_COUNT
     bne _error
     iny
     bne _nexByte
-    #kprint 0, OUT_LINE+3, cmpOkTxt, len(cmpOkTxt), cmpOkColor
     bra _done
 _error
     #kprint 0, OUT_LINE+3, errorTxt, len(errorTxt), errorColor
 _done
+    rts
+
+LINE_NO = 261*2  ; 240+21
+
+checkVBlank
+    lda #<LINE_NO
+    ldx #>LINE_NO
+_wait1
+    cpx $D01B
+    beq _wait1
+_wait2
+    cmp $D01A
+    beq _wait2
+
+_wait3
+    cpx $D01B
+    bne _wait3
+_wait4
+    cmp $D01A
+    bne _wait4
     rts
 
 TRY_COUNT .byte 0
@@ -92,10 +111,12 @@ setMemory
     #saveIo
     #setIo 0
 
+    stz DMA_CONTROL
+
     lda #DMA_FILL | DMA_ENABLE
     sta DMA_CONTROL
     
-    lda #BYTE_VALUE
+    lda TRY_COUNT
     sta DMA_FILL_BYTE
     
     ; destination $010000
@@ -119,12 +140,12 @@ setMemory
     sta DMA_CONTROL
 _checkEnd
     lda DMA_READY
-    and #$80
-    bne _checkEnd
-
-    stz DMA_CONTROL
+    bmi _checkEnd    
     ; These seem to be neccessary .... . Otherwise the system
     ; locks up after a few repititions.
+    nop
+    nop
+    nop
     nop
     nop
     nop
@@ -134,6 +155,8 @@ _checkEnd
 copyMemory
     #saveIo
     #setIo 0
+
+    stz DMA_CONTROL
 
     lda #DMA_ENABLE
     sta DMA_CONTROL
@@ -167,10 +190,15 @@ copyMemory
     sta DMA_CONTROL
 _checkEnd
     lda DMA_READY
-    and #$80
-    bne _checkEnd
-
-    stz DMA_CONTROL
+    bmi _checkEnd
+    ; These seem to be neccessary .... . Otherwise the system
+    ; locks up after a few repititions.
+    nop
+    nop
+    nop
+    nop
+    nop
+    nop
     #restoreIo
     rts
 
