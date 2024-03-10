@@ -88,6 +88,9 @@ _done
 LINE_NO = 261*2  ; 240+21
 
 checkVBlank
+    #saveIo
+    #setIo 0
+
     lda #<LINE_NO
     ldx #>LINE_NO
 _wait1
@@ -103,6 +106,9 @@ _wait3
 _wait4
     cmp $D01A
     bne _wait4
+
+    #restoreIo
+
     rts
 
 TRY_COUNT .byte 0
