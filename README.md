@@ -283,7 +283,6 @@ layout.
 
 ### Also noteworthy
 
-- The `superbasic` statement `call` is currently not mentioned in the documentation
 - The `bload` statement does not print `Completed` when loading is successfull whereas `load` does
 - The `superbasic` documentation does not mention that the `proc` keyword is only valid if it occurs after an `end` statement
 - When using the variant of the `if` statement that allows for a multline `if` block and an optional `else` block the `then` statement 
