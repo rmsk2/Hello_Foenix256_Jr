@@ -47,7 +47,7 @@ hires.bin: hires.asm api.asm macros.asm khelp.asm hires_base.asm zeropage.asm
 cursor.bin: cursor.asm api.asm macros.asm khelp.asm
 	64tass --nostart -o cursor.bin cursor.asm
 
-txtio.bin: test_txtio.asm txtio.asm api.asm macros.asm khelp.asm zeropage.asm
+txtio.bin: test_txtio.asm txtio.asm api.asm macros.asm khelp.asm zeropage.asm key_repeat.asm
 	64tass --nostart -o txtio.bin test_txtio.asm
 
 snespad.bin: snes_pad.asm api.asm macros.asm khelp.asm

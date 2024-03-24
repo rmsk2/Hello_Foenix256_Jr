@@ -25,6 +25,26 @@ restoreEvents
     rts
 
 
+FKEYS .byte $81, $82, $83, $84, $85, $86, $87, $88
+
+testForFKey
+    phx
+    ldx #0
+_loop
+    cmp FKEYS, x
+    beq _isFKey
+    inx
+    cpx #8
+    bne _loop
+    plx
+    clc
+    rts
+_isFKey
+    plx
+    sec
+    rts
+
+
 ; waiting for a key press event from the kernel
 waitForKey
     ; Peek at the queue to see if anything is pending
@@ -41,6 +61,11 @@ waitForKey
 _done
     lda myEvent.key.flags 
     and #myEvent.key.META
-    bne waitForKey
+    beq _isAscii
+    lda myEvent.key.raw                                      ; retrieve raw key code
+    jsr testForFKey
+    bcc waitForKey                                           ; a meta key but not an F-Key was pressed => we are not done
+    rts                                                      ; it was an F-Key => return raw key code a ascii value
+_isAscii
     lda myEvent.key.ascii
     rts
