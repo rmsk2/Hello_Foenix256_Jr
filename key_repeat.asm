@@ -107,7 +107,7 @@ _startMeasureTimer
     inc TRACKING.numMeasureTimersInFlight
     inc TRACKING.keyUpDownCount
     lda TRACKING.lastKeyPressed
-    clc                                          ; The user pressed a key. Stop iteration in waitForKeyRepeat
+    clc                                            ; The user pressed a key. Stop iteration in waitForKeyRepeat
     rts
 
 
@@ -126,7 +126,10 @@ _isAscii
     lda myEvent.key.ascii
 _updateTracking
     sta TRACKING.lastKeyReleased
+    lda TRACKING.keyUpDownCount
+    beq _done                                      ; counter is already zero => we have missed an event. Do not activate repeat
     dec TRACKING.keyUpDownCount
+_done
     rts
 
 
@@ -150,9 +153,13 @@ handleMeasurementTimer
     lda TRACKING.keyUpDownCount
     cmp #1                                         ; There should be exactly one key still being pressed
     beq _testForNumInFlight
+    lda TRACKING.numMeasureTimersInFlight
+    beq _noRepeat                                  ; don't decrement if already zero. We seem to have missed some events.
     dec TRACKING.numMeasureTimersInFlight
     bra _noRepeat                                  ; No key or several keys currently pressed => do nothing. Cause another loop iteration in waitForKeyRepeat
 _testForNumInFlight
+    lda TRACKING.numMeasureTimersInFlight
+    beq _noRepeat                                  ; counter is already zero => we have missed an event. Do not activate repeat
     dec TRACKING.numMeasureTimersInFlight
     bne _noRepeat                                  ; zero flag not set => There is at least one other timer in flight, so the one which arrived was not the last to be created
     lda TRACKING.lastKeyPressed
