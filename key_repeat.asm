@@ -94,7 +94,7 @@ handleKeyPressEvent
     lda myEvent.key.raw
     jsr testForFKey
     bcs _handleFKey
-    sec                                            ; we did not recognize the key. Make another loop iteration in waitForKeyRepeat
+    sec                                            ; we did not recognize the key. Make another loop iteration in waitForKey
     rts
 _handleFKey
     lda myEvent.key.raw    
@@ -107,7 +107,7 @@ _startMeasureTimer
     inc TRACKING.numMeasureTimersInFlight
     inc TRACKING.keyUpDownCount
     lda TRACKING.lastKeyPressed
-    clc                                            ; The user pressed a key. Stop iteration in waitForKeyRepeat and return key code.
+    clc                                            ; The user pressed a key. Stop iteration in waitForKey and return key code.
     rts
 
 
@@ -156,7 +156,7 @@ handleMeasurementTimer
     lda TRACKING.numMeasureTimersInFlight
     beq _noRepeat                                  ; don't decrement if already zero. We seem to have missed some events.
     dec TRACKING.numMeasureTimersInFlight
-    bra _noRepeat                                  ; No key or several keys currently pressed => do nothing. Cause another loop iteration in waitForKeyRepeat
+    bra _noRepeat                                  ; No key or several keys currently pressed => do nothing. Cause another loop iteration in waitForKey
 _testForNumInFlight
     lda TRACKING.numMeasureTimersInFlight
     beq _noRepeat                                  ; counter is already zero => we have missed an event. Do not activate repeat
@@ -166,11 +166,11 @@ _testForNumInFlight
     cmp TRACKING.lastKeyReleased
     beq _noRepeat                                  ; last key pressed and released are are the same *and* there is one key pressed. This can't be right ...
     #makeTimer REPEAT_TIMEOUT, COOKIE_REPEAT_TIMER ; start repeat timer
-    lda TRACKING.lastKeyPressed                    ; return key press to caller => Stop iteration in waitForKeyRepeat
+    lda TRACKING.lastKeyPressed                    ; return key press to caller => Stop iteration in waitForKey
     clc
     rts
 _noRepeat
-    sec                                            ; Cause another loop iteration in waitForKeyRepeat
+    sec                                            ; Cause another loop iteration in waitForKey
     rts
 
 
@@ -178,17 +178,17 @@ handleRepeatTimer
     lda TRACKING.keyUpDownCount
     cmp #1                                         ; There should be exactly one key still being pressed
     beq _testRestartRepeat
-    bra _noRepeat                                  ; No key or several keys currently pressed => do nothing. Cause another loop iteration in waitForKeyRepeat
+    bra _noRepeat                                  ; No key or several keys currently pressed => do nothing. Cause another loop iteration in waitForKey
 _testRestartRepeat
     lda TRACKING.lastKeyPressed
     cmp TRACKING.lastKeyReleased
     beq _noRepeat                                  ; last key pressed and released are are the same *and* there is one key pressed. This can't be right ...
     #makeTimer REPEAT_TIMEOUT, COOKIE_REPEAT_TIMER ; start repeat timer
-    lda TRACKING.lastKeyPressed                    ; return key press to caller => Stop iteration in waitForKeyRepeat
+    lda TRACKING.lastKeyPressed                    ; return key press to caller => Stop iteration in waitForKey
     clc    
     rts
 _noRepeat
-    sec                                            ; Cause another loop iteration in waitForKeyRepeat
+    sec                                            ; Cause another loop iteration in waitForKey
     rts
 
 .endnamespace
