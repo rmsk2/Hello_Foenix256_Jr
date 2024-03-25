@@ -94,7 +94,7 @@ handleKeyPressEvent
     lda myEvent.key.raw
     jsr testForFKey
     bcs _handleFKey
-    sec                                           ; we did not recognize the key. Make another loop iteration in waitForKeyRepeat
+    sec                                            ; we did not recognize the key. Make another loop iteration in waitForKeyRepeat
     rts
 _handleFKey
     lda myEvent.key.raw    
@@ -120,15 +120,15 @@ handleKeyReleaseEvent
     bcs _handleFKey
     rts
 _handleFKey
-    lda myEvent.key.raw
+    ldx myEvent.key.raw
     bra _updateTracking
 _isAscii
-    lda myEvent.key.ascii
+    ldx myEvent.key.ascii
 _updateTracking
-    sta TRACKING.lastKeyReleased
     lda TRACKING.keyUpDownCount
-    beq _done                                      ; counter is already zero => we have missed an event. Do not activate repeat
+    beq _done                                      ; counter is already zero => we have missed an event. Do not activate repeat. In essence ignore event.
     dec TRACKING.keyUpDownCount
+    stx TRACKING.lastKeyReleased                   ; State seems to be consistent. Save code of released key.
 _done
     rts
 
