@@ -107,7 +107,7 @@ _startMeasureTimer
     inc TRACKING.numMeasureTimersInFlight
     inc TRACKING.keyUpDownCount
     lda TRACKING.lastKeyPressed
-    clc                                            ; The user pressed a key. Stop iteration in waitForKeyRepeat
+    clc                                            ; The user pressed a key. Stop iteration in waitForKeyRepeat and return key code.
     rts
 
 
