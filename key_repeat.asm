@@ -97,13 +97,12 @@ handleKeyPressEvent
     sec                                           ; we did not recognize the key. Make another loop iteration in waitForKeyRepeat
     rts
 _handleFKey
-    lda myEvent.key.raw
-    sta TRACKING.lastKeyPressed
+    lda myEvent.key.raw    
     bra _startMeasureTimer
 _isAscii
     lda myEvent.key.ascii
-    sta TRACKING.lastKeyPressed
 _startMeasureTimer
+    sta TRACKING.lastKeyPressed
     #makeTimer MEASUREMENT_TIMEOUT, COOKIE_MEASUREMENT_TIMER
     inc TRACKING.numMeasureTimersInFlight
     inc TRACKING.keyUpDownCount
