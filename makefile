@@ -1,4 +1,4 @@
-all: hello hello_kernel ram_exp sid_test joystick slip uart hires cursor txtio mouse snespad keytest random sprites dma
+all: hello hello_kernel ram_exp sid_test joystick slip uart hires cursor txtio mouse snespad keytest random sprites dma key_repeat
 
 hello: hello.bin 
 hello_kernel: hello_kernel.bin
@@ -16,6 +16,7 @@ keytest: keytest.bin
 random: random.bin
 sprites: sprites.bin
 dma: dma.bin
+key_repeat: key_repeat.bin
 
 hello.bin: hello.asm
 	64tass --nostart -o hello.bin hello.asm
@@ -47,7 +48,7 @@ hires.bin: hires.asm api.asm macros.asm khelp.asm hires_base.asm zeropage.asm
 cursor.bin: cursor.asm api.asm macros.asm khelp.asm
 	64tass --nostart -o cursor.bin cursor.asm
 
-txtio.bin: test_txtio.asm txtio.asm api.asm macros.asm khelp.asm zeropage.asm key_repeat.asm
+txtio.bin: test_txtio.asm txtio.asm api.asm macros.asm khelp.asm zeropage.asm
 	64tass --nostart -o txtio.bin test_txtio.asm
 
 snespad.bin: snes_pad.asm api.asm macros.asm khelp.asm
@@ -64,6 +65,9 @@ sprites.bin: sprites.asm api.asm txtio.asm khelp.asm macros.asm zeropage.asm spr
 
 dma.bin: dma.asm api.asm macros.asm khelp.asm
 	64tass --nostart -o dma.bin dma.asm
+
+key_repeat.bin: key_repeat.asm txtio.asm api.asm macros.asm khelp.asm zeropage.asm
+	64tass --nostart -o key_repeat.bin key_repeat.asm
 
 
 clean:
@@ -83,3 +87,4 @@ clean:
 	rm random.bin
 	rm sprites.bin
 	rm dma.bin
+	rm key_repeat.bin

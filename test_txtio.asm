@@ -9,12 +9,6 @@ jmp main
 .include "macros.asm"
 .include "txtio.asm"
 .include "khelp.asm"
-.include "key_repeat.asm"
-
-; ************************************************************
-; Change this to zero when you don't want to use the key repeat feature
-; ************************************************************
-USE_REPEAT = 1
 
 UPPER .text "ABCDEFGHIJKLMNOPQRTSUVWXYZ"
 LOWER .text "abcdefghijklmnopqrstuvwxyz"
@@ -38,7 +32,6 @@ CRSR_RIGHT = $06
 
 main
     jsr txtio.init
-    jsr keyrepeat.init
     jsr initEvents
 
     ; set fore- and background colours
@@ -49,11 +42,7 @@ main
     #printString START_TXT2, len(START_TXT2)
 
 _charLoop
-.if USE_REPEAT != 0
-    jsr keyrepeat.waitForKey
-.else
     jsr waitForKey
-.endif
     cmp #KEY_X
     beq _done
     cmp #CRSR_UP
