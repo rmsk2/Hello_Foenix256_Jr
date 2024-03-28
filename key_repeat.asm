@@ -1,4 +1,3 @@
-; target address is $4000
 
 
 TimerHelp_t .struct 
@@ -33,7 +32,7 @@ init
     sta TRACKING.lastKeyReleased
     rts
 
-FOCUS_VECTOR .word 0
+FOCUS_VECTOR .word dummyCallBack
 
 TIMER_HELP .dstruct TimerHelp_t
 TRACKING .dstruct KeyTracking_t
@@ -45,6 +44,12 @@ makeTimer .macro interval, cookie
     sta TIMER_HELP.cookie
     jsr setTimer60thSeconds
 .endmacro
+
+
+; Dummy callback which ends keyEventLoop
+dummyCallBack
+    clc
+    rts
 
 
 ; set a timer that fires after the number of 1/60 th seconds
@@ -66,34 +71,34 @@ setTimer60thSeconds
     rts
 
 
-waitForKey
+keyEventLoop
     ; Peek at the queue to see if anything is pending
     lda kernel.args.events.pending ; Negated count
-    bpl waitForKey
+    bpl keyEventLoop
     ; Get the next event.
     jsr kernel.NextEvent
-    bcs waitForKey
+    bcs keyEventLoop
     ; Handle the event
     lda myEvent.type    
     cmp #kernel.event.key.PRESSED
     bne _checkKeyRelease
     jsr handleKeyPressEvent
-    bcs waitForKey
+    bcs keyEventLoop
     jsr processKeyPress
-    bcs waitForKey
+    bcs keyEventLoop
     rts
 _checkKeyRelease
     cmp #kernel.event.key.RELEASED
     bne _checkTimer
     jsr handleKeyReleaseEvent
-    bra waitForKey
+    bra keyEventLoop
 _checkTimer
     cmp #kernel.event.timer.EXPIRED
-    bne waitForKey
+    bne keyEventLoop
     jsr handleTimerEvent
-    bcs waitForKey
+    bcs keyEventLoop
     jsr processKeyPress
-    bcs waitForKey
+    bcs keyEventLoop
     rts
 
 
@@ -108,7 +113,7 @@ handleKeyPressEvent
     lda myEvent.key.raw
     jsr testForFKey
     bcs _handleFKey
-    sec                                            ; we did not recognize the key. Make another loop iteration in waitForKey
+    sec                                            ; we did not recognize the key. Make another loop iteration in keyEventLoop
     rts
 _handleFKey
     lda myEvent.key.raw    
@@ -121,8 +126,7 @@ _startMeasureTimer
     inc TRACKING.numMeasureTimersInFlight
     inc TRACKING.keyUpDownCount
     lda TRACKING.lastKeyPressed
-    clc                                            ; The user pressed a key. Stop iteration in waitForKey and return key code.
-    ;jsr visKeyUpDown
+    clc                                            ; The user pressed a key. Stop iteration in keyEventLoop and return key code.
     rts
 
 
@@ -145,10 +149,10 @@ _updateTracking
     dec TRACKING.keyUpDownCount
     bne _continue
     ldx #IMPOSSIBLE_KEY                            ; counter was zero, this means that we can allow last key pressed == last key released
+    stz TRACKING.numRepeatTimersInFlight           ; cancel all repeat timers which are in flight
 _continue
     stx TRACKING.lastKeyReleased                   ; State seems to be consistent. Save code of released key.
 _done
-    ;jsr visKeyUpDown
     rts
 
 
@@ -175,7 +179,7 @@ handleMeasurementTimer
     lda TRACKING.numMeasureTimersInFlight
     beq _noRepeat                                  ; don't decrement if already zero. We seem to have missed some events.
     dec TRACKING.numMeasureTimersInFlight
-    bra _noRepeat                                  ; No key or several keys currently pressed => do nothing. Cause another loop iteration in waitForKey
+    bra _noRepeat                                  ; No key or several keys currently pressed => do nothing. Cause another loop iteration in keyEventLoop
 _testForNumInFlight
     lda TRACKING.numMeasureTimersInFlight
     beq _noRepeat                                  ; counter is already zero => we have missed an event. Do not activate repeat
@@ -186,17 +190,17 @@ _testForNumInFlight
     beq _noRepeat                                  ; last key pressed and released are are the same *and* there is one key pressed. This can't be right ...
     #makeTimer REPEAT_TIMEOUT, COOKIE_REPEAT_TIMER ; start repeat timer
     inc TRACKING.numRepeatTimersInFlight
-    lda TRACKING.lastKeyPressed                    ; return key press to caller => Stop iteration in waitForKey
+    lda TRACKING.lastKeyPressed                    ; return key press to caller => Stop iteration in keyEventLoop
     clc
     rts
 _noRepeat
-    sec                                            ; Cause another loop iteration in waitForKey
+    sec                                            ; Cause another loop iteration in keyEventLoop
     rts
 
 
 handleRepeatTimer
     lda TRACKING.numRepeatTimersInFlight
-    beq _noRepeat                                  ; We received a timer event even though we did not record the timer creation => something went wrong
+    beq _noRepeat                                  ; We received a timer event even though we did not record the timer creation => something went wrong or timer was cancelled
     cmp #1
     beq _continue                                  ; Exactly one timer in flight, i.e. this is the one we received
     dec TRACKING.numRepeatTimersInFlight           ; More than one are in flight => We wait for the youngest and ignore this one
@@ -206,18 +210,18 @@ _continue
     lda TRACKING.keyUpDownCount
     cmp #1                                         ; There should be exactly one key still being pressed
     beq _testRestartRepeat
-    bra _noRepeat                                  ; No key or several keys currently pressed => do nothing. Cause another loop iteration in waitForKey
+    bra _noRepeat                                  ; No key or several keys currently pressed => do nothing. Cause another loop iteration in keyEventLoop
 _testRestartRepeat
     lda TRACKING.lastKeyPressed
     cmp TRACKING.lastKeyReleased
     beq _noRepeat                                  ; last key pressed and released are are the same *and* there is one key pressed. This can't be right ...
     #makeTimer REPEAT_TIMEOUT, COOKIE_REPEAT_TIMER ; start repeat timer
     inc TRACKING.numRepeatTimersInFlight
-    lda TRACKING.lastKeyPressed                    ; return key press to caller => Stop iteration in waitForKey
+    lda TRACKING.lastKeyPressed                    ; return key press to caller => Stop iteration in keyEventLoop
     clc    
     rts
 _noRepeat
-    sec                                            ; Cause another loop iteration in waitForKey
+    sec                                            ; Cause another loop iteration in keyEventLoop
     rts
 
 .endnamespace

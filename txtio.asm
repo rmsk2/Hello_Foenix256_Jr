@@ -62,6 +62,15 @@ inputString .macro addrRes, lenRes, addrAllowed, lenAllowed
     jsr txtio.getString    
 .endmacro
 
+inputStringNonBlocking .macro addrRes, lenRes, addrAllowed, lenAllowed
+    #load16BitImmediate \addrRes, TXT_PTR4
+    ldx #\lenRes
+    #load16BitImmediate \addrAllowed, TXT_PTR3
+    ldy #\lenAllowed
+    jsr txtio.getStringNonBlocking    
+.endmacro
+
+
 setCol .macro col 
     lda #\col
     sta CURSOR_STATE.col
@@ -631,6 +640,67 @@ _checkLoop
     bne _checkLoop                 ; try next character
     ldy #1                         ; typed character is not allowed => zero flag is clear when routine returns
 _found
+    rts
+
+
+; --------------------------------------------------
+; This routine implements a robust string input allowing only characters
+; from a given set. The address of the target buffer has to be specified in
+; TXT_PTR4. TXT_PTR3 has to point to the set of allowed characters.
+; The x register has to contain the length of the target buffer and the y
+; register the length of the set of allowed characters.
+;
+; This routine returns the length of the string entered in the accu. Carry is clear
+; if text entry is finished.
+; --------------------------------------------------
+getStringNonBlocking
+    stx INPUT_STATE.len_output
+    sty INPUT_STATE.len_allowed
+    txa
+    jsr printSpaces                            ; clear input text
+    lda #0
+    sta INPUT_STATE.index_output               ; set index in output to 0 
+    jsr cursorOn
+    rts
+
+
+getStringFocusFunc
+    cmp #CARRIAGE_RETURN                       ; CR 
+    beq _inputDone                             ; => We are done
+    cmp #BACK_SPACE                            ; DELETE
+    beq _delete                                ; delete one character from result string
+    sta INPUT_STATE.input_char
+    jsr checkIfInSet                           ; check if typed character is allowed
+    beq _procThisChar
+    sec
+    rts
+_procThisChar
+    lda INPUT_STATE.input_char
+    ldy INPUT_STATE.index_output
+    cpy INPUT_STATE.len_output                 ; have we reached the maximum length?
+    bne _notEnd   
+    sec
+    rts
+_notEnd
+    sta (TXT_PTR4), y                          ; store typed character
+    inc INPUT_STATE.index_output               ; move to next position in target buffer
+    jsr charOut                                ; print typed character
+    sec
+    rts
+_delete
+    lda INPUT_STATE.index_output
+    bne _doBackSpace
+    sec
+    rts
+_doBackSpace
+    dec INPUT_STATE.index_output               ; decrement the output position
+    jsr backSpace
+    sec
+    rts
+_inputDone
+    jsr cursorOff                            
+    lda INPUT_STATE.index_output               ; load length of target buffer in accu
+    clc
     rts
 
 

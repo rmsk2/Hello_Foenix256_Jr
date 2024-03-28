@@ -10,13 +10,17 @@ jmp main
 .include "khelp.asm"
 .include "key_repeat.asm"
 
-START_TXT1 .text "Use cursor keys to control cursor, c to clear screen, x to quit", $0d
+START_TXT1 .text "Use cursor keys to control cursor", $0d
+START_TXT4 .text "Use backspace to delete character left of cursor", $0d
+START_TXT3 .text "Use Ctrl-l to clear screen, Ctrl+c or RUN/STOP to quit", $0d
+START_TXT5 .text "Use F1 to test text entry box", $0d
 START_TXT2 .text "Other keys are printed raw", $0d
 DONE_TXT .text $0d, "Done!", $0d
 
 CRLF = $0D
-KEY_X = $78
-KEY_C = $63
+KEY_EXIT = 3
+KEY_CLEAR = 12
+KEY_ENTRY_TEST = $81
 CRSR_UP = $10
 CRSR_DOWN = $0E
 CRSR_LEFT = $02
@@ -25,16 +29,20 @@ CRSR_RIGHT = $06
 main
     jsr txtio.init
     jsr keyrepeat.init
-    jsr initEvents
-    #load16bitImmediate processKeyEvent, keyrepeat.FOCUS_VECTOR
+    jsr initEvents    
 
     ; set fore- and background colours
     lda #$92
     sta CURSOR_STATE.col
 
     #printString START_TXT1, len(START_TXT1)
+    #printString START_TXT4, len(START_TXT4)
+    #printString START_TXT3, len(START_TXT3)
+    #printString START_TXT5, len(START_TXT5)    
     #printString START_TXT2, len(START_TXT2)
-    jsr keyrepeat.waitForKey
+
+    #load16bitImmediate processKeyEvent, keyrepeat.FOCUS_VECTOR
+    jsr keyrepeat.keyEventLoop
 
     #printString DONE_TXT, len(DONE_TXT)
     jsr restoreEvents
@@ -42,7 +50,7 @@ main
 
 
 processKeyEvent
-    cmp #KEY_X
+    cmp #KEY_EXIT
     bne _checkUp
     clc
     rts
@@ -71,13 +79,72 @@ _checkRight
     sec
     rts
 _checkClear
-    cmp #KEY_C
-    bne _print
+    cmp #KEY_CLEAR
+    bne _checkCR
     jsr txtio.clear
     jsr txtio.home
+    sec
+    rts
+_checkCR
+    cmp #CRLF
+    bne _checkBackspace
+    jsr txtio.newLine
+    sec
+    rts
+_checkBackspace
+    cmp #BACK_SPACE
+    bne _checkF1
+    jsr txtio.backSpace
+    sec
+    rts
+_checkF1
+    cmp #KEY_ENTRY_TEST
+    bne _print
+    ; print "Enter string: "
+    #printString ENTER_TXT, len(ENTER_TXT)
+    ; set fore- and background colours to reverse
+    lda #$29
+    sta CURSOR_STATE.col
+    #inputStringNonBlocking ENTRY_RESULT, len(ENTRY_RESULT), ALLOWED_CHARS_1, len(ALLOWED_CHARS_1)
+    #load16BitImmediate processTextEntry, keyrepeat.FOCUS_VECTOR
     sec
     rts
 _print
     jsr txtio.charOut
     sec
+    rts
+
+
+ALLOWED_CHARS_1 .text "abcdefghijklmnopqrstuvwxyz "
+ENTRY_RESULT .text "                "
+OUT_LEN .byte 0
+ENTER_TXT .text "Enter text: "
+OUT_LEN_TXT .text "Number of characters: $"
+
+processTextEntry
+    jsr txtio.getStringFocusFunc
+    bcs _notDone
+    sta OUT_LEN
+
+    ; restore colours to non reverse
+    lda #$92
+    sta CURSOR_STATE.col
+
+    ; print "Number of characters: $"
+    jsr txtio.newLine
+    #printString OUT_LEN_TXT, len(OUT_LEN_TXT)
+
+    ; print text length in hex
+    lda OUT_LEN    
+    jsr txtio.printByte
+    jsr txtio.newLine    
+    
+    ; print text the user entered
+    #printStringLenMem ENTRY_RESULT, OUT_LEN
+    jsr txtio.newLine
+
+    #load16bitImmediate processKeyEvent, keyrepeat.FOCUS_VECTOR
+    jsr txtio.cursorOn
+_notDone
+    sec    
     rts
