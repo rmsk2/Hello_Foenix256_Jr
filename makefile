@@ -66,8 +66,8 @@ sprites.bin: sprites.asm api.asm txtio.asm khelp.asm macros.asm zeropage.asm spr
 dma.bin: dma.asm api.asm macros.asm khelp.asm
 	64tass --nostart -o dma.bin dma.asm
 
-key_repeat.bin: key_repeat.asm txtio.asm api.asm macros.asm khelp.asm zeropage.asm
-	64tass --nostart -o key_repeat.bin key_repeat.asm
+key_repeat.bin: key_repeat_test.asm key_repeat.asm txtio.asm api.asm macros.asm khelp.asm zeropage.asm
+	64tass --nostart -o key_repeat.bin key_repeat_test.asm
 
 
 clean:

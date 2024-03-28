@@ -1,26 +1,4 @@
 ; target address is $4000
-* = $4000
-.cpu "w65c02"
-
-jmp keyrepeat.main
-
-.include "api.asm"
-.include "zeropage.asm"
-.include "macros.asm"
-.include "txtio.asm"
-.include "khelp.asm"
-
-START_TXT1 .text "Use cursor keys to control cursor, c to clear screen, x to quit", $0d
-START_TXT2 .text "Other keys are printed raw", $0d
-DONE_TXT .text $0d, "Done!", $0d
-
-CRLF = $0D
-KEY_X = $78
-KEY_C = $63
-CRSR_UP = $10
-CRSR_DOWN = $0E
-CRSR_LEFT = $02
-CRSR_RIGHT = $06
 
 
 TimerHelp_t .struct 
@@ -39,24 +17,6 @@ KeyTracking_t .struct
 
 keyrepeat .namespace
 
-main
-    jsr txtio.init
-    jsr init
-    jsr initEvents
-
-    ; set fore- and background colours
-    lda #$92
-    sta CURSOR_STATE.col
-
-    #printString START_TXT1, len(START_TXT1)
-    #printString START_TXT2, len(START_TXT2)
-    jsr waitForKey
-
-    #printString DONE_TXT, len(DONE_TXT)
-    jsr restoreEvents
-    rts
-
-
 MEASUREMENT_TIMEOUT = 30
 REPEAT_TIMEOUT = 3
 COOKIE_MEASUREMENT_TIMER = $10
@@ -73,6 +33,7 @@ init
     sta TRACKING.lastKeyReleased
     rts
 
+FOCUS_VECTOR .word 0
 
 TIMER_HELP .dstruct TimerHelp_t
 TRACKING .dstruct KeyTracking_t
@@ -85,42 +46,6 @@ makeTimer .macro interval, cookie
     jsr setTimer60thSeconds
 .endmacro
 
-saveReg .macro 
-    php
-    pha
-    phx
-    phy
-.endmacro
-
-restoreReg .macro 
-    ply
-    plx
-    pla
-    plp
-.endmacro
-
-
-visKeyUpDown
-    #saveReg
-    #saveIoState
-    #toTxtMatrix
-    lda TRACKING.keyUpDownCount    
-    and #$F0
-    lsr
-    lsr
-    lsr
-    lsr
-    tay
-    lda txtio.PRBYTE.hex_chars, y
-    sta $C000
-    lda TRACKING.keyUpDownCount
-    and #$0F
-    tay
-    lda txtio.PRBYTE.hex_chars, y
-    sta $C001
-    #restoreIoState
-    #restoreReg
-    rts
 
 ; set a timer that fires after the number of 1/60 th seconds
 setTimer60thSeconds
@@ -154,7 +79,7 @@ waitForKey
     bne _checkKeyRelease
     jsr handleKeyPressEvent
     bcs waitForKey
-    jsr processKeyEvent
+    jsr processKeyPress
     bcs waitForKey
     rts
 _checkKeyRelease
@@ -167,52 +92,13 @@ _checkTimer
     bne waitForKey
     jsr handleTimerEvent
     bcs waitForKey
-    jsr processKeyEvent
+    jsr processKeyPress
     bcs waitForKey
     rts
 
 
-processKeyEvent
-_charLoop
-    cmp #KEY_X
-    bne _checkUp
-    clc
-    rts
-_checkUp
-    cmp #CRSR_UP
-    bne _checkDown
-    jsr txtio.up
-    sec
-    rts
-_checkDown
-    cmp #CRSR_DOWN
-    bne _checkLeft
-    jsr txtio.down
-    sec
-    rts
-_checkLeft
-    cmp #CRSR_LEFT
-    bne _checkRight
-    jsr txtio.left
-    sec
-    rts
-_checkRight
-    cmp #CRSR_RIGHT
-    bne _checkClear
-    jsr txtio.right
-    sec
-    rts
-_checkClear
-    cmp #KEY_C
-    bne _print
-    jsr txtio.clear
-    jsr txtio.home
-    sec
-    rts
-_print
-    jsr txtio.charOut
-    sec
-    rts
+processKeyPress
+    jmp (FOCUS_VECTOR)
 
 
 handleKeyPressEvent
