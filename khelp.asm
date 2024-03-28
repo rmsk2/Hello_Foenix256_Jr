@@ -69,3 +69,44 @@ _done
 _isAscii
     lda myEvent.key.ascii
     rts
+
+
+; Dummy callback which ends keyEventLoop and simpleKeyEventLoop
+dummyCallBack
+    clc
+    rts
+
+
+SIMPLE_FOCUS_VECTOR .word dummyCallBack
+
+
+simpleCallback
+    jmp (SIMPLE_FOCUS_VECTOR)
+
+
+simpleKeyEventLoop
+    ; Peek at the queue to see if anything is pending
+    lda kernel.args.events.pending ; Negated count
+    bpl simpleKeyEventLoop
+    ; Get the next event.
+    jsr kernel.NextEvent
+    bcs simpleKeyEventLoop
+    ; Handle the event
+    lda myEvent.type    
+    cmp #kernel.event.key.PRESSED
+    beq _evalChar
+    bra simpleKeyEventLoop
+_evalChar
+    lda myEvent.key.flags 
+    and #myEvent.key.META
+    beq _isAscii
+    lda myEvent.key.raw                                      ; retrieve raw key code
+    jsr testForFKey
+    bcc simpleKeyEventLoop                                   ; a meta key but not an F-Key was pressed => we are not done
+    bra _doProc                                              ; it was an F-Key 
+_isAscii
+    lda myEvent.key.ascii
+_doProc
+    jsr simpleCallback
+    bcs simpleKeyEventLoop
+    rts

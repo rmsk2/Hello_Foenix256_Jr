@@ -46,12 +46,6 @@ makeTimer .macro interval, cookie
 .endmacro
 
 
-; Dummy callback which ends keyEventLoop
-dummyCallBack
-    clc
-    rts
-
-
 ; set a timer that fires after the number of 1/60 th seconds
 setTimer60thSeconds
     ; get current value of timer

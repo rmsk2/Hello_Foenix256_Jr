@@ -650,8 +650,11 @@ _found
 ; The x register has to contain the length of the target buffer and the y
 ; register the length of the set of allowed characters.
 ;
-; This routine returns the length of the string entered in the accu. Carry is clear
-; if text entry is finished.
+; This routine only sets up only the necessary data structure. The key presses
+; then must be processed one by one through calls to getStringFocusFunc as
+; soon as a new character becomes available.
+;
+; This routine does not return a value.
 ; --------------------------------------------------
 getStringNonBlocking
     stx INPUT_STATE.len_output
@@ -664,6 +667,12 @@ getStringNonBlocking
     rts
 
 
+; --------------------------------------------------
+; This routine processes single characters as provided by external means. If the
+; carry is clear upon return then the accu contains the length of the entered string.
+; If the carry is set upon return then the text entry is not yet finished and the
+; routine should be called again until the carry is clear.
+; --------------------------------------------------
 getStringFocusFunc
     cmp #CARRIAGE_RETURN                       ; CR 
     beq _inputDone                             ; => We are done
