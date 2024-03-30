@@ -102,9 +102,7 @@ _checkF1
     bne _print
     ; print "Enter string: "
     #printString ENTER_TXT, len(ENTER_TXT)
-    ; set fore- and background colours to reverse
-    lda #$29
-    sta CURSOR_STATE.col
+    jsr txtio.reverseColor
     #inputStringNonBlocking ENTRY_RESULT, len(ENTRY_RESULT), ALLOWED_CHARS_1, len(ALLOWED_CHARS_1)
     #load16BitImmediate processTextEntry, keyrepeat.FOCUS_VECTOR
     sec
@@ -125,10 +123,7 @@ processTextEntry
     jsr txtio.getStringFocusFunc
     bcs _notDone
     sta OUT_LEN
-
-    ; restore colours to non reverse
-    lda #$92
-    sta CURSOR_STATE.col
+    jsr txtio.reverseColor
 
     ; print "Number of characters: $"
     jsr txtio.newLine

@@ -499,6 +499,29 @@ printByte
     jsr charOut
     rts
 
+; --------------------------------------------------
+; This routine reverses the colour that is currently defined in CURSOR_STATE.col
+;
+; This routine does not return a value.
+; --------------------------------------------------
+reverseColor
+    lda CURSOR_STATE.col
+    and #$F0
+    lsr
+    lsr
+    lsr
+    lsr
+    sta PRBYTE.temp_char
+    lda CURSOR_STATE.col
+    and #$0F
+    asl
+    asl
+    asl
+    asl
+    ora PRBYTE.temp_char
+    sta CURSOR_STATE.col
+    rts
+
 
 prString_t .struct
 out_len .byte 0
