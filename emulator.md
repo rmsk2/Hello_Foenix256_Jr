@@ -1,5 +1,8 @@
 # Setting up the emulator
 
+**Attention**: This document is here for historical reasons. I recommed to use the 
+[official emulator](https://github.com/Trinity-11/FoenixIDE/releases).
+
 I have tried all emulators listed below and for the purpose of this experiment the emulator of paulscottrobson worked best for me. 
 I cloned the repo available at 
 [https://github.com/paulscottrobson/junior-emulator](https://github.com/paulscottrobson/junior-emulator)

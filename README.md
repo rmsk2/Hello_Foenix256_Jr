@@ -8,9 +8,8 @@ I am using Ubuntu 22.04 so all the following information is in principle specifi
 but it should be easy to replicate these steps on other Linux distros. I have not attempted to use 
 these tools on Windows.
 
-In [this document](/emulator.md) you find info about how to set up an F256 Jr. emulator. Alternatively
-you can use the official emulator available [here](https://github.com/Trinity-11/FoenixIDE) which now
-boots into a BASIC prompt.
+I recommend to use the official emulator available [here](https://github.com/Trinity-11/FoenixIDE). [This
+document](/emulator.md) that descibes working with an alternative emulator is outdated.
 
 **Note:** The math coprocessor addresses differ between the F256 Jr. (in factory condition as of March 2023 having FPGA version RC08) 
 and the F256 K (as bought in October 2023). This repo uses the F256 K addresses as a default. You have to 
@@ -292,13 +291,12 @@ must be omitted. This is explained in the section about structured programming o
 - [Github page of Foenix Retro Systems](https://github.com/FoenixRetro) Look here for the "official" Kernel, Basic and other firmware
 - [F256K/F256 Jr. introductory information from Foenix Retro Systems at Github](https://github.com/FoenixRetro/Documentation)
 - [Product Home page](https://c256foenix.com/f256-jr/?v=3a52f3c22ed6)
-- [Wiki at Foenix Retro Systems](https://wiki.c256foenix.com/index.php?title=F256JR)
+- [Wiki at Foenix Retro Systems](http://wiki.f256foenix.com)
 - [Simple Shell for the F256](https://github.com/FoenixRetro/f256-dos)
 - [TinyCore Microkernel for the F256 Jr. (default Kernel)](https://github.com/ghackwrench/F256_MicroKernel)
 - [Readme for Kernel](https://github.com/ghackwrench/F256_MicroKernel/tree/master/docs)
 - [Alternative KernAl using Commodore interface](https://github.com/ghackwrench/OpenKERNAL)
 - [Another Commodore Kernal implementation](https://github.com/ghackwrench/OpenFNXKernal)
-- [Basic implementation](https://github.com/paulscottrobson/superbasic)
 - [Fork of BASIC in FoenixRetro Repo](https://github.com/FoenixRetro/f256-superbasic)
 - Excellent [System manual](https://github.com/pweingar/C256jrManual)
 - [BASIC manual](https://github.com/FoenixRetro/f256-superbasic/blob/main/documents/f256jr_ref.pdf)
@@ -306,7 +304,6 @@ must be omitted. This is explained in the section about structured programming o
 - [Tool for firmware upload and USB debugging](https://github.com/pweingar/FoenixMgr)
 - [The official emulator/Dev suite](https://github.com/Trinity-11/FoenixIDE)
 - [Fork of the official emulator](https://github.com/scttgs0/emuF256Jr)
-- [Emulator used in this project](https://github.com/paulscottrobson/junior-emulator)
 - The project uses [64tass](https://sourceforge.net/projects/tass64/) as an assembler. The manual can be found [here](http://tass64.sourceforge.net/)
 
 ## What do I think about the F256 Jr.?
