@@ -91,6 +91,7 @@ cursorState_t .struct
     tempIo      .byte 0
     nextChar    .byte 0
     maxVideoRam .word 0
+    scrollOn    .byte 1
 .endstruct
 
 
@@ -492,14 +493,20 @@ scrollUp_t .struct
 .endstruct
 
 SCROLL_UP .dstruct scrollUp_t
+
+
+scrollUp
+    lda CURSOR_STATE.scrollOn
+    bne scrollUpInternal
+    rts
+
 ; --------------------------------------------------
 ; scrollUp scrolls the text screen one line up. It makes use
 ; of TXT_PTR1 and TXT_PTR2 in order to implement this functionality.
-; This routine currently only works on an 80x60 screen.
 ;
 ; This routine does not return a value.
 ; --------------------------------------------------
-scrollUp
+scrollUpInternal
     #saveIoState
 
     #load16BitImmediate $C000, TXT_PTR1
