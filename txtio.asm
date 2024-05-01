@@ -81,16 +81,16 @@ setCol .macro col
 .endmacro
 
 cursorState_t .struct 
-xPos        .byte 0
-yPos        .byte 0
-videoRamPtr .word 0
-lastLinePtr .word 0
-xMax        .byte 80
-yMax        .byte 60
-col         .byte $92
-tempIo      .byte 0
-nextChar    .byte 0
-maxVideoRam .word 0
+    xPos        .byte 0
+    yPos        .byte 0
+    videoRamPtr .word 0
+    lastLinePtr .word 0
+    xMax        .byte 80
+    yMax        .byte 60
+    col         .byte $92
+    tempIo      .byte 0
+    nextChar    .byte 0
+    maxVideoRam .word 0
 .endstruct
 
 
@@ -125,6 +125,7 @@ init
     ; initialize from current cursor position
     jsr cursorGet
     rts
+
 
 init80x60
     lda #80
@@ -436,7 +437,7 @@ home
     rts
 
 clear_t .struct
-block_count .byte 0
+    block_count .byte 0
 .endstruct
 
 CLEAR_STATE .dstruct clear_t
@@ -485,9 +486,9 @@ _lastLoop
     rts
 
 scrollUp_t .struct
-line_count .byte 0
-yMaxMinus1 .byte 0
-vramPtr    .word 0
+    line_count .byte 0
+    yMaxMinus1 .byte 0
+    vramPtr    .word 0
 .endstruct
 
 SCROLL_UP .dstruct scrollUp_t
@@ -556,8 +557,8 @@ _lastLineLoop
 
 
 prByteState_t .struct
-hex_chars .text "0123456789ABCDEF"
-temp_char .byte 0
+    hex_chars .text "0123456789ABCDEF"
+    temp_char .byte 0
 .endstruct
 
 PRBYTE .dstruct prByteState_t
@@ -608,7 +609,7 @@ reverseColor
 
 
 prString_t .struct
-out_len .byte 0
+    out_len .byte 0
 .endstruct
 
 PRINT_STR .dstruct prString_t
@@ -639,9 +640,9 @@ _done
 
 
 printSpace_t .struct
-temp_x    .byte 0
-temp_y    .byte 0
-temp_size .byte 0
+    temp_x    .byte 0
+    temp_y    .byte 0
+    temp_size .byte 0
 .endstruct
 
 PRINT_SPACES .dstruct printSpace_t
@@ -680,10 +681,10 @@ _doneClear
 
 
 inputState_t .struct
-len_output   .byte 0
-len_allowed  .byte 0
-index_output .byte 0
-input_char   .byte 0
+    len_output   .byte 0
+    len_allowed  .byte 0
+    index_output .byte 0
+    input_char   .byte 0
 .endstruct
 
 INPUT_STATE .dstruct inputState_t
