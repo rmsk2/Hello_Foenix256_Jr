@@ -27,7 +27,7 @@ CRSR_LEFT = $02
 CRSR_RIGHT = $06
 
 main
-    jsr txtio.init
+    jsr txtio.init80x60
     jsr keyrepeat.init
     jsr initEvents    
 
@@ -46,6 +46,7 @@ main
 
     #printString DONE_TXT, len(DONE_TXT)
     jsr restoreEvents
+    jsr txtio.init80x60
     rts
 
 

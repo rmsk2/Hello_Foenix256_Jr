@@ -15,6 +15,10 @@ toColorMatrix .macro
     sta $01
 .endmacro
 
+toIoPage0 .macro
+    stz $01
+.endmacro
+
 saveIoState .macro
     lda $01
     sta CURSOR_STATE.tempIo
@@ -80,6 +84,7 @@ cursorState_t .struct
 xPos        .byte 0
 yPos        .byte 0
 videoRamPtr .word 0
+lastLinePtr .word 0
 xMax        .byte 80
 yMax        .byte 60
 col         .byte $92
@@ -99,15 +104,84 @@ txtio .namespace
 ; This routine does not return a value.
 ; --------------------------------------------------
 init
+    lda CURSOR_STATE.yMax
+    dea
+    sta SCROLL_UP.yMaxMinus1
+
     ;calculate max address
     stz CURSOR_STATE.xPos
     lda CURSOR_STATE.yMax
     sta CURSOR_STATE.yPos
     jsr calcCursorOffset
     #move16Bit CURSOR_STATE.videoRamPtr, CURSOR_STATE.maxVideoRam
+
+    ; calc address of last line
+    lda SCROLL_UP.yMaxMinus1
+    sta CURSOR_STATE.yPos
+    stz CURSOR_STATE.xPos
+    jsr calcCursorOffset
+    #move16Bit CURSOR_STATE.videoRamPtr, CURSOR_STATE.lastLinePtr
+
     ; initialize from current cursor position
     jsr cursorGet
     rts
+
+init80x60
+    lda #80
+    sta CURSOR_STATE.xMax
+    lda #60
+    sta CURSOR_STATE.yMax
+    #saveIoState
+    #toIoPage0
+    lda $D001
+    and #%11111001
+    sta $D001
+    #restoreIoState
+    jmp init
+
+
+init40x60
+    lda #40
+    sta CURSOR_STATE.xMax
+    lda #60
+    sta CURSOR_STATE.yMax
+    #saveIoState
+    #toIoPage0
+    lda $D001
+    and #%11111001
+    ora #%00000010
+    sta $D001
+    #restoreIoState
+    jmp init
+
+
+init80x30
+    lda #80
+    sta CURSOR_STATE.xMax
+    lda #30
+    sta CURSOR_STATE.yMax
+    #saveIoState
+    #toIoPage0
+    lda $D001
+    and #%11111001
+    ora #%00000100
+    sta $D001
+    #restoreIoState
+    jmp init
+
+
+init40x30
+    lda #40
+    sta CURSOR_STATE.xMax
+    lda #30
+    sta CURSOR_STATE.yMax
+    #saveIoState
+    #toIoPage0
+    lda $D001
+    ora #%00000110
+    sta $D001
+    #restoreIoState
+    jmp init
 
 
 ; --------------------------------------------------
@@ -118,7 +192,7 @@ init
 ; address is stored in CURSOR_STATE.videoRamPtr.
 ; --------------------------------------------------
 calcCursorOffset
-    ; calculate x * 80    
+    ; calculate y * xMax    
     lda CURSOR_STATE.xMax
     sta $DE00
     stz $DE01
@@ -128,7 +202,7 @@ calcCursorOffset
     
     #move16Bit MUL_RES_CO_PROC, CURSOR_STATE.videoRamPtr
 
-    ; calculate x * 80 + y + 0xC000
+    ; calculate y * xMax + x + 0xC000
     clc
     lda CURSOR_STATE.videoRamPtr
     adc CURSOR_STATE.xPos
@@ -155,8 +229,7 @@ cursorSet
 ; --------------------------------------------------
 ; This routine prints the character stored in the accu to the screen at the current
 ; position of the cursor. If it is called while the cursor is in the bottom right corner
-; the whole screen is scrolled one line up. It currently only works on an 80x60
-; character screen.
+; the whole screen is scrolled one line up.
 ;
 ; This routine does not return a value.
 ; --------------------------------------------------
@@ -180,7 +253,7 @@ charOut
     #cmp16Bit CURSOR_STATE.videoRamPtr, CURSOR_STATE.maxVideoRam
     bcc _moveRight
     ; We have reached the lower right corner.
-    #load16BitImmediate $D270, CURSOR_STATE.videoRamPtr
+    #move16Bit CURSOR_STATE.lastLinePtr, CURSOR_STATE.videoRamPtr
     stz CURSOR_STATE.xPos
     phy
     jsr scrollUp
@@ -370,8 +443,8 @@ CLEAR_STATE .dstruct clear_t
 ; --------------------------------------------------
 ; clear fills the whole screen with blank characters and the
 ; color matrix with the value given in CURSOR_STATE.col. It makes
-; use of TXT_PTR2. It currently only works on an 80x60 character
-; screen.
+; use of TXT_PTR2. It always clears the whole screen memory as if
+; the resolution would be at 80x60 characters.
 ;
 ; This routine does not return a value.
 ; --------------------------------------------------
@@ -413,6 +486,8 @@ _lastLoop
 
 scrollUp_t .struct
 line_count .byte 0
+yMaxMinus1 .byte 0
+vramPtr    .word 0
 .endstruct
 
 SCROLL_UP .dstruct scrollUp_t
@@ -427,7 +502,10 @@ scrollUp
     #saveIoState
 
     #load16BitImmediate $C000, TXT_PTR1
-    #load16BitImmediate $C050, TXT_PTR2    
+    lda #$C0
+    sta TXT_PTR2+1
+    lda CURSOR_STATE.xMax
+    sta TXT_PTR2
     stz SCROLL_UP.line_count
 
     ; move all lines on step up
@@ -441,18 +519,24 @@ _lineLoop
     lda (TXT_PTR2), y
     sta (TXT_PTR1), y
     iny
-    cpy #80
+    cpy CURSOR_STATE.xMax
     bne _lineLoop
     
     #move16Bit TXT_PTR2, TXT_PTR1
-    #add16BitImmediate 80, TXT_PTR2
+    clc
+    lda CURSOR_STATE.xMax
+    adc TXT_PTR2
+    sta TXT_PTR2
+    lda #0
+    adc TXT_PTR2+1
+    sta TXT_PTR2+1
 
     inc SCROLL_UP.line_count
     lda SCROLL_UP.line_count
-    cmp #59
+    cmp SCROLL_UP.yMaxMinus1
     bne _nextLine
 
-    #load16BitImmediate $D270, TXT_PTR1
+    #move16Bit CURSOR_STATE.lastLinePtr, TXT_PTR1
 
     ; clear last line
     ldy #0
@@ -464,7 +548,7 @@ _lastLineLoop
     lda CURSOR_STATE.col
     sta (TXT_PTR1), y
     iny
-    cpy #80
+    cpy CURSOR_STATE.xMax
     bne _lastLineLoop
 
     #restoreIoState

@@ -77,6 +77,7 @@ _checkClear
 _done
     #printString DONE_TXT, len(DONE_TXT)
     jsr txtio.newLine
+    jsr txtio.init80x60
     jsr restoreEvents
     rts
 

@@ -83,6 +83,23 @@ add16BitImmediate .macro  value, memAddr2
     sta \memAddr2+1
 .endmacro
 
+
+; --------------------------------------------------
+; add16Bit implements a 16 bit add of the values stored at memAddr1 and memAddr2 
+; The result is stored in .memAddr2
+; --------------------------------------------------
+add16Bit .macro  memAddr1, memAddr2 
+    clc
+    ; add lo bytes
+    lda \memAddr1
+    adc \memAddr2
+    sta \memAddr2
+    ; add hi bytes
+    lda \memAddr1+1
+    adc \memAddr2+1
+    sta \memAddr2+1
+.endmacro
+
 ; --------------------------------------------------
 ; This macro prints a string to the screen at a given x and y coordinate. The 
 ; macro has the following parameters
