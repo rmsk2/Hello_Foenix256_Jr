@@ -82,21 +82,23 @@ setCol .macro col
     sta CURSOR_STATE.col
 .endmacro
 
+; Take a look at key_repeat_test.asm for an example on how to define a screen segment
+
 cursorState_t .struct 
     xPos        .byte 0
     yPos        .byte 0
-    videoRamPtr .word 0
-    lastLinePtr .word 0
+    videoRamPtr .word 0           ; location of VRAM which is represented by the current cursor position
+    lastLinePtr .word 0           ; pointer to the last line of the segment. Is calculated in init routine.
     xMax        .byte 80
-    yMax        .byte 60
+    yMax        .byte 60          ; Use a non default value to define a screen segment of corresponding size
     yMaxMinus1  .byte 59
     col         .byte $92
     tempIo      .byte 0
     nextChar    .byte 0
-    maxVideoRam .word 0
-    scrollOn    .byte 1
-    vramOffset  .word $c000
-    yOffset     .word 0
+    maxVideoRam .word 0           ; is calculated in init routine
+    scrollOn    .byte 1           ; set to zero to prevent scrolling when lower right edge is reached
+    vramOffset  .word $c000       ; set to address of the line that begins at yOffset, if yOffset is nonzero
+    yOffset     .word 0           ; set to a nonzero value to define the row in which the screen segment begins
 .endstruct
 
 
