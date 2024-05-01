@@ -33,7 +33,9 @@ moveCursor .macro
     lda CURSOR_STATE.xPos
     sta CURSOR_X
     stz CURSOR_X+1
+    clc
     lda CURSOR_STATE.yPos
+    adc CURSOR_STATE.yOffset
     sta CURSOR_Y
     stz CURSOR_Y+1
 .endmacro
@@ -87,17 +89,54 @@ cursorState_t .struct
     lastLinePtr .word 0
     xMax        .byte 80
     yMax        .byte 60
+    yMaxMinus1  .byte 59
     col         .byte $92
     tempIo      .byte 0
     nextChar    .byte 0
     maxVideoRam .word 0
     scrollOn    .byte 1
+    vramOffset  .word $c000
+    yOffset     .word 0
 .endstruct
 
 
 CURSOR_STATE  .dstruct cursorState_t
 
 txtio .namespace
+
+; --------------------------------------------------
+; This routine saves the current values stored in the CURSOR_STATE
+; struct to the memory location to which TXT_PTR2 points.
+;
+; This routine does not return a value.
+; --------------------------------------------------
+saveCursorState
+    ldy #0
+_loop
+    lda CURSOR_STATE, y
+    sta (TXT_PTR2), y
+    iny
+    cpy #size(cursorState_t)
+    bne _loop
+    rts
+
+
+; --------------------------------------------------
+; This routine restores the saved CURSOR_STATE struct from
+; the memory location to which TXT_PTR2 points.
+;
+; This routine does not return a value.
+; --------------------------------------------------
+restoreCursorState
+    ldy #0
+_loop
+    lda (TXT_PTR2), y
+    sta CURSOR_STATE, y
+    iny
+    cpy #size(cursorState_t)
+    bne _loop
+    rts
+
 
 ; --------------------------------------------------
 ; This routine intializes the CURSOR_STATE struct.
@@ -107,7 +146,7 @@ txtio .namespace
 init
     lda CURSOR_STATE.yMax
     dea
-    sta SCROLL_UP.yMaxMinus1
+    sta CURSOR_STATE.yMaxMinus1
 
     ;calculate max address
     stz CURSOR_STATE.xPos
@@ -117,14 +156,20 @@ init
     #move16Bit CURSOR_STATE.videoRamPtr, CURSOR_STATE.maxVideoRam
 
     ; calc address of last line
-    lda SCROLL_UP.yMaxMinus1
+    lda CURSOR_STATE.yMaxMinus1
     sta CURSOR_STATE.yPos
     stz CURSOR_STATE.xPos
     jsr calcCursorOffset
     #move16Bit CURSOR_STATE.videoRamPtr, CURSOR_STATE.lastLinePtr
 
-    ; initialize from current cursor position
-    jsr cursorGet
+    ; Make sure hardware cursor is in current screen segment
+    jsr txtio.home
+    rts
+
+
+initSegmentDefaults
+    stz CURSOR_STATE.yOffset
+    #load16BitImmediate $c000, CURSOR_STATE.vramOffset
     rts
 
 
@@ -133,6 +178,8 @@ init80x60
     sta CURSOR_STATE.xMax
     lda #60
     sta CURSOR_STATE.yMax
+    jsr initSegmentDefaults
+setMode80x60
     #saveIoState
     #toIoPage0
     lda $D001
@@ -147,6 +194,8 @@ init40x60
     sta CURSOR_STATE.xMax
     lda #60
     sta CURSOR_STATE.yMax
+    jsr initSegmentDefaults
+setMode40x60    
     #saveIoState
     #toIoPage0
     lda $D001
@@ -162,6 +211,8 @@ init80x30
     sta CURSOR_STATE.xMax
     lda #30
     sta CURSOR_STATE.yMax
+    jsr initSegmentDefaults
+setMode80x30    
     #saveIoState
     #toIoPage0
     lda $D001
@@ -177,6 +228,8 @@ init40x30
     sta CURSOR_STATE.xMax
     lda #30
     sta CURSOR_STATE.yMax
+    jsr initSegmentDefaults
+setMode40x30    
     #saveIoState
     #toIoPage0
     lda $D001
@@ -204,13 +257,22 @@ calcCursorOffset
     
     #move16Bit MUL_RES_CO_PROC, CURSOR_STATE.videoRamPtr
 
-    ; calculate y * xMax + x + 0xC000
+    ; calculate y * xMax + x + CURSOR_STATE.vramOffset
     clc
     lda CURSOR_STATE.videoRamPtr
     adc CURSOR_STATE.xPos
     sta CURSOR_STATE.videoRamPtr
     lda CURSOR_STATE.videoRamPtr+1
-    adc #$C0
+    adc #0
+    sta CURSOR_STATE.videoRamPtr+1
+
+    clc
+    lda CURSOR_STATE.videoRamPtr
+    adc CURSOR_STATE.vramOffset
+    sta CURSOR_STATE.videoRamPtr
+
+    lda CURSOR_STATE.videoRamPtr+1
+    adc CURSOR_STATE.vramOffset+1
     sta CURSOR_STATE.videoRamPtr+1
 
     rts
@@ -277,17 +339,24 @@ _done
     rts
 
 
+TEMP_CURSOR_POS .byte 0
 ; --------------------------------------------------
 ; This routine stores the current position of the hardware cursor in
-; the CURSOR_STATE struct and updates CURSOR_STATE.videoRamPtr.
+; the CURSOR_STATE struct and updates CURSOR_STATE.videoRamPtr. A precondition
+; for this routine is that the hardware cursor is currently in the defined
+; screen segment.
 ;
 ; This routine does not return a value.
 ; --------------------------------------------------
 cursorGet
     lda CURSOR_X
     sta CURSOR_STATE.xPos
+    
     lda CURSOR_Y
+    sec
+    sbc CURSOR_STATE.yOffset
     sta CURSOR_STATE.yPos
+
     jsr calcCursorOffset
 
     rts
@@ -438,25 +507,29 @@ home
     rts
 
 clear_t .struct
-    block_count .byte 0
+    mem_size .word 0
 .endstruct
 
 CLEAR_STATE .dstruct clear_t
+
+
 ; --------------------------------------------------
-; clear fills the whole screen with blank characters and the
+; clear fills the screen segment with blank characters and the
 ; color matrix with the value given in CURSOR_STATE.col. It makes
-; use of TXT_PTR2. It always clears the whole screen memory as if
-; the resolution would be at 80x60 characters.
+; use of TXT_PTR2.
 ;
 ; This routine does not return a value.
 ; --------------------------------------------------
 clear
     #saveIoState
-    lda #17
-    sta CLEAR_STATE.block_count
-    #load16BitImmediate $C000, TXT_PTR2
+    #move16Bit CURSOR_STATE.maxVideoRam, CLEAR_STATE.mem_size
+    #sub16Bit CURSOR_STATE.vramOffset, CLEAR_STATE.mem_size
+    #move16Bit CURSOR_STATE.vramOffset, TXT_PTR2
     ldy #0
-_blockLoop
+_nextBlock
+    lda CLEAR_STATE.mem_size + 1
+    beq _lastBlockOnly
+_clearBlock    
     #toTxtMatrix
     lda #32
     sta (TXT_PTR2), y
@@ -464,16 +537,16 @@ _blockLoop
     lda CURSOR_STATE.col
     sta (TXT_PTR2), y
     iny
-    bne _blockLoop
+    bne _clearBlock
     inc TXT_PTR2+1
-    dec CLEAR_STATE.block_count
-    bpl _blockLoop
+    dec CLEAR_STATE.mem_size+1
+    bra _nextBlock
 
-    ; Special treatment of last 192 bytes which do not form 
-    ; a full block
-    #load16BitImmediate $D200, TXT_PTR2
+_lastBlockOnly
+    lda CLEAR_STATE.mem_size
+    beq _done
     ldy #0
-_lastLoop
+_loop
     #toTxtMatrix
     lda #32
     sta (TXT_PTR2), y
@@ -481,15 +554,15 @@ _lastLoop
     lda CURSOR_STATE.col
     sta (TXT_PTR2), y
     iny
-    cpy #192
-    bne _lastLoop
+    cpy CLEAR_STATE.mem_size
+    bne _loop
+_done
     #restoreIoState
     rts
 
+
 scrollUp_t .struct
     line_count .byte 0
-    yMaxMinus1 .byte 0
-    vramPtr    .word 0
 .endstruct
 
 SCROLL_UP .dstruct scrollUp_t
@@ -501,7 +574,7 @@ scrollUp
     rts
 
 ; --------------------------------------------------
-; scrollUp scrolls the text screen one line up. It makes use
+; scrollUpInternal scrolls the text screen one line up. It makes use
 ; of TXT_PTR1 and TXT_PTR2 in order to implement this functionality.
 ;
 ; This routine does not return a value.
@@ -509,11 +582,16 @@ scrollUp
 scrollUpInternal
     #saveIoState
 
-    #load16BitImmediate $C000, TXT_PTR1
-    lda #$C0
-    sta TXT_PTR2+1
-    lda CURSOR_STATE.xMax
+    #move16Bit CURSOR_STATE.vramOffset, TXT_PTR1
+    #move16Bit CURSOR_STATE.vramOffset, TXT_PTR2
+    clc
+    lda TXT_PTR2
+    adc CURSOR_STATE.xMax
     sta TXT_PTR2
+    lda #0
+    adc TXT_PTR2
+    sta TXT_PTR2
+
     stz SCROLL_UP.line_count
 
     ; move all lines on step up
@@ -541,7 +619,7 @@ _lineLoop
 
     inc SCROLL_UP.line_count
     lda SCROLL_UP.line_count
-    cmp SCROLL_UP.yMaxMinus1
+    cmp CURSOR_STATE.yMaxMinus1
     bne _nextLine
 
     #move16Bit CURSOR_STATE.lastLinePtr, TXT_PTR1

@@ -26,10 +26,26 @@ CRSR_DOWN = $0E
 CRSR_LEFT = $02
 CRSR_RIGHT = $06
 
+Y_OFFSET = 10
+
 main
+    ; #load16BitImmediate $c000 + Y_OFFSET*80, CURSOR_STATE.vramOffset
+    ; lda #80
+    ; sta CURSOR_STATE.xMax
+    ; lda #40
+    ; sta CURSOR_STATE.yMax
+    ; lda #Y_OFFSET
+    ; sta CURSOR_STATE.yOffset
+    ; jsr txtio.setMode80x60
     jsr txtio.init80x60
     jsr keyrepeat.init
-    jsr initEvents    
+    jsr initEvents
+
+    ldx #24
+_loopNewLine
+    jsr txtio.newLine
+    dex
+    bpl _loopNewLine
 
     ; set fore- and background colours
     lda #$92
@@ -43,10 +59,11 @@ main
 
     #load16bitImmediate processKeyEvent, keyrepeat.FOCUS_VECTOR
     jsr keyrepeat.keyEventLoop
-
-    #printString DONE_TXT, len(DONE_TXT)
+    
     jsr restoreEvents
+    jsr txtio.clear
     jsr txtio.init80x60
+    #printString DONE_TXT, len(DONE_TXT)
     rts
 
 

@@ -100,6 +100,21 @@ add16Bit .macro  memAddr1, memAddr2
     sta \memAddr2+1
 .endmacro
 
+
+; --------------------------------------------------
+; sub16Bit subtracts the value stored at .memAddr1 from the value stored at the
+; address .memAddr2. The result is stored in .memAddr2
+; --------------------------------------------------
+sub16Bit .macro  memAddr1, memAddr2 
+    sec
+    lda \memAddr2
+    sbc \memAddr1
+    sta \memAddr2
+    lda \memAddr2+1
+    sbc \memAddr1+1
+    sta \memAddr2+1
+.endmacro
+
 ; --------------------------------------------------
 ; This macro prints a string to the screen at a given x and y coordinate. The 
 ; macro has the following parameters
