@@ -34,6 +34,12 @@ main
     jsr txtio.init
     jsr initEvents
 
+    ldx #24
+_loopNewLine
+    jsr txtio.newLine
+    dex
+    bpl _loopNewLine    
+
     ; set fore- and background colours
     lda #$92
     sta CURSOR_STATE.col
