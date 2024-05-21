@@ -32,6 +32,8 @@ CRSR_RIGHT = $06
 
 main
     jsr txtio.init
+    jsr txtio.init80x60
+    jsr txtio.cursorOn
     jsr initEvents
 
     ldx #24
@@ -84,6 +86,7 @@ _done
     #printString DONE_TXT, len(DONE_TXT)
     jsr txtio.newLine
     jsr txtio.init80x60
+    jsr txtio.cursorOn
     jsr restoreEvents
     rts
 

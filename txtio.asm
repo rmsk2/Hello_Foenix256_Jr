@@ -84,6 +84,9 @@ setCol .macro col
 
 ; Take a look at key_repeat_test.asm for an example on how to define a screen segment
 
+BOOL_FALSE = 0
+BOOL_TRUE = 1
+
 cursorState_t .struct 
     xPos        .byte 0
     yPos        .byte 0
@@ -96,7 +99,8 @@ cursorState_t .struct
     tempIo      .byte 0
     nextChar    .byte 0
     maxVideoRam .word 0           ; is calculated in init routine
-    scrollOn    .byte 1           ; set to zero to prevent scrolling when lower right edge is reached
+    scrollOn    .byte BOOL_TRUE   ; set to zero to prevent scrolling when lower right edge is reached
+    cursorOn    .byte BOOL_FALSE
     vramOffset  .word $c000       ; set to address of the line that begins at yOffset, if yOffset is nonzero
     yOffset     .word 0           ; set to a nonzero value to define the row in which the screen segment begins
 .endstruct
@@ -124,15 +128,34 @@ _loop
 
 
 ; --------------------------------------------------
+; This routine switches between two CursorState_t structs. The one to
+; which the current state should be saved has to be pointed to TXT_PTR2
+; and the one which should be restored is referenced by TXT_PTR1.
+; --------------------------------------------------
+switch
+    jsr cursorGet
+    jsr saveCursorState
+    jsr restoreCursorState
+    jsr cursorSet
+    lda CURSOR_STATE.cursorOn
+    beq _off
+    jsr cursorOn
+    rts
+_off    
+    jsr cursorOff
+    rts
+
+
+; --------------------------------------------------
 ; This routine restores the saved CURSOR_STATE struct from
-; the memory location to which TXT_PTR2 points.
+; the memory location to which TXT_PTR1 points.
 ;
 ; This routine does not return a value.
 ; --------------------------------------------------
 restoreCursorState
     ldy #0
 _loop
-    lda (TXT_PTR2), y
+    lda (TXT_PTR1), y
     sta CURSOR_STATE, y
     iny
     cpy #size(cursorState_t)
@@ -165,7 +188,8 @@ init
     #move16Bit CURSOR_STATE.videoRamPtr, CURSOR_STATE.lastLinePtr
 
     ; Make sure hardware cursor is in current screen segment
-    jsr txtio.home
+    jsr home
+    jsr cursorOff
     rts
 
 
@@ -370,9 +394,12 @@ cursorGet
 ; This routine does not return a value.
 ; --------------------------------------------------
 cursorOn
-    lda #1
-    ora $D010
+    lda #5
     sta $D010
+    lda #214
+    sta $D012
+    lda #BOOL_TRUE
+    sta CURSOR_STATE.cursorOn
     rts
 
 ; --------------------------------------------------
@@ -384,6 +411,7 @@ cursorOff
     lda #%11111110
     and $D010
     sta $D010
+    stz CURSOR_STATE.cursorOn
     rts
 
 
@@ -403,6 +431,7 @@ left
 _leftEdge
     lda CURSOR_STATE.yPos
     beq _done                                            ; was yPos zero?
+    inc HAS_LINE_CHANGED
     lda CURSOR_STATE.xMax
     dec a
     sta CURSOR_STATE.xPos
@@ -425,12 +454,14 @@ right
     lda CURSOR_STATE.xPos
     cmp CURSOR_STATE.xMax
     bcc _done
+    inc HAS_LINE_CHANGED
     stz CURSOR_STATE.xPos
     inc CURSOR_STATE.yPos
     lda CURSOR_STATE.yPos
     cmp CURSOR_STATE.yMax
     bcc _done
     phy
+    inc HAS_SCROLLED
     jsr scrollUp
     ply
     dec CURSOR_STATE.yPos
@@ -438,10 +469,25 @@ _done
     jsr cursorSet
     rts
 
+HAS_SCROLLED     .byte 0
+HAS_LINE_CHANGED .byte 0
 
+; --------------------------------------------------
+; This routine moves the cursor up one line. If it is called
+; while the cursor is in the top line then the screen is scrolled 
+; one line upwards.
+;
+; This routine does not return a value.
+; --------------------------------------------------
 up
     lda CURSOR_STATE.yPos
-    beq _done
+    bne _noScroll
+    phy
+    inc HAS_SCROLLED
+    jsr scrollDown
+    ply
+    bra _done
+_noScroll
     dec CURSOR_STATE.yPos
 _done
     jsr cursorSet
@@ -450,8 +496,8 @@ _done
 
 ; --------------------------------------------------
 ; This routine moves the cursor down one line. If it is called
-; while the cursor is in the bottom line then the screen is scrolled on 
-; line upwards.
+; while the cursor is in the bottom line then the screen is scrolled
+; one line upwards.
 ;
 ; This routine does not return a value.
 ; --------------------------------------------------
@@ -462,6 +508,7 @@ down
     bcc _done
     dec CURSOR_STATE.yPos
     phy
+    inc HAS_SCROLLED
     jsr scrollUp
     ply
 _done
@@ -493,6 +540,18 @@ backSpace
 newLine
     stz CURSOR_STATE.xPos
     jsr down
+    rts
+
+
+; --------------------------------------------------
+; This routine sets the cursor to the leftmost position in the current 
+; line
+;
+; This routine does not return a value.
+; --------------------------------------------------
+leftMost
+    stz CURSOR_STATE.xPos
+    jsr cursorSet
     rts
 
 
@@ -568,12 +627,109 @@ scrollUp_t .struct
 .endstruct
 
 SCROLL_UP .dstruct scrollUp_t
+SCROLL_DOWN .dstruct scrollUp_t
+
+LINE_TEMP .byte 0
+; accu has to contain the line to clear in the context of the
+; screen segment.
+clearLine
+    sta LINE_TEMP
+    #saveIoState
+    jsr clearLineWithOffset
+    #restoreIoState
+    rts
+
+
+; LINE_TEMP has to contain the line to clear in the context of the
+; screen segment.
+clearLineWithOffset
+    #mul8x8BitCoproc LINE_TEMP, CURSOR_STATE.xMax, TXT_PTR1
+    #add16Bit CURSOR_STATE.vramOffset, TXT_PTR1 
+; TXT_PTR1 has to be set to line start
+clearLineInternal
+    ldy #0
+_lastLineLoop
+    #toTxtMatrix
+    lda #32
+    sta (TXT_PTR1), y
+    #toColorMatrix
+    lda CURSOR_STATE.col
+    sta (TXT_PTR1), y
+    iny
+    cpy CURSOR_STATE.xMax
+    bne _lastLineLoop
+
+    rts
+
+
+scrollDown
+    lda CURSOR_STATE.scrollOn
+    bne scrollDownInternal
+    rts
+
+
+; --------------------------------------------------
+; scrollDownInternal scrolls the text screen one line down. It makes use
+; of TXT_PTR1 and TXT_PTR2 in order to implement this functionality.
+;
+; This routine does not return a value.
+; --------------------------------------------------
+scrollDownInternal
+    #saveIoState
+
+    #move16Bit CURSOR_STATE.lastLinePtr, TXT_PTR1
+    #move16Bit CURSOR_STATE.lastLinePtr, TXT_PTR2
+
+    sec
+    lda TXT_PTR2
+    sbc CURSOR_STATE.xMax
+    sta TXT_PTR2
+    lda TXT_PTR2 + 1
+    sbc #0    
+    sta TXT_PTR2 + 1
+
+    lda CURSOR_STATE.yMaxMinus1
+    sta SCROLL_DOWN.line_count
+
+    ; move all lines one step down
+_nextLine
+    ldy #0
+_lineLoop
+    #toTxtMatrix
+    lda (TXT_PTR2), y
+    sta (TXT_PTR1), y
+    #toColorMatrix
+    lda (TXT_PTR2), y
+    sta (TXT_PTR1), y
+    iny
+    cpy CURSOR_STATE.xMax
+    bne _lineLoop
+    
+    #move16Bit TXT_PTR2, TXT_PTR1
+    dec SCROLL_DOWN.line_count
+    beq _clearFirstLine
+
+    sec
+    lda TXT_PTR2
+    sbc CURSOR_STATE.xMax
+    sta TXT_PTR2
+    lda TXT_PTR2+1
+    sbc #0
+    sta TXT_PTR2+1
+    bra _nextLine
+
+_clearFirstLine
+    jsr clearLineInternal
+
+    #restoreIoState
+    rts
 
 
 scrollUp
     lda CURSOR_STATE.scrollOn
     bne scrollUpInternal
     rts
+
 
 ; --------------------------------------------------
 ; scrollUpInternal scrolls the text screen one line up. It makes use
@@ -591,8 +747,8 @@ scrollUpInternal
     adc CURSOR_STATE.xMax
     sta TXT_PTR2
     lda #0
-    adc TXT_PTR2
-    sta TXT_PTR2
+    adc TXT_PTR2+1
+    sta TXT_PTR2+1
 
     stz SCROLL_UP.line_count
 
@@ -627,17 +783,7 @@ _lineLoop
     #move16Bit CURSOR_STATE.lastLinePtr, TXT_PTR1
 
     ; clear last line
-    ldy #0
-_lastLineLoop
-    #toTxtMatrix
-    lda #32
-    sta (TXT_PTR1), y
-    #toColorMatrix
-    lda CURSOR_STATE.col
-    sta (TXT_PTR1), y
-    iny
-    cpy CURSOR_STATE.xMax
-    bne _lastLineLoop
+    jsr clearLineInternal
 
     #restoreIoState
     rts
@@ -669,6 +815,35 @@ printByte
     tay
     lda PRBYTE.hex_chars, y
     jsr charOut
+    rts
+
+
+WORD_TEMP .word 0
+COUNT_DIGITS .byte 0
+printWordDecimal
+    stz COUNT_DIGITS
+    #load16BitImmediate 10, $DE04
+    lda WORD_TEMP 
+    sta $DE06
+    lda WORD_TEMP + 1
+    sta $DE07
+_loop
+    ldx $DE16
+    lda PRBYTE.hex_chars, x
+    pha
+    inc COUNT_DIGITS
+    #cmp16BitImmediate 0, $DE14
+    beq _done
+    #move16Bit $DE14, $DE06
+    bra _loop
+_done
+    ldy #0
+_loop2
+    pla
+    jsr charOut
+    iny
+    cpy COUNT_DIGITS
+    bne _loop2 
     rts
 
 ; --------------------------------------------------

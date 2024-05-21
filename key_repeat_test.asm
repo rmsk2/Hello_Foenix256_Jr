@@ -38,6 +38,7 @@ main
     ; sta CURSOR_STATE.yOffset
     ; jsr txtio.setMode80x60
     jsr txtio.init80x60
+    jsr txtio.cursorOn
     jsr keyrepeat.init
     jsr initEvents
 

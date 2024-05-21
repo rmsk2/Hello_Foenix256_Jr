@@ -115,6 +115,18 @@ sub16Bit .macro  memAddr1, memAddr2
     sta \memAddr2+1
 .endmacro
 
+
+mul8x8BitCoproc .macro oper1, oper2, oper3
+    lda \oper1
+    sta $DE00
+    stz $DE01
+    lda \oper2
+    sta $DE02
+    stz $DE03
+    #move16Bit $DE10, \oper3
+.endmacro
+
+
 ; --------------------------------------------------
 ; This macro prints a string to the screen at a given x and y coordinate. The 
 ; macro has the following parameters

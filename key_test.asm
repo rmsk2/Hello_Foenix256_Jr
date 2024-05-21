@@ -11,7 +11,7 @@
 ; This routine is the entry point of the program
 ;--------------------------------------------------
 main
-    jsr txtio.init
+    jsr txtio.init80x60
     jsr initEvents
 
     jsr txtio.cursorOff
