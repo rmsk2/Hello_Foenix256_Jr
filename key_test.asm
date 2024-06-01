@@ -32,6 +32,8 @@ _loop
     lda myEvent.type    
     cmp #kernel.event.key.PRESSED
     beq _done
+    cmp #kernel.event.key.RELEASED
+    beq _done
     bra _loop
 _done
     #printString MSG, len(MSG)
@@ -54,6 +56,10 @@ _done
     lda myEvent.key.ascii 
     jsr txtio.printByte
     jsr txtio.newLine
+
+    lda myEvent.key.ascii
+    cmp #3
+    bne _loop
 
     jsr txtio.cursorOn
     jsr restoreEvents

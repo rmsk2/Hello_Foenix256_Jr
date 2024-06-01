@@ -65,6 +65,7 @@ _loopNewLine
     jsr txtio.clear
     jsr txtio.init80x60
     #printString DONE_TXT, len(DONE_TXT)
+    jsr txtio.cursorOn
     rts
 
 
