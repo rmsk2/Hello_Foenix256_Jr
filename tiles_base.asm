@@ -42,15 +42,11 @@ TILE_MAP_ADDR = $6000
 MAP_SIZE_X = 40
 MAP_SIZE_Y = 30
 
+TC1 = 221
+TC2 = 122
+
+
 on
-    ; setup graphics layer, i.e. layer 0 shows tile map 0
-    lda #4
-    sta LAYER_REG1
-
-    ; enter graphics mode using tile mode with a text overly
-    lda #BIT_TILE | BIT_GRAPH | BIT_OVERLY | BIT_TEXT
-    sta VKY_MSTR_CTRL_0
-
     ; setup tile map
     ; address of tile map
     lda #<TILE_MAP_ADDR
@@ -63,9 +59,8 @@ on
     lda #MAP_SIZE_X
     sta TILE_MAP_REGS + 4
     lda #MAP_SIZE_Y
-    sta TILE_MAP_REGS + 5
+    sta TILE_MAP_REGS + 6
     ; no scrolling
-    stz TILE_MAP_REGS + 6
     stz TILE_MAP_REGS + 8
     stz TILE_MAP_REGS + 9
     stz TILE_MAP_REGS + 10
@@ -85,6 +80,14 @@ on
 
     jsr clearTileMap
 
+    ; setup graphics layer, i.e. layer 0 shows tile map 0
+    lda #4
+    sta LAYER_REG1
+
+    ; enter graphics mode using tile mode with a text overly
+    lda #BIT_TILE | BIT_GRAPH | BIT_OVERLY | BIT_TEXT
+    sta VKY_MSTR_CTRL_0
+
     rts
 
 
@@ -98,24 +101,27 @@ off
 clearTileMap
     stz MEM_SET.valToSet
     #load16BitImmediate TILE_MAP_ADDR, MEM_SET.startAddress
-    #load16BitImmediate MAP_SIZE_X * MAP_SIZE_Y * 2, MEM_SET.length
+    ; make room for invisible column 1
+    #load16BitImmediate (MAP_SIZE_X + 1) * MAP_SIZE_Y * 2, MEM_SET.length
     jsr memSet
     rts
 
 
-X_POS    .byte 0
-Y_POS    .byte 0
+X_MAX    .byte MAP_SIZE_X
+X_POS    .word 0
+Y_POS    .word 0
 TILE_NR  .byte 0
-MAP_ADDR .word 0
 ATTRS    .byte 0
 callPlotTile
-    #mul8x8BitCoproc X_POS, Y_POS, ZP_GRAPHIC_PTR 
+    inc X_POS
+    #mul8x8BitCoproc X_MAX, Y_POS, ZP_GRAPHIC_PTR 
+    #add16Bit X_POS, ZP_GRAPHIC_PTR
     #double16Bit ZP_GRAPHIC_PTR 
     #add16BitImmediate TILE_MAP_ADDR, ZP_GRAPHIC_PTR
-    lda ATTRS
+    lda TILE_NR
     sta (ZP_GRAPHIC_PTR)
     ldy #1
-    lda TILE_NR
+    lda ATTRS
     sta (ZP_GRAPHIC_PTR), y
     rts
 
@@ -171,23 +177,23 @@ TILE_SET_ADDR
 .byte 0,0,0,0,0,0,0,0
 .byte 0,0,0,0,0,0,0,0
 .byte 0,0,0,0,0,0,0,0
-; tile 2
-.byte 1,0,1,0,1,0,1,0
-.byte 1,0,1,0,1,0,1,0
-.byte 1,0,1,0,1,0,1,0
-.byte 1,0,1,0,1,0,1,0
-.byte 1,0,1,0,1,0,1,0
-.byte 1,0,1,0,1,0,1,0
-.byte 1,0,1,0,1,0,1,0
-.byte 1,0,1,0,1,0,1,0
 ; tile 1
-.byte 1,1,1,1,1,1,1,1
+.byte TC1,0,TC1,0,TC1,0,TC1,0
+.byte TC1,0,TC1,0,TC1,0,TC1,0
+.byte TC1,0,TC1,0,TC1,0,TC1,0
+.byte TC1,0,TC1,0,TC1,0,TC1,0
+.byte TC1,0,TC1,0,TC1,0,TC1,0
+.byte TC1,0,TC1,0,TC1,0,TC1,0
+.byte TC1,0,TC1,0,TC1,0,TC1,0
+.byte TC1,0,TC1,0,TC1,0,TC1,0
+; tile 2
+.byte TC2,TC2,TC2,TC2,TC2,TC2,TC2,TC2
 .byte 0,0,0,0,0,0,0,0
-.byte 1,1,1,1,1,1,1,1
+.byte TC2,TC2,TC2,TC2,TC2,TC2,TC2,TC2
 .byte 0,0,0,0,0,0,0,0
-.byte 1,1,1,1,1,1,1,1
+.byte TC2,TC2,TC2,TC2,TC2,TC2,TC2,TC2
 .byte 0,0,0,0,0,0,0,0
-.byte 1,1,1,1,1,1,1,1
+.byte TC2,TC2,TC2,TC2,TC2,TC2,TC2,TC2
 .byte 0,0,0,0,0,0,0,0
 
 

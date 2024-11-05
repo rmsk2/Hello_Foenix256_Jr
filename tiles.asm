@@ -19,9 +19,10 @@ main
 
     jsr tiles.on
 
-    #plotTile 1, 1, 1
-    #plotTile 2, 1, 0
-    #plotTile 3, 1, 2
+    #plotTile 0, 0, 1
+    #plotTile 0, 1, 1
+    #plotTile 39, 29, 2
+    #plotTile 39, 28, 2
 
     jsr waitForKey
 
