@@ -128,6 +128,14 @@ mul8x8BitCoproc .macro oper1, oper2, oper3
 
 
 ; --------------------------------------------------
+; double16Bit multiplies the 16 bit value stored at .memAddr by 2
+; --------------------------------------------------
+double16Bit .macro  memAddr     
+    asl \memAddr                     
+    rol \memAddr+1
+.endmacro
+
+; --------------------------------------------------
 ; This macro prints a string to the screen at a given x and y coordinate. The 
 ; macro has the following parameters
 ;

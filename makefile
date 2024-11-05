@@ -1,4 +1,4 @@
-all: hello hello_kernel ram_exp sid_test joystick slip uart hires cursor txtio mouse snespad keytest random sprites dma key_repeat
+all: hello hello_kernel ram_exp sid_test joystick slip uart hires cursor txtio mouse snespad keytest random sprites dma key_repeat tiles
 
 hello: hello.bin 
 hello_kernel: hello_kernel.bin
@@ -17,6 +17,7 @@ random: random.bin
 sprites: sprites.bin
 dma: dma.bin
 key_repeat: key_repeat.bin
+tiles: tiles.bin
 
 hello.bin: hello.asm
 	64tass --nostart -o hello.bin hello.asm
@@ -69,6 +70,9 @@ dma.bin: dma.asm api.asm macros.asm khelp.asm
 key_repeat.bin: key_repeat_test.asm key_repeat.asm txtio.asm api.asm macros.asm khelp.asm zeropage.asm
 	64tass --nostart -o key_repeat.bin key_repeat_test.asm
 
+tiles.bin: api.asm macros.asm khelp.asm tiles.asm tiles_base.asm zeropage.asm
+	64tass --nostart -o tiles.bin tiles.asm
+
 
 clean:
 	rm hello.bin
@@ -88,3 +92,4 @@ clean:
 	rm sprites.bin
 	rm dma.bin
 	rm key_repeat.bin
+	rm tiles.bin
