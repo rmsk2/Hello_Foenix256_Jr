@@ -19,10 +19,16 @@ main
 
     jsr tiles.on
 
+    ; lda #1
+    ; sta tiles.TILE_PARAMS.tileNr
+    ;#load16BitImmediate tiles.TILE_MAP_ADDR + ((29*40)+39)*2, TILE_PTR1
+    ;#load16BitImmediate tiles.TILE_MAP_ADDR, TILE_PTR1
+    ; jsr tiles.callPokeTileInt
+
     #plotTile 0, 0, 1
-    #plotTile 0, 1, 1
-    #plotTile 39, 29, 2
-    #plotTile 39, 28, 2
+    ; #plotTile 0, 1, 1
+    ; #plotTile 39, 29, 2
+    ; #plotTile 39, 28, 2
 
     jsr waitForKey
 

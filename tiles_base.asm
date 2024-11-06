@@ -1,11 +1,11 @@
 plotTile .macro x, y, tileNr
     lda #\x
-    sta tiles.X_POS
+    sta tiles.TILE_PARAMS.xPos
     lda #\y
-    sta tiles.Y_POS
+    sta tiles.TILE_PARAMS.yPos
     lda #\tileNr
-    sta tiles.TILE_NR
-    jsr tiles.callPlotTile
+    sta tiles.TILE_PARAMS.tileNr
+    jsr tiles.callPokeTile
 .endmacro
 
 tiles .namespace
@@ -38,22 +38,28 @@ TILE_MAP_0_ON = 1
 TILE_MAP_REGS = $D200
 TILE_SET_REGS = $D280
 
+TILE_MAP_0 = 4
+TILE_MAP_1 = 5
+TILE_MAP_2 = 6
+
 TILE_MAP_ADDR = $6000
 MAP_SIZE_X = 40
 MAP_SIZE_Y = 30
 
 TC1 = 221
 TC2 = 122
+ATTRS_DEFAULT = 0
 
 
 on
     ; setup tile map
     ; address of tile map
-    lda #<TILE_MAP_ADDR
+    ; Yes, the minus 2 seems to be neccessary
+    lda #<TILE_MAP_ADDR - 2
     sta TILE_MAP_REGS + 1
-    lda #>TILE_MAP_ADDR
+    lda #>TILE_MAP_ADDR - 2
     sta TILE_MAP_REGS + 2
-    lda #`TILE_MAP_ADDR
+    lda #`TILE_MAP_ADDR - 2
     sta TILE_MAP_REGS + 3
     ; size of tile map
     lda #MAP_SIZE_X
@@ -81,10 +87,10 @@ on
     jsr clearTileMap
 
     ; setup graphics layer, i.e. layer 0 shows tile map 0
-    lda #4
+    lda #TILE_MAP_0
     sta LAYER_REG1
 
-    ; enter graphics mode using tile mode with a text overly
+    ; enter graphics mode using tile mode with a text overlay
     lda #BIT_TILE | BIT_GRAPH | BIT_OVERLY | BIT_TEXT
     sta VKY_MSTR_CTRL_0
 
@@ -101,28 +107,48 @@ off
 clearTileMap
     stz MEM_SET.valToSet
     #load16BitImmediate TILE_MAP_ADDR, MEM_SET.startAddress
-    ; make room for invisible column 1
-    #load16BitImmediate (MAP_SIZE_X + 1) * MAP_SIZE_Y * 2, MEM_SET.length
+    #load16BitImmediate MAP_SIZE_X  * MAP_SIZE_Y * 2, MEM_SET.length
     jsr memSet
     rts
 
 
-X_MAX    .byte MAP_SIZE_X
-X_POS    .word 0
-Y_POS    .word 0
-TILE_NR  .byte 0
-ATTRS    .byte 0
-callPlotTile
-    inc X_POS
-    #mul8x8BitCoproc X_MAX, Y_POS, ZP_GRAPHIC_PTR 
-    #add16Bit X_POS, ZP_GRAPHIC_PTR
-    #double16Bit ZP_GRAPHIC_PTR 
-    #add16BitImmediate TILE_MAP_ADDR, ZP_GRAPHIC_PTR
-    lda TILE_NR
-    sta (ZP_GRAPHIC_PTR)
+calcMapAddress
+    #mul8x8BitCoproc TILE_PARAMS.xMax, TILE_PARAMS.yPos, TILE_PTR1 
+    #add16Bit TILE_PARAMS.xPos, TILE_PTR1
+    #double16Bit TILE_PTR1 
+    #add16BitImmediate TILE_MAP_ADDR, TILE_PTR1
+    rts    
+
+
+TileParam_t .struct 
+    xMax   .byte MAP_SIZE_X
+    xPos   .word 0
+    yPos   .word 0
+    tileNr .byte ?
+    attrs  .byte ATTRS_DEFAULT
+.endstruct
+
+TILE_PARAMS .dstruct TileParam_t
+
+callPokeTile
+    jsr calcMapAddress
+callPokeTileInt
+    lda TILE_PARAMS.tileNr
+    sta (TILE_PTR1)
     ldy #1
-    lda ATTRS
-    sta (ZP_GRAPHIC_PTR), y
+    lda TILE_PARAMS.attrs
+    sta (TILE_PTR1), y
+    rts
+
+
+callPeekTile
+    jsr calcMapAddress
+callPeekTileInt
+    lda (TILE_PTR1)
+    sta TILE_PARAMS.tileNr
+    ldy #1
+    lda (TILE_PTR1), y
+    sta TILE_PARAMS.attrs
     rts
 
 
