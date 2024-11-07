@@ -17,17 +17,14 @@ jmp main
 main
     jsr initEvents
 
-    jsr tiles.on
+    #configTileSetAddr TILE_SET_ADDR
+    #setBackGroundColour $00FF00
 
-    ; lda #1
-    ; sta tiles.TILE_PARAMS.tileNr
-    ;#load16BitImmediate tiles.TILE_MAP_ADDR + ((29*40)+39)*2, TILE_PTR1
-    ;#load16BitImmediate tiles.TILE_MAP_ADDR, TILE_PTR1
-    ; jsr tiles.callPokeTileInt
+    jsr tiles.on
 
     #plotTile 0, 0, 1
     ; #plotTile 0, 1, 1
-    ; #plotTile 39, 29, 2
+    #plotTile 39, 29, 2
     ; #plotTile 39, 28, 2
 
     jsr waitForKey
@@ -36,3 +33,36 @@ main
     
     jsr restoreEvents
     rts
+
+
+TC1 = 221
+TC2 = 122
+
+TILE_SET_ADDR
+; tile 0
+.byte 0,0,0,0,0,0,0,0
+.byte 0,0,0,0,0,0,0,0
+.byte 0,0,0,0,0,0,0,0
+.byte 0,0,0,0,0,0,0,0
+.byte 0,0,0,0,0,0,0,0
+.byte 0,0,0,0,0,0,0,0
+.byte 0,0,0,0,0,0,0,0
+.byte 0,0,0,0,0,0,0,0
+; tile 1
+.byte TC1,0,TC1,0,TC1,0,TC1,0
+.byte TC1,0,TC1,0,TC1,0,TC1,0
+.byte TC1,0,TC1,0,TC1,0,TC1,0
+.byte TC1,0,TC1,0,TC1,0,TC1,0
+.byte TC1,0,TC1,0,TC1,0,TC1,0
+.byte TC1,0,TC1,0,TC1,0,TC1,0
+.byte TC1,0,TC1,0,TC1,0,TC1,0
+.byte TC1,0,TC1,0,TC1,0,TC1,0
+; tile 2
+.byte TC2,TC2,TC2,TC2,TC2,TC2,TC2,TC2
+.byte 0,0,0,0,0,0,0,0
+.byte TC2,TC2,TC2,TC2,TC2,TC2,TC2,TC2
+.byte 0,0,0,0,0,0,0,0
+.byte TC2,TC2,TC2,TC2,TC2,TC2,TC2,TC2
+.byte 0,0,0,0,0,0,0,0
+.byte TC2,TC2,TC2,TC2,TC2,TC2,TC2,TC2
+.byte 0,0,0,0,0,0,0,0

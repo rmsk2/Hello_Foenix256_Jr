@@ -8,6 +8,39 @@ plotTile .macro x, y, tileNr
     jsr tiles.callPokeTile
 .endmacro
 
+
+plotTileWithAttr .macro x, y, tileNr, attr
+    lda #\x
+    sta tiles.TILE_PARAMS.xPos
+    lda #\y
+    sta tiles.TILE_PARAMS.yPos
+    lda #\tileNr
+    sta tiles.TILE_PARAMS.tileNr
+    lda #\attr
+    sta tiles.TILE_PARAMS.attrs
+    jsr tiles.callPokeTile
+.endmacro
+
+
+configTileSetAddr .macro addr
+    lda #<\addr
+    sta tiles.TILE_SET.lo
+    lda #>\addr
+    sta tiles.TILE_SET.middle
+    lda #`\addr
+    sta tiles.TILE_SET.hi    
+.endmacro
+
+
+setBackGroundColour .macro val
+    lda #<\val
+    sta $D00D
+    lda #>\val
+    sta $D00E
+    lda #`\val
+    sta $D00F
+.endmacro
+
 tiles .namespace
 
 VKY_MSTR_CTRL_0 = $D000
@@ -42,12 +75,9 @@ TILE_MAP_0 = 4
 TILE_MAP_1 = 5
 TILE_MAP_2 = 6
 
-TILE_MAP_ADDR = $6000
 MAP_SIZE_X = 40
 MAP_SIZE_Y = 30
 
-TC1 = 221
-TC2 = 122
 ATTRS_DEFAULT = 0
 
 
@@ -73,12 +103,13 @@ on
     stz TILE_MAP_REGS + 11
 
     ; setup tile set
-    lda #<TILE_SET_ADDR
+    lda TILE_SET.lo
     sta TILE_SET_REGS
-    lda #>TILE_SET_ADDR
+    lda TILE_SET.middle
     sta TILE_SET_REGS + 1
-    lda #`TILE_SET_ADDR
-    sta TILE_SET_REGS + 2    
+    lda TILE_SET.hi
+    sta TILE_SET_REGS + 2
+
     stz TILE_SET_REGS + 3
 
     lda #TILE_SIZE_8x8 | TILE_MAP_0_ON
@@ -193,35 +224,15 @@ _done
     rts
 
 
-TILE_SET_ADDR
-; tile 0
-.byte 0,0,0,0,0,0,0,0
-.byte 0,0,0,0,0,0,0,0
-.byte 0,0,0,0,0,0,0,0
-.byte 0,0,0,0,0,0,0,0
-.byte 0,0,0,0,0,0,0,0
-.byte 0,0,0,0,0,0,0,0
-.byte 0,0,0,0,0,0,0,0
-.byte 0,0,0,0,0,0,0,0
-; tile 1
-.byte TC1,0,TC1,0,TC1,0,TC1,0
-.byte TC1,0,TC1,0,TC1,0,TC1,0
-.byte TC1,0,TC1,0,TC1,0,TC1,0
-.byte TC1,0,TC1,0,TC1,0,TC1,0
-.byte TC1,0,TC1,0,TC1,0,TC1,0
-.byte TC1,0,TC1,0,TC1,0,TC1,0
-.byte TC1,0,TC1,0,TC1,0,TC1,0
-.byte TC1,0,TC1,0,TC1,0,TC1,0
-; tile 2
-.byte TC2,TC2,TC2,TC2,TC2,TC2,TC2,TC2
-.byte 0,0,0,0,0,0,0,0
-.byte TC2,TC2,TC2,TC2,TC2,TC2,TC2,TC2
-.byte 0,0,0,0,0,0,0,0
-.byte TC2,TC2,TC2,TC2,TC2,TC2,TC2,TC2
-.byte 0,0,0,0,0,0,0,0
-.byte TC2,TC2,TC2,TC2,TC2,TC2,TC2,TC2
-.byte 0,0,0,0,0,0,0,0
+DUMMY .word 0
+TILE_MAP_ADDR .fill MAP_SIZE_X * MAP_SIZE_Y * 2
 
+TileSetAddr_t .struct 
+    lo     .byte ?
+    middle .byte ?
+    hi     .byte ?
+.endstruct
 
+TILE_SET .dstruct TileSetAddr_t
 
 .endnamespace
