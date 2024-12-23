@@ -1,4 +1,4 @@
-all: hello hello_kernel ram_exp sid_test joystick slip uart hires cursor txtio mouse snespad keytest random sprites dma key_repeat tiles
+all: hello hello_kernel ram_exp sid_test joystick slip uart hires cursor txtio mouse snespad keytest random sprites dma key_repeat tiles prg_parms
 
 hello: hello.bin 
 hello_kernel: hello_kernel.bin
@@ -18,6 +18,7 @@ sprites: sprites.bin
 dma: dma.bin
 key_repeat: key_repeat.bin
 tiles: tiles.bin
+prg_parms: prg_parms.pgz
 
 hello.bin: hello.asm
 	64tass --nostart -o hello.bin hello.asm
@@ -73,6 +74,10 @@ key_repeat.bin: key_repeat_test.asm key_repeat.asm txtio.asm api.asm macros.asm 
 tiles.bin: api.asm macros.asm khelp.asm tiles.asm tiles_base.asm zeropage.asm
 	64tass --nostart -o tiles.bin tiles.asm
 
+prg_parms.pgz: prg_parms.asm api.asm zeropage.asm macros.asm txtio.asm khelp.asm
+	64tass --nostart -o prg_parms.bin prg_parms.asm
+	python3 make_pgz.py prg_parms.bin
+	mv prg_parms.bin.pgz prg_parms.pgz
 
 clean:
 	rm hello.bin
@@ -93,3 +98,5 @@ clean:
 	rm dma.bin
 	rm key_repeat.bin
 	rm tiles.bin
+	rm prg_parms.bin
+	rm prg_parms.pgz
