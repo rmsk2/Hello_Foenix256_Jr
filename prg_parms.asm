@@ -12,6 +12,8 @@ jmp main
 
 
 TXT_MSG .text $0d, "Press any key to return to BASIC", $0d
+TXT_PTR_ARRAY .text "Addr of Pointer array: $"
+TXT_ARRAY_LEN .text "Array length in bytes: $"
 
 LEN_PARMS_IN_BYTES .byte 0
 BYTE_COUNT .byte 0
@@ -30,6 +32,18 @@ main
     sta CURSOR_STATE.col 
     jsr txtio.clear
     
+    #printString TXT_PTR_ARRAY, len(TXT_PTR_ARRAY)
+    lda MEM_PTR1+1
+    jsr txtio.printByte
+    lda MEM_PTR1
+    jsr txtio.printByte
+    jsr txtio.newLine
+    #printString TXT_ARRAY_LEN, len(TXT_ARRAY_LEN)
+    lda LEN_PARMS_IN_BYTES
+    jsr txtio.printByte
+    jsr txtio.newLine
+    jsr txtio.newLine
+
     stz BYTE_COUNT
 
 _loop    
@@ -57,6 +71,15 @@ _done
 
 
 printZeroTerminated
+    lda TILE_PTR1+1
+    jsr txtio.printByte
+    lda TILE_PTR1
+    jsr txtio.printByte
+    lda #36
+    jsr txtio.charOut
+    lda #$20
+    jsr txtio.charOut
+
     ldy #0
 _loop 
     lda (TILE_PTR1), y
